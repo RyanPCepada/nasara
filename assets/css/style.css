@@ -1,0 +1,15 @@
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.body{
+    display: flex;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+   
+    background: url('pages/login/pages/login/img.png');
+    background-size: cover;
+    background-position: center;
+}
+
