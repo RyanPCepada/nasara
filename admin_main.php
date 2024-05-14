@@ -64,6 +64,28 @@ if (isset($_SESSION['adminID'])) {
             $image = '';
         }
 
+        
+        // Get admin information based on adminID from the session
+        $adminID = $_SESSION['adminID'];
+        $adminQuery = $conn->prepare("SELECT userName, password, image FROM tbl_admin WHERE admin_ID = :adminID");
+        $adminQuery->bindParam(':adminID', $adminID, PDO::PARAM_INT);
+        $adminQuery->execute();
+
+        // Fetch the admin's information
+        $admin = $adminQuery->fetch(PDO::FETCH_ASSOC);
+
+        // Check if data was found in the database
+        if ($admin !== false) {
+            // Assign the username to $userName
+            $userName = $admin['userName'];
+            $adminimage = $admin['image'];
+            $password = $admin['password'];
+        } else {
+            $userName = '';
+            $adminimage = '';
+            $password = '';
+        }
+        
 
 
         //FETCH ACTIVITY LOGS FOR HISTORY LIST
@@ -83,28 +105,28 @@ if (isset($_SESSION['adminID'])) {
 
 
 
-
-
-
-        // Get admin information based on adminID from the session
-        $adminID = $_SESSION['adminID'];
-        $adminQuery = $conn->prepare("SELECT userName, image FROM tbl_admin WHERE admin_ID = :adminID");
-        $adminQuery->bindParam(':adminID', $adminID, PDO::PARAM_INT);
-        $adminQuery->execute();
-
-        // Fetch the admin's information
-        $admin = $adminQuery->fetch(PDO::FETCH_ASSOC);
-
-        // Check if data was found in the database
-        if ($user !== false) {
-            // Assign the username to $userName
-            $userName = $admin['userName'];
-            $adminimage = $admin['image'];
-        } else {
-            $userName = '';
-            $adminimage = '';
-        }
         
+
+         // Get admin information based on adminID from the session
+         $adminID = $_SESSION['adminID'];
+         $adminQuery = $conn->prepare("SELECT userName, password, image FROM tbl_admin WHERE admin_ID = :adminID");
+         $adminQuery->bindParam(':adminID', $adminID, PDO::PARAM_INT);
+         $adminQuery->execute();
+ 
+         // Fetch the admin's information
+         $admin = $adminQuery->fetch(PDO::FETCH_ASSOC);
+ 
+         // Check if data was found in the database
+         if ($admin !== false) {
+             // Assign the username to $userName
+             $userName = $admin['userName'];
+             $adminimage = $admin['image'];
+             $password = $admin['password'];
+         } else {
+             $userName = '';
+             $adminimage = '';
+             $password = '';
+         }
 
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
@@ -149,6 +171,26 @@ try {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -178,16 +220,7 @@ try {
 
         <img src="icons/NASARA_LOGO_WHITE_PNG.png" class="img-fluid" id="NASARA_LOGO" alt="">
 
-        <button class="btn btn-dark" type="button" id="icon_home" onclick="to_home()" href="home_main.php">
-            <i class="fas fa-home"></i>
-        </button>
-
-        <img src="images/<?php echo $image; ?>" id="icon_account" class="img-fluid zoomable-image rounded-square"
-        onclick="to_account()">
-
-        <div class = " m-2 text-light" >   
-            <b class = "bg-transparent "  id="accountLink" onclick="to_account()" style=" cursor: pointer;"> <img src="navigation/user.png" alt=""></b>
-        </div>
+        
 
     </nav>
 
@@ -202,18 +235,204 @@ try {
     <div class="row" id="dash_bg">
 
         <div class="col-1">
-            <div class="card-body" id="cards_body1">
+            <div class="card-body text-center d-flex justify-content-center" id="cards_body1">
+
+                <div class="text-center d-flex align-items-center justify-content-center bg-dark" id="div_home"></div>
+                <button class="btn btn-secondary" type="button" id="icon_home" onclick="to_home()" href="home_main.php">
+                    <i class="fas fa-home"></i>
+                    <h3 style="margin-top: -39px; margin-left: 52px;">Home</h3>
+                </button>
+
+                <button class="btn btn-secondary" type="button" id="icon_settings" data-bs-toggle="modal" data-bs-target="#modal_settings">
+                    <i class="fas fa-cog"></i>
+                    <h3 style="margin-top: -39px; margin-left: 52px;">Settings</h3>
+                </button>
+                
+                <button class="btn btn-secondary" type="button" id="icon_history" data-bs-toggle="modal" data-bs-target="#modal_history">
+                    <i class="fas fa-history"></i>
+                    <h3 style="margin-top: -39px; margin-left: 52px;">History</h3>
+                </button>
+
+                <img src="images/<?php echo $adminimage; ?>" id="icon_account" class="img-fluid zoomable-image rounded-square"
+                onclick="to_adminacc()">
+
+                <h3 style="color: white; margin-top: 311px; margin-left: 13px;">Me</h3>
+
+                <div class = " m-2 text-light" >   
+                    <b class = "bg-transparent "  id="accountLink" onclick="to_account()" style=" cursor: pointer;"> <img src="navigation/user.png" alt=""></b>
+                </div>
 
             </div>
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- SETTINGS MODAL -- FOR EDITING SETTINGS -->
+    <div class="modal fade custom-fade" id="modal_settings" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="staticBackdropLabel">Settings</h3>
+                    <img src="pages/account/GIF_SETTINGS.gif" style="width: 1.5in; height: 1in; margin-left: 0px;" id="settings_gif">
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body">
+
+
+                    <form id="registration_form" method="POST"> <!--action="actions/edit_profile.php" -->
+                        <div class="input" id="inputfields" style="height: 400px;">
+
+                            <button type="button" class="btn btn-secondary" id="openChangeYourPasswordModalBtn" data-bs-toggle="modal" data-bs-target="#modal_changeyourpassword"
+                                style="width: 250px; height: 50px; margin-top: 20px; margin-left: 105px;">
+                                Change Your Password
+                            </button>
+                            <br>
+                            <button type="button" class="btn btn-secondary" id="openHistoryModalBtn" data-bs-toggle="modal" data-bs-target="#modal_history"
+                                style="width: 250px; height: 50px; margin-top: 20px; margin-left: 105px;">
+                                History
+                            </button>
+                            <br>
+                            <!-- <button type="button" class="btn btn-secondary" id="openAppearanceAndThemeModalBtn" data-bs-toggle="modal" data-bs-target="#modal_appearanceandtheme"
+                                style="width: 250px; height: 50px; margin-top: 20px; margin-left: 105px;">
+                                Appearance and Theme
+                            </button>
+                            <br>
+                            <button type="button" class="btn btn-secondary" id="openTermsAndPrivacyPolicyModalBtn" data-bs-toggle="modal" data-bs-target="#modal_termsandprivacypolicy"
+                                style="width: 250px; height: 50px; margin-top: 20px; margin-left: 105px;">
+                                Terms and Privacy Policy
+                            </button> -->
+                        </div>
+                        
+                            <button type="button" class="btn btn-secondary" id="sett_closeModalBtn" data-bs-dismiss="modal"
+                            window.location.href = 'account_main.php';>Close</button>
+                        
+                    </form>
+                    
+                        
+            
+                </div>
+            
+            </div>
+        </div>
+    </div>
+    <!-- <script>
+        function openmodal_settings() {
+            $('#modal_settings').modal('show');
+        }
+    </script> -->
+    <!-- END SETTINGS MODAL -- FOR EDITING SETTINGS -->
+
+
+
+
+
+
+    <!-- CHANGE PASSWORD MODAL -- FOR CHANGING YOUR PASSWORD -->
+    <div class="modal fade" id="modal_changeyourpassword" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Change Your Password</h5>
+                    <img src="pages/account/GIF_PASSWORD.gif" style="width: 1.6in; height: .9in; margin-right: -15px;" id="password_gif">
+                </div>
+                <div class="modal-body">
+                    <form id="change_password_form" method="POST" action="actions_admin/change_pword_admin.php">
+                        <div class="input" id="inputfields" style="height: 350px;">
+
+                            <div class="row">
+                                <br>
+                                <h style="margin-top: 10px; margin-left: 83px;">Enter old password</h>
+                                <input type="password" class="oldpassword" name="oldpassword" id="cyp_row1" style="margin-top: 10px;"/>
+                                <br>
+                                <h style="margin-top: 10px; margin-left: 83px;">Enter new password</h>
+                                <input type="password" class="newpassword" name="newpassword" id="cyp_row2" style="margin-top: 10px;"/>
+                                <br>
+                                <h style="margin-top: 10px; margin-left: 83px;">Confirm new password</h>
+                                <input type="password" class="confirmnewpassword" name="confirmnewpassword" id="cyp_row3" style="margin-top: 10px;"/>
+                            </div>
+                        </div>
+                        <button type="submit" class="submit" name="submit" id="sett_cyp_modalsave">Save</button>
+
+                        <button type="button" class="btn btn-secondary" id="sett_cyp_closeModalBtn" data-bs-dismiss="modal">Close</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script>
+        document.getElementById("sett_cyp_modalsave").addEventListener("click", function(event) {
+            //event.preventDefault(); // Prevent the form from being submitted
+
+            <?php
+                $password = $admin['password'];
+            ?>
+            
+            let oldPassword = document.querySelector('.oldpassword').value;
+            let newPassword = document.querySelector('.newpassword').value;
+            let confirmNewPassword = document.querySelector('.confirmnewpassword').value;
+            let password = "<?php echo $password; ?>"; // Echo the PHP variable as a JavaScript variable
+
+            if (oldPassword === password) {
+                if (newPassword.length !== 0) {
+                    if (newPassword === confirmNewPassword) {
+                        // alert("Password changed successfully");
+                        document.getElementById("change_password_form").submit();
+                    } else {
+                        event.preventDefault();
+                        alert("Passwords don't match");
+                    }
+                } else {
+                    event.preventDefault();
+                    alert("New password can't be empty");
+                }
+            } else {
+                event.preventDefault();
+                alert("Old password is incorrect");
+            }
+        });
+    </script>
+    <!-- END CHANGE PASSWORD MODAL -- FOR CHANGING YOUR PASSWORD -->
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         <div class="col-11">
 
             <div class="body">
             
                 <h5 style="position: absolute; margin-top: 40px; margin-bottom: 25px; margin-left: 140px; font-size: 70px; color: gray;"
-                >Admin Dashboard</h5>
-                <img src="icons/GIF_REPORT.gif" style="position: absolute; width: 2.15in; height: 1.1in; margin-left: 730px; margin-top: 35px;" id="newfb_gif">
+                >Dashboard</h5>
+                <img src="icons/GIF_REPORT.gif" style="position: absolute; width: 2.15in; height: 1.1in; margin-left: 480px; margin-top: 35px;" id="newfb_gif">
 
                 <div class="container">
                 
@@ -234,7 +453,7 @@ try {
                             <hr>
 
                             <!-- ROW 1 -->
-                            <div class="" style="padding: 20px;">
+                            <div class="" style="padding: 20px; border-radius: 15px;">
 
                                 <div class="col-4 justify-content-center";>
 

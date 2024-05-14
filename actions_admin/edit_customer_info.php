@@ -49,7 +49,7 @@ try {
 
     $conn->commit();
     echo '<script>alert("Customer Profile Updated Successfully!");';
-    echo 'window.location.href = "http://localhost/DevBugs/admin_main.php";</script>';
+    echo 'window.location.href = "http://localhost/nasara/admin_main.php";</script>';
 } catch (\Throwable $th) {
     echo $th;
     $conn->rollBack();

@@ -28,10 +28,10 @@ if (isset($_SESSION['adminID'])) {
     session_destroy();
 
     // Display an alert using JavaScript
-    echo '<script>alert("You are logged out."); window.location.href = "http://localhost/DevBugs/login_main.php";</script>';
+    echo '<script>alert("You are logged out."); window.location.href = "http://localhost/nasara/login_main.php";</script>';
 } else {
     // Display an alert using JavaScript
-    echo '<script>alert("You must be logged in to log out."); window.location.href = "http://localhost/DevBugs/login_main.php";</script>';
+    echo '<script>alert("You must be logged in to log out."); window.location.href = "http://localhost/nasara/login_main.php";</script>';
 }
 ?>
 

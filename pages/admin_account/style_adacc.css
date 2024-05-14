@@ -3,6 +3,12 @@
     height: 0;
 }
 
+#NASARA_LOGO{
+  width: 1.5in;
+  margin-left: 25px;
+  margin-top: -0px;
+}
+
 #logoname{
   font-size: 30px;
   font-weight: bold;

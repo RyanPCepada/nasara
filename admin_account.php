@@ -7,7 +7,7 @@ if (isset($_SESSION['adminID'])) {
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $dbname = "cfms";
+    $dbname = "nasara";
 
     try {
         // Create a PDO connection to your database
@@ -131,7 +131,7 @@ if (isset($_SESSION['adminID'])) {
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "cfms";
+$dbname = "nasara";
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
@@ -163,7 +163,7 @@ try {
  
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <title>DevBugs</title>
+    <title>Nasara - Admin</title>
 </head>
 <body>
     <script src="assets/js/jquery-3.7.1.js"></script>
@@ -198,14 +198,14 @@ try {
                         </form> -->
                     </div>
                     <div class="container-fluid col-3">
-
+<!-- 
                         <button type="button" class="btn btn-secondary position-relative" id="openAdminNotifModalBtn" data-bs-toggle="modal" data-bs-target="#modal_adminmess"
                             style="margin-right: 20px; margin-left: -40px;"">
                             Messages
                             <span id="notification-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                <!-- 0 -->
+                                <!-- 0 --
                                 
-                                <?php
+                                <php
                                     $sqlMessage = "SELECT COUNT(message_ID) AS messageCount FROM tbl_message";  //WHERE DATE(date) = CURDATE()
                                     $stmtMessage = $conn->prepare($sqlMessage);
                                     $stmtMessage->execute();
@@ -215,11 +215,11 @@ try {
 
                                 <span class="visually-hidden">unread messages</span>
                             </span>
-                        </button>
+                        </button> -->
 
 
                         <!-- ADMIN MESSAGES MODAL -- FOR VIEWING ADMIN MESSAGES -->
-                        <div class="modal fade" id="modal_adminmess" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"
+                        <!-- <div class="modal fade" id="modal_adminmess" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"
                             style="margin-left: 350px;">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -231,7 +231,7 @@ try {
                                     <div class="scrollable-content" id="messageContent" style="height: 450px; padding: 20px; overflow-y: auto; color: black;">
 
                                         <div class="">
-                                            <?php
+                                            <php
                                             // Fetch messages with concatenated first and last names as Sender
                                             $sqlMessage = "SELECT message_ID AS Message_ID, CONCAT(firstName, ' ', lastName) AS Sender, message AS Message, date AS Date,
                                                         email AS Email, contactNumber AS Contact, customer_ID AS Customer_ID FROM tbl_message ORDER BY date DESC";
@@ -240,7 +240,7 @@ try {
                                             $messages = $stmtMessage->fetchAll(PDO::FETCH_ASSOC);
                                             ?>
 
-                                            <?php
+                                            <php
                                             // Output messages in the alternative design
                                             foreach ($messages as $message) {
                                                 $messageDate = new DateTime($message["Date"]);
@@ -282,7 +282,7 @@ try {
 
                                                     <hr>
                                                 </div>
-                                            <?php
+                                            <php
                                             }
 
                                             // Check if no messages found
@@ -306,7 +306,7 @@ try {
                         function openmodal_adminmess() {
                             $('#modal_adminmess').modal('show');
                         }
-                        </script>
+                        </script> -->
                         <!-- END ADMIN MESSAGES MODAL -- FOR VIEWING ADMIN MESSAGES -->
 
 
@@ -1256,14 +1256,14 @@ try {
 
 <script>
     function to_dashboard() {
-        window.location.href = 'admin_main.php';
+        window.location.href = 'nasara/admin_main.php';
     }
 </script>
 
 
 <script>
     function to_adminacc() {
-        window.location.href = 'admin_account.php';
+        window.location.href = 'nasara/admin_account.php';
     }
 </script>
 

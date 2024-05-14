@@ -42,7 +42,7 @@ if ($newPassword == $confirmNewPassword) {
 
         // echo '<script>alert("' . $password . '");</script>';
         echo '<script>alert("Password Changed Successfully!");';
-        echo 'window.location.href = "http://localhost/DevBugs/admin_account.php";</script>';
+        echo 'window.location.href = "http://localhost/nasara/admin_main.php";</script>';
     } catch (\Throwable $th) {
         echo $th;
         $conn->rollBack();

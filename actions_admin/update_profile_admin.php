@@ -6,7 +6,7 @@ if (isset($_SESSION['adminID'])) {
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $dbname = "cfms";
+    $dbname = "nasara";
 
     try {
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
@@ -34,7 +34,7 @@ if (isset($_SESSION['adminID'])) {
                 $newImageName = $adminID . '_' . date("Y.m.d") . '_' . date("h.i.sa") . '.' . $imageExtension;
 
                 // Save the image to your server
-                $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/DevBugs/images/' . $newImageName;
+                $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/nasara/images/' . $newImageName;
                 move_uploaded_file($tmpName, $uploadPath);
 
                 // Update the admin's profile picture in tbl_admin
@@ -51,7 +51,7 @@ if (isset($_SESSION['adminID'])) {
 
         // Redirect to the user's profile page
         echo '<script>alert("Profile Picture Successfully Changed!");';
-        echo 'window.location.href = "http://localhost/DevBugs/admin_account.php";</script>';
+        echo 'window.location.href = "http://localhost/nasara/admin_account.php";</script>';
 
 
     } catch (PDOException $e) {

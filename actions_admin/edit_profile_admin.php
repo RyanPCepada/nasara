@@ -36,7 +36,7 @@ try {
 
     $conn->commit();
     echo '<script>alert("Profile Updated Successfully!");';
-    echo 'window.location.href = "http://localhost/DevBugs/admin_account.php";</script>';
+    echo 'window.location.href = "http://localhost/nasara/admin_account.php";</script>';
 } catch (\Throwable $th) {
     echo $th;
     $conn->rollBack();
