@@ -10,8 +10,8 @@ if (isset($_SESSION['adminID'])) {
     try {
         $conn->beginTransaction();
 
-        // $insertActivity = $conn->prepare('INSERT INTO tbl_activity_logs (activity, admin_ID) VALUES (?, ?)');
-        // $insertActivity->execute(["Logged out an account", $adminID]);
+        $insertActivity = $conn->prepare('INSERT INTO tbl_activity_logs (activity, admin_ID) VALUES (?, ?)');
+        $insertActivity->execute(["You logged out of your account", $adminID]);
 
         $conn->commit();
     } catch (\Throwable $th) {

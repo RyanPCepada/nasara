@@ -111,6 +111,39 @@
             
         
 
+    
+    <script>
+        
+        function checkPassword(event) {
+
+            let password = document.getElementById("row3").value;
+            let cnfrmPassword = document.getElementById("row4").value;
+            console.log(password, cnfrmPassword);
+            let message = document.getElementById("message");
+
+            if (password.length !== 0) {
+                if (password === cnfrmPassword) {
+                    // message.textContent = "Passwords match";
+                    // alert("Passwords match");
+
+                    // If passwords match, you can manually submit the form here:
+                     document.getElementById("registration_form").submit();
+
+                     
+                } else {
+                    event.preventDefault(); // Prevent the form from submitting
+                    // message.textContent = "Passwords don't match";
+                    alert("Passwords don't match");
+                }
+            } else {
+                event.preventDefault(); // Prevent the form from submitting
+                alert("Password can't be empty!");
+                message.textContent = "";
+            }
+        }
+
+    </script>
+
         
         
 

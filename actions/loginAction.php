@@ -42,7 +42,7 @@ try {
 
         //tbl_activity_logs
         $insertActivity = $conn->prepare('INSERT INTO tbl_activity_logs (activity, admin_ID) VALUES (?, ?)');
-        $insertActivity->execute(["Admin logged in an account", $adminID]);
+        $insertActivity->execute(["You logged in of your account", $adminID]);
         
         $conn->commit();
     }else if (isset($_SESSION['customerID'])) {

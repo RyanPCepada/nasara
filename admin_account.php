@@ -540,7 +540,7 @@ try {
                                         }
                                     </style>
 
-                                    <button class="btn btn-primary"  style="width: 200px; height: 44px;" type="submit" id="logout" onclick="window.location.href='admin_login.php'"
+                                    <button class="btn btn-primary"  style="width: 200px; height: 44px;" type="submit" id="logout" onclick="window.location.href='login_main.php'"
                                     >Log Out</button>
 
                                 </form>

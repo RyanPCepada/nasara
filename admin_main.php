@@ -90,8 +90,8 @@ if (isset($_SESSION['adminID'])) {
 
         //FETCH ACTIVITY LOGS FOR HISTORY LIST
         // $sql1 = "SELECT activity FROM tbl_activity_logs WHERE activity = 'Submitted feedback' OR activity = 'Updated the profile'";
-        $sql1 = "SELECT activity FROM tbl_activity_logs WHERE customer_ID = $customerID ORDER BY dateAdded DESC";
-        $sql2 = "SELECT dateAdded FROM tbl_activity_logs WHERE customer_ID = $customerID ORDER BY dateAdded DESC";
+        $sql1 = "SELECT activity FROM tbl_activity_logs WHERE admin_ID = $adminID ORDER BY dateAdded DESC";
+        $sql2 = "SELECT dateAdded FROM tbl_activity_logs WHERE admin_ID = $adminID ORDER BY dateAdded DESC";
         // Prepare and execute the query
         $stmt1 = $conn->prepare($sql1);
         $stmt2 = $conn->prepare($sql2);
@@ -220,8 +220,10 @@ try {
 
         <img src="icons/NASARA_LOGO_WHITE_PNG.png" class="img-fluid" id="NASARA_LOGO" alt="">
 
-        
-
+        <form action="actions_admin/logoutAction_admin.php" method="post">
+            <button class="btn" type="submit" id="logout" onclick="window.location.href='login_main.php'"
+            >Log Out</button>
+        </form>
     </nav>
 
 
@@ -244,11 +246,30 @@ try {
                     </button>
                 </div>
 
-                
-                <div class="div-settings text-center d-flex align-items-center justify-content-center" id="div_settings" data-bs-toggle="modal" data-bs-target="#modal_settings">
-                    <button class="btn btn-secondary" type="button" id="icon_settings">
-                        <i class="fas fa-cog"></i>
-                        <h3 style="margin-top: -39px; margin-left: 56px;">Settings</h3>
+                <div class="div-notification text-center d-flex align-items-center justify-content-center" id="div_notification"  data-bs-toggle="modal" data-bs-target="#modal_adminnotif">
+                    <button class="btn btn-secondary" type="button" id="icon_notification">
+                        <i class="fas fa-bell"></i>
+                        <h3 style="margin-top: -39px; margin-left: 56px;">Notif</h3>
+                            <span id="notification-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <?php
+                                // Fetch the count of new feedbacks for today
+                                $sqlFeedback = "SELECT COUNT(feedback_ID) AS feedbackCount FROM tbl_feedback WHERE DATE(date) = CURDATE()"; // WHERE DATE(date) = CURDATE()
+                                $stmtFeedback = $conn->prepare($sqlFeedback);
+                                $stmtFeedback->execute();
+                                $feedbackCount = $stmtFeedback->fetchColumn();
+
+                                // Fetch the count of new customers for today
+                                $sqlCustomers = "SELECT COUNT(customer_ID) AS customerCount FROM tbl_customer_info"; // WHERE DATE(dateAdded) = CURDATE()
+                                $stmtCustomers = $conn->prepare($sqlCustomers);
+                                $stmtCustomers->execute();
+                                $customerCount = $stmtCustomers->fetchColumn();
+
+                                // Calculate and display the combined count of feedbacks and new customers
+                                $totalNotifications = $feedbackCount + $customerCount;
+                                echo $totalNotifications;
+                                ?>
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
                     </button>
                 </div>
                 
@@ -259,14 +280,12 @@ try {
                     </button>
                 </div>
                 
-                <div class="div-notification text-center d-flex align-items-center justify-content-center" id="div_notification" data-bs-toggle="modal" data-bs-target="#modal_notification">
-                    <button class="btn btn-secondary" type="button" id="icon_notification">
-                        <i class="fas fa-bell"></i>
-                        <h3 style="margin-top: -39px; margin-left: 56px;">Notif</h3>
+                <div class="div-settings text-center d-flex align-items-center justify-content-center" id="div_settings" data-bs-toggle="modal" data-bs-target="#modal_settings">
+                    <button class="btn btn-secondary" type="button" id="icon_settings">
+                        <i class="fas fa-cog"></i>
+                        <h3 style="margin-top: -39px; margin-left: 56px;">Settings</h3>
                     </button>
                 </div>
-
-
 
                 <div class="div-me text-center d-flex align-items-center justify-content-center" id="div_me" onclick="to_adminacc()">
                     <img src="images/<?php echo $adminimage; ?>" id="icon_me" class="img-fluid zoomable-image rounded-square">
@@ -281,6 +300,87 @@ try {
             </div>
         </div>
 
+        <!-- ADMIN NOTIFICATIONS MODAL -- FOR VIEWING ADMIN NOTIFICATIONS -->
+        <div class="modal fade" id="modal_adminnotif" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title" id="staticBackdropLabel" style="color: Black;">Notifications</h3>
+                                        <img src="pages/admin/GIF_NOTIFICATIONS.gif" style="width: 1.1in; height: .6in; margin-left: 0px; margin-top: 0px;" id="adminnotif_gif">
+                                    </div>
+
+                                    <div class="scrollable-content" id="inputfields" style="height: 500px; overflow-y: auto; color: black; background: lightgray;">
+                                        <div class="" style="position: relative;">
+                                            <?php
+                                            // Fetch and display customer registrations and feedback submissions
+                                            $sqlNotifications = "
+                                                (SELECT CONCAT(firstName, ' ', lastName) AS name, dateAdded AS date, 'registration' AS type
+                                                FROM tbl_customer_info)
+                                                UNION
+                                                (SELECT CONCAT(firstName, ' ', lastName) AS name, date, 'feedback' AS type
+                                                FROM tbl_customer_info ci
+                                                JOIN tbl_feedback f ON ci.customer_id = f.customer_id)
+                                                ORDER BY date DESC
+                                            ";
+
+                                            $stmtNotifications = $conn->prepare($sqlNotifications);
+                                            $stmtNotifications->execute();
+                                            $notifications = $stmtNotifications->fetchAll();
+
+                                            foreach ($notifications as $notification) {
+                                                echo '<div class="row" style="background-color: white; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);
+                                                    border-radius: 5px; font-size: 20px; width: 450px; margin-left: 15px; margin-top: 20px;">'; //#ecffed
+
+                                                if ($notification['type'] == 'registration') {
+                                                    // echo '<img src="images/<?php echo $image; >" class="img-fluid zoomable-image rounded-square" style="position: absolute; width: 50px; border-radius: 25px;">';
+                                                    echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has registered an account.</p>';
+                                                } elseif ($notification['type'] == 'feedback') {
+                                                    echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has submitted a feedback.</p>';
+                                                }
+
+                                                // Display relative date and time below
+                                                echo '<p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($notification['date']) . '</p>';
+
+                                                echo '</div>';
+                                            }
+
+                                            // Function to format relative date and time
+                                            function formatRelativeDate($date)
+                                            {
+                                                $now = new DateTime();
+                                                $formattedDate = new DateTime($date);
+                                                $interval = $now->diff($formattedDate);
+
+                                                if ($interval->days == 0) {
+                                                    if ($interval->h == 0) {
+                                                        return 'Today';
+                                                    } else {
+                                                        return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
+                                                    }
+                                                } elseif ($interval->days == 1) {
+                                                    return 'Yesterday @ ' . $formattedDate->format('h:i A');
+                                                } else {
+                                                    return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
+                                                }
+                                            }
+                                            ?>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="modal-footer" style="height: 70px;">
+                                        <button type="button" class="btn btn-secondary float-end" style="margin-top: 15px; margin-bottom: 15px; margin-right: 5px;" id="adminnotif_closeModalBtn" data-bs-dismiss="modal"
+                                        >Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <script>
+                            function openmodal_adminnotif() {
+                                $('#modal_adminnotif').modal('show');
+                            }
+                        </script>
+                        <!-- END ADMIN NOTIFICATIONS MODAL -- FOR VIEWING ADMIN NOTIFICATIONS -->
 
 
 
