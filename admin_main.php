@@ -237,26 +237,42 @@ try {
         <div class="col-1">
             <div class="card-body text-center d-flex justify-content-center" id="cards_body1">
 
-                <div class="text-center d-flex align-items-center justify-content-center bg-dark" id="div_home"></div>
-                <button class="btn btn-secondary" type="button" id="icon_home" onclick="to_home()" href="home_main.php">
-                    <i class="fas fa-home"></i>
-                    <h3 style="margin-top: -39px; margin-left: 52px;">Home</h3>
-                </button>
+                <div class="div-home text-center d-flex align-items-center justify-content-center" id="div_home">
+                    <button class="btn btn-secondary" type="button" id="icon_home" onclick="to_home()" href="home_main.php">
+                        <i class="fas fa-home"></i>
+                        <h3 style="margin-top: -39px; margin-left: 56px;">Home</h3>
+                    </button>
+                </div>
 
-                <button class="btn btn-secondary" type="button" id="icon_settings" data-bs-toggle="modal" data-bs-target="#modal_settings">
-                    <i class="fas fa-cog"></i>
-                    <h3 style="margin-top: -39px; margin-left: 52px;">Settings</h3>
-                </button>
                 
-                <button class="btn btn-secondary" type="button" id="icon_history" data-bs-toggle="modal" data-bs-target="#modal_history">
-                    <i class="fas fa-history"></i>
-                    <h3 style="margin-top: -39px; margin-left: 52px;">History</h3>
-                </button>
+                <div class="div-settings text-center d-flex align-items-center justify-content-center" id="div_settings" data-bs-toggle="modal" data-bs-target="#modal_settings">
+                    <button class="btn btn-secondary" type="button" id="icon_settings">
+                        <i class="fas fa-cog"></i>
+                        <h3 style="margin-top: -39px; margin-left: 56px;">Settings</h3>
+                    </button>
+                </div>
+                
+                <div class="div-history text-center d-flex align-items-center justify-content-center" id="div_history" data-bs-toggle="modal" data-bs-target="#modal_history">
+                    <button class="btn btn-secondary" type="button" id="icon_history">
+                        <i class="fas fa-history"></i>
+                        <h3 style="margin-top: -39px; margin-left: 56px;">History</h3>
+                    </button>
+                </div>
+                
+                <div class="div-notification text-center d-flex align-items-center justify-content-center" id="div_notification" data-bs-toggle="modal" data-bs-target="#modal_notification">
+                    <button class="btn btn-secondary" type="button" id="icon_notification">
+                        <i class="fas fa-bell"></i>
+                        <h3 style="margin-top: -39px; margin-left: 56px;">Notif</h3>
+                    </button>
+                </div>
 
-                <img src="images/<?php echo $adminimage; ?>" id="icon_account" class="img-fluid zoomable-image rounded-square"
-                onclick="to_adminacc()">
 
-                <h3 style="color: white; margin-top: 311px; margin-left: 13px;">Me</h3>
+
+                <div class="div-me text-center d-flex align-items-center justify-content-center" id="div_me" onclick="to_adminacc()">
+                    <img src="images/<?php echo $adminimage; ?>" id="icon_me" class="img-fluid zoomable-image rounded-square">
+
+                    <h3 style="color: white; margin-top: 8px; margin-left: 0px; cursor: pointer;">Me</h3>
+                </div>
 
                 <div class = " m-2 text-light" >   
                     <b class = "bg-transparent "  id="accountLink" onclick="to_account()" style=" cursor: pointer;"> <img src="navigation/user.png" alt=""></b>
@@ -267,6 +283,99 @@ try {
 
 
 
+
+    <!-- CHECK HISTORY MODAL -- FOR CHECKING HISTORY -->
+    <div class="modal fade" id="modal_checkhistory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="header"> <!--DON'T USE MODAL-HEADER, HEADER ONLY-->
+                    <h1 class="modal-title" id="staticBackdropLabel" style="margin-left: 20px; margin-top: 30px; margin-bottom: -25px; line-height: 1.1;"
+                    >History</h1>
+                    <img src="icons/GIF_FBHISTORY.gif" style="width: 2in; height: 1.15in; margin-left: 300px; margin-top: -80px;" id="fbhistory_gif">
+                <div>
+                </div class="row">
+                    <!-- <h style="margin-top: 5px; margin-left: 15px;"><?php echo 'all of <b>' . $firstName . ' ' . $middleName. ' ' . $lastName . '</b>\'s submitted feedbacks<br>'; ?></h> -->
+                </div>
+                <hr>
+                <div class="modal-body">
+                    <div class="scrollable-content" id="inputfields" style="height: 400px; overflow-y: auto;">
+
+                        <?php
+                            // Make sure you have the customer ID from the session
+                            $customerID = $_SESSION['customerID'];
+
+                            // Modify your SQL query to filter data for the current customer user
+                            $sql = "SELECT 
+                                        opinion AS 'Opinion',
+                                        suggestion AS 'Suggestion',
+                                        question AS 'Question',
+                                        rating AS 'Rating',
+                                        date AS 'Date'
+                                    FROM tbl_feedback
+                                    WHERE customer_ID = :customerID
+                                    ORDER BY date DESC";
+
+                            // Prepare and execute the query with the customer ID as a parameter
+                            $stmt = $conn->prepare($sql);
+                            $stmt->bindParam(':customerID', $customerID, PDO::PARAM_INT);
+                            $stmt->execute();
+
+                            // Fetch the data for the current customer user
+                            $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                        ?>
+
+                        <!-- Step 4: Display data in the table format with renamed columns -->
+                        <div class="scrollable-content" id="inputfields" style="max-height: 400px; overflow-y: auto;">
+                            <div class="row">
+                                <div class="col-12">
+                                    <table class="table table-bordered" style="color: black;">
+                                        <thead>
+                                            <tr>
+                                                <?php
+                                                // Display column aliases as headers
+                                                $aliasRow = $customerData[0]; // Assuming the first row contains aliases
+
+                                                foreach ($aliasRow as $alias => $value) {
+                                                    echo "<th style='background-color: white; color: black;'>$alias</th>";
+                                                }
+                                                ?>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            // Loop through the data and populate the table
+                                            foreach ($customerData as $row) {
+                                                echo "<tr>";
+                                                foreach ($row as $value) {
+                                                    echo "<td>$value</td>";
+                                                }
+                                                echo "</tr>";
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- <button type="submit" class="submit" name="submit" id="sett_cyp_modalsave">Save</button> -->
+
+                    <button type="button" class="btn btn-secondary float-end" style="margin-top: 15px;" id="sett_h_closeModalBtn" data-bs-dismiss="modal">Close</button>
+                    <!-- </form> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function openmodal_checkhistory() {
+        $('#modal_checkhistory').modal('show');
+    }
+    </script>
+    <!-- END CHECK HISTORY MODAL -- FOR CHECKING HISTORY -->
 
 
 
@@ -342,7 +451,7 @@ try {
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Change Your Password</h5>
+                    <h3 class="modal-title" id="staticBackdropLabel">Change Your Password</h3>
                     <img src="pages/account/GIF_PASSWORD.gif" style="width: 1.6in; height: .9in; margin-right: -15px;" id="password_gif">
                 </div>
                 <div class="modal-body">
@@ -408,6 +517,71 @@ try {
     
 
 
+    <!-- HISTORY MODAL -- FOR VIEWING HISTORY -->
+    <div class="modal fade" id="modal_history" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="staticBackdropLabel">History</h3>
+                <img src="pages/account/GIF_HISTORY.gif" style="width: 1.75in; height: 1in; margin-left: 208px;" id="bginfo_gif">
+                <!-- <img src="pages/account/HISTORY_GIF.gif" style="width: 1.5in; height: 1in; margin-left: 0px;" id="bginfo_gif"> -->
+            </div>
+
+                <div class="modal-body">
+                    <!-- <form id="feedback_history_form" method="POST" action="actions/change_password.php"> -->
+                    <div class="row">
+                        <div class="col-1">
+                        </div>
+                        <div class="col-4" style="margin-bottom: 10px; margin-left: 0px;">
+                            <h><b>Activity</b></h>
+                        </div>
+                        <div class="col-2">
+                        </div>
+                        <div class="col-5" style="margin-bottom: 10px; margin-left: 0px;">
+                            <h><b>Date</b></h>
+                        </div>
+                    </div>
+                    
+                    <div class="scrollable-content" id="inputfields" style="height: 400px; overflow-y: auto;">
+                        <table class="table table-bordered">
+                            <!-- <thead>
+                                <tr>
+                                    <th class="col-5">Activities</th>
+                                    <th class="col-5">Dates</th>
+                                </tr>
+                            </thead> -->
+                            <tbody>
+                                <?php
+                                // Assuming both arrays have the same length
+                                $count = count($activities);
+
+                                for ($i = 0; $i < $count; $i++) {
+                                ?>
+                                <tr>
+                                    <td class="col-5"><?php echo $activities[$i]; ?></td>
+                                    <td class="col-5"><?php echo $dates[$i]; ?></td>
+                                </tr>
+                                <?php
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- <button type="submit" class="submit" name="submit" id="sett_cyp_modalsave">Save</button> -->
+
+                    <button type="button" class="btn btn-secondary float-end" style="margin-top: 15px;" id="sett_h_closeModalBtn" data-bs-dismiss="modal">Close</button>
+                    <!-- </form> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function openmodal_history() {
+        $('#modal_history').modal('show');
+    }
+    </script>
+    <!-- END FEEDBACK HISTORY MODAL -- FOR VIEWING FEEDBACK HISTORY -->
 
 
 

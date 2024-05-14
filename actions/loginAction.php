@@ -37,7 +37,15 @@ if ($fetchCount_) {
 try {
     $conn->beginTransaction();
 
-    if (isset($_SESSION['customerID'])) {
+    if (isset($_SESSION['adminID'])) {
+        $adminID = $_SESSION['adminID'];
+
+        //tbl_activity_logs
+        $insertActivity = $conn->prepare('INSERT INTO tbl_activity_logs (activity, admin_ID) VALUES (?, ?)');
+        $insertActivity->execute(["Admin logged in an account", $adminID]);
+        
+        $conn->commit();
+    }else if (isset($_SESSION['customerID'])) {
         $customerID = $_SESSION['customerID'];
 
         //tbl_activity_logs

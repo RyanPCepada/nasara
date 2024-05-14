@@ -25,13 +25,13 @@
     <div class="body">
         <img src="pages/login/LOGIN.png" id="login_card" alt="">
         
-        <!-- <a id="back" href="http://localhost/DevBugs/landing_main.php">Back</a> -->
+        <!-- <a id="back" href="http://localhost/nasara/landing_main.php">Back</a> -->
 
         <div class="container">
             <label class="login">Login</label>
             <div class="login-container">
                 <!-- <form action="pages/home/home_main.php" method="POST" id="login_form"> -->
-                <form action="DevBugs/home_main.php" method="POST" id="login_form">
+                <form action="nasara/home_main.php" method="POST" id="login_form">
                     <div class="entryarea">
                         <input type="text" placeholder="Email" id="email" class="form-control" name="email" required>
                         <i class='bx bxs-user' id="userIcon"></i>
@@ -290,7 +290,7 @@ document.getElementById('closeModalBtn').addEventListener('click', function() {
 
     <script>
         function to_regis() {
-            window.location.href = '/DevBugs/registration_main.php';
+            window.location.href = '/nasara/registration_main.php';
         }
     </script>
     <script>
@@ -302,7 +302,7 @@ document.getElementById('closeModalBtn').addEventListener('click', function() {
     </script>
     <script>
         function to_forgotpassword_main() {
-            window.location.href = '/DevBugs/forgot_password_main.php';
+            window.location.href = '/nasara/forgot_password_main.php';
         }
     </script>
 </body>

@@ -20,13 +20,69 @@
 
 #div_home{
   position: absolute;
-  margin-left: 15px;
+  margin-left: 0px;
   margin-top: 20px;
-  width: 210px;
+  width: 210px !important;
   height: 80px;
   border-radius: 40px;
+  background-color: rgba(255, 255, 255, 0.075);
 }
 #div_home:hover{
+  background-color: rgba(255, 255, 255, 0.221) !important;
+}
+
+
+#div_notification{
+  position: absolute;
+  margin-left: 0px;
+  margin-top: 110px;
+  width: 210px !important;
+  height: 80px;
+  border-radius: 40px;
+  background-color: rgba(255, 255, 255, 0.075);
+}
+#div_notification:hover{
+  background-color: rgba(255, 255, 255, 0.221) !important;
+}
+
+#div_history{
+  position: absolute;
+  margin-left: 0px;
+  margin-top: 200px;
+  width: 210px !important;
+  height: 80px;
+  border-radius: 40px;
+  background-color: rgba(255, 255, 255, 0.075);
+}
+#div_history:hover{
+  background-color: rgba(255, 255, 255, 0.221) !important;
+}
+
+
+#div_settings{
+  position: absolute;
+  margin-left: 0px;
+  margin-top: 290px;
+  width: 210px !important;
+  height: 80px;
+  border-radius: 40px;
+  background-color: rgba(255, 255, 255, 0.075);
+}
+#div_settings:hover{
+  background-color: rgba(255, 255, 255, 0.221) !important;
+}
+
+
+#div_me{
+  position: absolute;
+  margin-left: 0px;
+  margin-top: 380px;
+  width: 210px !important;
+  height: 80px;
+  border-radius: 40px;
+  background-color: rgba(255, 255, 255, 0.075);
+}
+#div_me:hover{
   background-color: rgba(255, 255, 255, 0.221) !important;
 }
 
@@ -45,9 +101,7 @@
   height: 60px;
   border: solid 2px lightblue;
   border-radius: 30px;
-  /* margin-left: 1380px; */
-  margin-left: -50%;
-  margin-top: 30px;
+  margin-left: -120px;
   transition: border-color 0.2s ease;
 }
 
@@ -64,9 +118,7 @@
   height: 60px;
   border: solid 2px lightblue;
   border-radius: 30px;
-  /* margin-left: 1380px; */
-  margin-left: -50%;
-  margin-top: 120px;
+  margin-left: -120px;
   transition: border-color 0.2s ease;
 }
 
@@ -82,15 +134,48 @@
   height: 60px;
   border: solid 2px lightblue;
   border-radius: 30px;
-  /* margin-left: 1380px; */
-  margin-left: -50%;
-  margin-top: 210px;
+  margin-left: -120px;
   transition: border-color 0.2s ease;
 }
 
 #icon_history:hover {
   border-color: rgb(255, 255, 255);
 }
+
+
+#icon_notification {
+  position: absolute;
+  width: 60px;
+  font-size: 30px;
+  height: 60px;
+  border: solid 2px lightblue;
+  border-radius: 30px;
+  margin-left: -120px;
+  transition: border-color 0.2s ease;
+}
+
+#icon_notification:hover {
+  border-color: rgb(255, 255, 255);
+}
+
+#icon_me {
+  position: absolute;
+  width: 60px;
+  font-size: 30px;
+  height: 60px;
+  border: solid 2px lightblue;
+  border-radius: 30px;
+  margin-left: -120px;
+  transition: border-color 0.2s ease;
+}
+
+#icon_me:hover {
+  border-color: rgb(255, 255, 255);
+}
+
+
+
+
 
 
 

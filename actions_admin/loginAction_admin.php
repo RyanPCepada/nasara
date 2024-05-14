@@ -28,8 +28,8 @@ try {
         $adminID = $_SESSION['adminID'];
 
         //tbl_activity_logs
-        // $insertActivity = $conn->prepare('INSERT INTO tbl_activity_logs (activity, customer_ID) VALUES (?, ?)');
-        // $insertActivity->execute(["Logged in an account", $customerID]);
+        $insertActivity = $conn->prepare('INSERT INTO tbl_activity_logs (activity, admin_ID) VALUES (?, ?)');
+        $insertActivity->execute(["Admin logged in an account", $adminID]);
         
         $conn->commit();
     } else {
