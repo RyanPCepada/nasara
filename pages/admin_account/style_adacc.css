@@ -9,11 +9,194 @@
   margin-top: -0px;
 }
 
+#logout{
+  margin-left: 1250px;
+  width: 80px;
+  height: 40px;
+  color: white;
+  text-align: center;
+  border: 1px solid white;
+  padding: 5px;
+  text-decoration: none;
+  border-radius: 3px;
+}
+
+#logout:hover{
+  background-color: #045dbd; /*#248eff*/
+  border-radius: 3px;
+}
+
+
 #logoname{
   font-size: 30px;
   font-weight: bold;
   margin-left: 0px;
 }
+
+
+
+
+
+#div_home{
+  position: absolute;
+  margin-left: 0px;
+  margin-top: 20px;
+  width: 210px !important;
+  height: 80px;
+  border-radius: 40px;
+  background-color: rgba(255, 255, 255, 0.075);
+}
+#div_home:hover{
+  background-color: rgba(255, 255, 255, 0.221) !important;
+}
+
+
+#div_notification{
+  position: absolute;
+  margin-left: 0px;
+  margin-top: 110px;
+  width: 210px !important;
+  height: 80px;
+  border-radius: 40px;
+  background-color: rgba(255, 255, 255, 0.075);
+}
+#div_notification:hover{
+  background-color: rgba(255, 255, 255, 0.221) !important;
+}
+
+#div_history{
+  position: absolute;
+  margin-left: 0px;
+  margin-top: 200px;
+  width: 210px !important;
+  height: 80px;
+  border-radius: 40px;
+  background-color: rgba(255, 255, 255, 0.075);
+}
+#div_history:hover{
+  background-color: rgba(255, 255, 255, 0.221) !important;
+}
+
+
+#div_settings{
+  position: absolute;
+  margin-left: 0px;
+  margin-top: 290px;
+  width: 210px !important;
+  height: 80px;
+  border-radius: 40px;
+  background-color: rgba(255, 255, 255, 0.075);
+}
+#div_settings:hover{
+  background-color: rgba(255, 255, 255, 0.221) !important;
+}
+
+
+#div_profile{
+  position: absolute;
+  margin-left: 0px;
+  margin-top: 380px;
+  width: 210px !important;
+  height: 80px;
+  border-radius: 40px;
+  background-color: rgba(255, 255, 255, 0.075);
+  background-color: rgba(255, 255, 255, 0.221) !important;
+}
+#div_profile:hover{
+  background-color: rgba(255, 255, 255, 0.221) !important;
+}
+
+
+
+
+
+
+
+
+
+#icon_home {
+  position: absolute;
+  width: 60px;
+  font-size: 30px;
+  height: 60px;
+  border: solid 2px lightblue;
+  border-radius: 30px;
+  margin-left: -120px;
+  transition: border-color 0.2s ease;
+}
+
+#icon_home:hover {
+  border-color: rgb(255, 255, 255);
+}
+
+
+
+#icon_settings {
+  position: absolute;
+  width: 60px;
+  font-size: 30px;
+  height: 60px;
+  border: solid 2px lightblue;
+  border-radius: 30px;
+  margin-left: -120px;
+  transition: border-color 0.2s ease;
+}
+
+#icon_settings:hover {
+  border-color: rgb(255, 255, 255);
+}
+
+
+#icon_history {
+  position: absolute;
+  width: 60px;
+  font-size: 30px;
+  height: 60px;
+  border: solid 2px lightblue;
+  border-radius: 30px;
+  margin-left: -120px;
+  transition: border-color 0.2s ease;
+}
+
+#icon_history:hover {
+  border-color: rgb(255, 255, 255);
+}
+
+
+#icon_notification {
+  position: absolute;
+  width: 60px;
+  font-size: 30px;
+  height: 60px;
+  border: solid 2px lightblue;
+  border-radius: 30px;
+  margin-left: -120px;
+  transition: border-color 0.2s ease;
+}
+
+#icon_notification:hover {
+  border-color: rgb(255, 255, 255);
+}
+
+#icon_profile {
+  position: absolute;
+  width: 60px;
+  font-size: 30px;
+  height: 60px;
+  border: solid 2px lightblue;
+  border-radius: 30px;
+  margin-left: -120px;
+  margin-top: 0px;
+  transition: border-color 0.2s ease;
+}
+
+#icon_profile:hover {
+  border-color: rgb(255, 255, 255);
+}
+
+
+
+
 
 
 
@@ -457,6 +640,19 @@ thead th {
 
 /*//////////////////////////////MODAL//////////////////////////////*/
 
+
+#div_profile_page{
+  width: 100%;
+  height: 601px;
+  /* background-image: url('BG_DEFAULT.png'); */
+  /* background-color: blue; */
+  background-position: center;
+  background-repeat: no-repeat;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+}
+
 #openModalBtn{
 color: rgb(13, 0, 255);
 background: white;
@@ -496,35 +692,33 @@ width: 250px;
 }
 
 .zoomable-image{
-margin-top: 20px;
-width: 1in;
-height: 1in;
-border: 5px solid rgb(157, 145, 255);
-border-radius: 100px;
-filter: drop-shadow(5px 5px 15px rgba(62, 62, 62, 0.5));
+  width: 1in;
+  height: 1in;
+  border: 5px solid rgb(157, 145, 255);
+  border-radius: 150px;
+  filter: drop-shadow(5px 5px 15px rgba(62, 62, 62, 0.5));
 }
 .zoomable-image:hover{
-transform: scale(1.005);
-filter: drop-shadow(5px 5px 10px rgba(46, 46, 46, 0.5));
-}
-.fa-camera {
-transition: transform 0.2s, filter 0.2s;
-filter: drop-shadow(5px 5px 10px rgba(46, 46, 46, 0.5));
-
-/* Define the size and position */
-position: absolute;
-bottom: 5px;
-right: 5px;
-font-size: 0.4in;
-color: rgb(212, 255, 0); /* Blue Gradient */
-border-radius: 50%; /* Apply a circular shape to mimic bevel style */
-padding: 0.1in; /* Adjust padding to control the bevel effect */
-transform: rotate(0deg); /* Rotate the camera icon for the bevel effect */
+  transform: scale(1.005);
+  filter: drop-shadow(5px 5px 10px rgba(46, 46, 46, 0.5));
 }
 
-.fa-camera:hover{
-transform: scale(1.1); /* Scale the image up by 10% on hover */
-filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.5)); /* Add a shadow effect using the filter property */
+#icon_camera {
+  position: absolute;
+  margin-left: -60px !important;
+  margin-top: 200px;
+  font-size: 0.55in;
+  color: rgb(212, 255, 0); /* Blue Gradient */
+  border-radius: 50%; /* Apply a circular shape to mimic bevel style */
+  padding: 0.1in; /* Adjust padding to control the bevel effect */
+  transform: rotate(0deg); /* Rotate the camera icon for the bevel effect */
+  transition: transform 0.2s, filter 0.2s;
+  filter: drop-shadow(5px 5px 10px rgba(46, 46, 46, 0.5));
+}
+
+#icon_camera:hover{
+  transform: scale(1.1); /* Scale the image up by 10% on hover */
+  filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.5)); /* Add a shadow effect using the filter property */
 }
 
 #p_row1{

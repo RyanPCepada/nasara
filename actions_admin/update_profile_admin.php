@@ -45,9 +45,9 @@ if (isset($_SESSION['adminID'])) {
             }
         }
 
-        // Insert an activity log in tbl_activity_logs
-        // $insertActivity = $conn->prepare('INSERT INTO tbl_activity_logs (activity, admin_ID) VALUES (?, ?)');
-        // $insertActivity->execute(["Changed Profile Picture", $adminID]);
+        // Insert admin activity log in tbl_activity_logs
+        $insertActivity = $conn->prepare('INSERT INTO tbl_activity_logs (activity, admin_ID) VALUES (?, ?)');
+        $insertActivity->execute(["You changed your profile picture", $adminID]);
 
         // Redirect to the user's profile page
         echo '<script>alert("Profile Picture Successfully Changed!");';

@@ -249,7 +249,7 @@ try {
                 <div class="div-notification text-center d-flex align-items-center justify-content-center" id="div_notification"  data-bs-toggle="modal" data-bs-target="#modal_adminnotif">
                     <button class="btn btn-secondary" type="button" id="icon_notification">
                         <i class="fas fa-bell"></i>
-                        <h3 style="margin-top: -39px; margin-left: 56px;">Notif</h3>
+                        <h3 style="margin-top: -39px; margin-left: 56px;">Notifs</h3>
                             <span id="notification-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                 <?php
                                 // Fetch the count of new feedbacks for today
@@ -259,7 +259,7 @@ try {
                                 $feedbackCount = $stmtFeedback->fetchColumn();
 
                                 // Fetch the count of new customers for today
-                                $sqlCustomers = "SELECT COUNT(customer_ID) AS customerCount FROM tbl_customer_info"; // WHERE DATE(dateAdded) = CURDATE()
+                                $sqlCustomers = "SELECT COUNT(customer_ID) AS customerCount FROM tbl_customer_info WHERE DATE(dateAdded) = CURDATE()"; // WHERE DATE(dateAdded) = CURDATE()
                                 $stmtCustomers = $conn->prepare($sqlCustomers);
                                 $stmtCustomers->execute();
                                 $customerCount = $stmtCustomers->fetchColumn();
@@ -273,7 +273,7 @@ try {
                     </button>
                 </div>
                 
-                <div class="div-history text-center d-flex align-items-center justify-content-center" id="div_history" data-bs-toggle="modal" data-bs-target="#modal_history">
+                <div class="div-history text-center d-flex align-items-center justify-content-center" id="div_history" data-bs-toggle="modal" data-bs-target="#modal_adminhistory">
                     <button class="btn btn-secondary" type="button" id="icon_history">
                         <i class="fas fa-history"></i>
                         <h3 style="margin-top: -39px; margin-left: 56px;">History</h3>
@@ -287,10 +287,10 @@ try {
                     </button>
                 </div>
 
-                <div class="div-me text-center d-flex align-items-center justify-content-center" id="div_me" onclick="to_adminacc()">
-                    <img src="images/<?php echo $adminimage; ?>" id="icon_me" class="img-fluid zoomable-image rounded-square">
+                <div class="div-profile text-center d-flex align-items-center justify-content-center" id="div_profile" onclick="to_adminacc()">
+                    <img src="images/<?php echo $adminimage; ?>" id="icon_profile" class="img-fluid zoomable-image rounded-square">
 
-                    <h3 style="color: white; margin-top: 8px; margin-left: 0px; cursor: pointer;">Me</h3>
+                    <h3 style="color: white; margin-top: 8px; margin-left: 42px; cursor: pointer;">Profile</h3>
                 </div>
 
                 <div class = " m-2 text-light" >   
@@ -300,167 +300,158 @@ try {
             </div>
         </div>
 
-        <!-- ADMIN NOTIFICATIONS MODAL -- FOR VIEWING ADMIN NOTIFICATIONS -->
+       <!-- ADMIN NOTIFICATIONS MODAL -- FOR VIEWING ADMIN NOTIFICATIONS -->
         <div class="modal fade" id="modal_adminnotif" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h3 class="modal-title" id="staticBackdropLabel" style="color: Black;">Notifications</h3>
-                                        <img src="pages/admin/GIF_NOTIFICATIONS.gif" style="width: 1.1in; height: .6in; margin-left: 0px; margin-top: 0px;" id="adminnotif_gif">
-                                    </div>
-
-                                    <div class="scrollable-content" id="inputfields" style="height: 500px; overflow-y: auto; color: black; background: lightgray;">
-                                        <div class="" style="position: relative;">
-                                            <?php
-                                            // Fetch and display customer registrations and feedback submissions
-                                            $sqlNotifications = "
-                                                (SELECT CONCAT(firstName, ' ', lastName) AS name, dateAdded AS date, 'registration' AS type
-                                                FROM tbl_customer_info)
-                                                UNION
-                                                (SELECT CONCAT(firstName, ' ', lastName) AS name, date, 'feedback' AS type
-                                                FROM tbl_customer_info ci
-                                                JOIN tbl_feedback f ON ci.customer_id = f.customer_id)
-                                                ORDER BY date DESC
-                                            ";
-
-                                            $stmtNotifications = $conn->prepare($sqlNotifications);
-                                            $stmtNotifications->execute();
-                                            $notifications = $stmtNotifications->fetchAll();
-
-                                            foreach ($notifications as $notification) {
-                                                echo '<div class="row" style="background-color: white; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);
-                                                    border-radius: 5px; font-size: 20px; width: 450px; margin-left: 15px; margin-top: 20px;">'; //#ecffed
-
-                                                if ($notification['type'] == 'registration') {
-                                                    // echo '<img src="images/<?php echo $image; >" class="img-fluid zoomable-image rounded-square" style="position: absolute; width: 50px; border-radius: 25px;">';
-                                                    echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has registered an account.</p>';
-                                                } elseif ($notification['type'] == 'feedback') {
-                                                    echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has submitted a feedback.</p>';
-                                                }
-
-                                                // Display relative date and time below
-                                                echo '<p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($notification['date']) . '</p>';
-
-                                                echo '</div>';
-                                            }
-
-                                            // Function to format relative date and time
-                                            function formatRelativeDate($date)
-                                            {
-                                                $now = new DateTime();
-                                                $formattedDate = new DateTime($date);
-                                                $interval = $now->diff($formattedDate);
-
-                                                if ($interval->days == 0) {
-                                                    if ($interval->h == 0) {
-                                                        return 'Today';
-                                                    } else {
-                                                        return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
-                                                    }
-                                                } elseif ($interval->days == 1) {
-                                                    return 'Yesterday @ ' . $formattedDate->format('h:i A');
-                                                } else {
-                                                    return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
-                                                }
-                                            }
-                                            ?>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="modal-footer" style="height: 70px;">
-                                        <button type="button" class="btn btn-secondary float-end" style="margin-top: 15px; margin-bottom: 15px; margin-right: 5px;" id="adminnotif_closeModalBtn" data-bs-dismiss="modal"
-                                        >Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <script>
-                            function openmodal_adminnotif() {
-                                $('#modal_adminnotif').modal('show');
-                            }
-                        </script>
-                        <!-- END ADMIN NOTIFICATIONS MODAL -- FOR VIEWING ADMIN NOTIFICATIONS -->
-
-
-
-    <!-- CHECK HISTORY MODAL -- FOR CHECKING HISTORY -->
-    <div class="modal fade" id="modal_checkhistory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="header"> <!--DON'T USE MODAL-HEADER, HEADER ONLY-->
-                    <h1 class="modal-title" id="staticBackdropLabel" style="margin-left: 20px; margin-top: 30px; margin-bottom: -25px; line-height: 1.1;"
-                    >History</h1>
-                    <img src="icons/GIF_FBHISTORY.gif" style="width: 2in; height: 1.15in; margin-left: 300px; margin-top: -80px;" id="fbhistory_gif">
-                <div>
-                </div class="row">
-                    <!-- <h style="margin-top: 5px; margin-left: 15px;"><?php echo 'all of <b>' . $firstName . ' ' . $middleName. ' ' . $lastName . '</b>\'s submitted feedbacks<br>'; ?></h> -->
-                </div>
-                <hr>
-                <div class="modal-body">
-                    <div class="scrollable-content" id="inputfields" style="height: 400px; overflow-y: auto;">
-
-                        <?php
-                            // Make sure you have the customer ID from the session
-                            $customerID = $_SESSION['customerID'];
-
-                            // Modify your SQL query to filter data for the current customer user
-                            $sql = "SELECT 
-                                        opinion AS 'Opinion',
-                                        suggestion AS 'Suggestion',
-                                        question AS 'Question',
-                                        rating AS 'Rating',
-                                        date AS 'Date'
-                                    FROM tbl_feedback
-                                    WHERE customer_ID = :customerID
-                                    ORDER BY date DESC";
-
-                            // Prepare and execute the query with the customer ID as a parameter
-                            $stmt = $conn->prepare($sql);
-                            $stmt->bindParam(':customerID', $customerID, PDO::PARAM_INT);
-                            $stmt->execute();
-
-                            // Fetch the data for the current customer user
-                            $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                        ?>
-
-                        <!-- Step 4: Display data in the table format with renamed columns -->
-                        <div class="scrollable-content" id="inputfields" style="max-height: 400px; overflow-y: auto;">
-                            <div class="row">
-                                <div class="col-12">
-                                    <table class="table table-bordered" style="color: black;">
-                                        <thead>
-                                            <tr>
-                                                <?php
-                                                // Display column aliases as headers
-                                                $aliasRow = $customerData[0]; // Assuming the first row contains aliases
-
-                                                foreach ($aliasRow as $alias => $value) {
-                                                    echo "<th style='background-color: white; color: black;'>$alias</th>";
-                                                }
-                                                ?>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            // Loop through the data and populate the table
-                                            foreach ($customerData as $row) {
-                                                echo "<tr>";
-                                                foreach ($row as $value) {
-                                                    echo "<td>$value</td>";
-                                                }
-                                                echo "</tr>";
-                                            }
-                                            ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="staticBackdropLabel" style="color: Black;">Notifications</h3>
+                        <img src="pages/admin/GIF_NOTIFICATIONS.gif" style="width: 1.1in; height: .6in; margin-left: 0px; margin-top: 0px;" id="adminnotif_gif">
                     </div>
 
+                    <div class="scrollable-content" id="inputfields" style="height: 500px; overflow-y: auto; color: black; background: white;">
+                        <div class="" style="position: relative;">
+                        <?php
+                            // Fetch and display customer registrations and feedback submissions
+                            $sqlNotifications = "
+                                (SELECT CONCAT(firstName, ' ', lastName) AS name, dateAdded AS date, 'registration' AS type
+                                FROM tbl_customer_info) 
+                                UNION
+                                (SELECT CONCAT(firstName, ' ', lastName) AS name, date, 'feedback' AS type
+                                FROM tbl_customer_info ci
+                                JOIN tbl_feedback f ON ci.customer_id = f.customer_id)
+                                ORDER BY date DESC
+                            ";
+
+                            $stmtNotifications = $conn->prepare($sqlNotifications);
+                            $stmtNotifications->execute();
+                            $notifications = $stmtNotifications->fetchAll();
+
+                            $todayNotifications = [];
+                            $yesterdayNotifications = [];
+                            $olderNotifications = [];
+
+                            $now = new DateTime();
+                            $yesterday = (clone $now)->modify('-1 day');
+
+                            foreach ($notifications as $notification) {
+                                $notificationDate = new DateTime($notification['date']);
+
+                                if ($notificationDate->format('Y-m-d') == $now->format('Y-m-d')) {
+                                    $todayNotifications[] = $notification;
+                                } elseif ($notificationDate->format('Y-m-d') == $yesterday->format('Y-m-d')) {
+                                    $yesterdayNotifications[] = $notification;
+                                } else {
+                                    $olderNotifications[] = $notification;
+                                }
+                            }
+
+                            function displayNotifications($notifications, $heading, $marginTop) {
+                                echo '<h4 style="margin-top: ' . $marginTop . '; margin-left: 15px; font-size: 20px; color: gray;">' . $heading . '</h4>';
+                                foreach ($notifications as $notification) {
+                                    echo '<div class="row" style="background-color: #f0ecff; border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); 
+                                        border-radius: 5px; font-size: 20px; width: 450px; margin-left: 15px; margin-top: 10px;">';
+
+                                    if ($notification['type'] == 'registration') {
+                                        echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has registered an account.</p>';
+                                    } elseif ($notification['type'] == 'feedback') {
+                                        echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has submitted feedback.</p>';
+                                    }
+
+                                    echo '<p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($notification['date'], $heading) . '</p>';
+                                    echo '</div>';
+                                }
+                            }
+
+                            displayNotifications($todayNotifications, 'Today', '20px');
+                            displayNotifications($yesterdayNotifications, 'Yesterday', '20px');
+                            displayNotifications($olderNotifications, 'Older', '20px');
+
+                            // Function to format relative date and time
+                            function formatRelativeDate($date, $category)
+                            {
+                                $formattedDate = new DateTime($date);
+
+                                if ($category === 'Today') {
+                                    return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
+                                } elseif ($category === 'Yesterday') {
+                                    return 'Yesterday @ ' . $formattedDate->format('h:i A');
+                                } else {
+                                    $interval = (new DateTime())->diff($formattedDate);
+                                    return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
+                                }
+                            }
+                        ?>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer" style="height: 70px;">
+                        <button type="button" class="btn btn-secondary float-end" style="margin-top: 15px; margin-bottom: 15px; margin-right: 5px;" id="adminnotif_closeModalBtn" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function openmodal_adminnotif() {
+                $('#modal_adminnotif').modal('show');
+                document.getElementById('notification-badge').textContent = '0';
+            }
+        </script>
+
+
+    <!-- ADMIN HISTORY MODAL -- FOR VIEWING HISTORY -->
+    <div class="modal fade" id="modal_adminhistory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="staticBackdropLabel">History</h3>
+                <img src="pages/account/GIF_HISTORY.gif" style="width: 1.75in; height: 1in; margin-left: 208px;" id="bginfo_gif">
+                <!-- <img src="pages/account/HISTORY_GIF.gif" style="width: 1.5in; height: 1in; margin-left: 0px;" id="bginfo_gif"> -->
+            </div>
+
+                <div class="modal-body">
+                    <!-- <form id="feedback_history_form" method="POST" action="actions/change_password.php"> -->
+                    <div class="row">
+                        <div class="col-1">
+                        </div>
+                        <div class="col-4" style="margin-bottom: 10px; margin-left: 0px;">
+                            <h><b>Activity</b></h>
+                        </div>
+                        <div class="col-2">
+                        </div>
+                        <div class="col-5" style="margin-bottom: 10px; margin-left: 0px;">
+                            <h><b>Date</b></h>
+                        </div>
+                    </div>
+                    
+                    <div class="scrollable-content" id="inputfields" style="height: 400px; overflow-y: auto;">
+                        <table class="table table-bordered">
+                            <!-- <thead>
+                                <tr>
+                                    <th class="col-5">Activities</th>
+                                    <th class="col-5">Dates</th>
+                                </tr>
+                            </thead> -->
+                            <tbody>
+                                <?php
+                                // Assuming both arrays have the same length
+                                $count = count($activities);
+
+                                for ($i = 0; $i < $count; $i++) {
+                                ?>
+                                <tr>
+                                    <td class="col-5"><?php echo $activities[$i]; ?></td>
+                                    <td class="col-5"><?php echo $dates[$i]; ?></td>
+                                </tr>
+                                <?php
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
                     <!-- <button type="submit" class="submit" name="submit" id="sett_cyp_modalsave">Save</button> -->
 
                     <button type="button" class="btn btn-secondary float-end" style="margin-top: 15px;" id="sett_h_closeModalBtn" data-bs-dismiss="modal">Close</button>
@@ -471,11 +462,13 @@ try {
     </div>
 
     <script>
-    function openmodal_checkhistory() {
-        $('#modal_checkhistory').modal('show');
+    function openmodal_history() {
+        $('#modal_history').modal('show');
     }
     </script>
-    <!-- END CHECK HISTORY MODAL -- FOR CHECKING HISTORY -->
+    <!-- END ADMIN HISTORY MODAL -- FOR VIEWING FEEDBACK HISTORY -->
+
+
 
 
 
@@ -617,73 +610,7 @@ try {
     
 
 
-    <!-- HISTORY MODAL -- FOR VIEWING HISTORY -->
-    <div class="modal fade" id="modal_history" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="staticBackdropLabel">History</h3>
-                <img src="pages/account/GIF_HISTORY.gif" style="width: 1.75in; height: 1in; margin-left: 208px;" id="bginfo_gif">
-                <!-- <img src="pages/account/HISTORY_GIF.gif" style="width: 1.5in; height: 1in; margin-left: 0px;" id="bginfo_gif"> -->
-            </div>
-
-                <div class="modal-body">
-                    <!-- <form id="feedback_history_form" method="POST" action="actions/change_password.php"> -->
-                    <div class="row">
-                        <div class="col-1">
-                        </div>
-                        <div class="col-4" style="margin-bottom: 10px; margin-left: 0px;">
-                            <h><b>Activity</b></h>
-                        </div>
-                        <div class="col-2">
-                        </div>
-                        <div class="col-5" style="margin-bottom: 10px; margin-left: 0px;">
-                            <h><b>Date</b></h>
-                        </div>
-                    </div>
-                    
-                    <div class="scrollable-content" id="inputfields" style="height: 400px; overflow-y: auto;">
-                        <table class="table table-bordered">
-                            <!-- <thead>
-                                <tr>
-                                    <th class="col-5">Activities</th>
-                                    <th class="col-5">Dates</th>
-                                </tr>
-                            </thead> -->
-                            <tbody>
-                                <?php
-                                // Assuming both arrays have the same length
-                                $count = count($activities);
-
-                                for ($i = 0; $i < $count; $i++) {
-                                ?>
-                                <tr>
-                                    <td class="col-5"><?php echo $activities[$i]; ?></td>
-                                    <td class="col-5"><?php echo $dates[$i]; ?></td>
-                                </tr>
-                                <?php
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- <button type="submit" class="submit" name="submit" id="sett_cyp_modalsave">Save</button> -->
-
-                    <button type="button" class="btn btn-secondary float-end" style="margin-top: 15px;" id="sett_h_closeModalBtn" data-bs-dismiss="modal">Close</button>
-                    <!-- </form> -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-    function openmodal_history() {
-        $('#modal_history').modal('show');
-    }
-    </script>
-    <!-- END FEEDBACK HISTORY MODAL -- FOR VIEWING FEEDBACK HISTORY -->
-
-
+    
 
 
 
