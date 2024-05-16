@@ -242,28 +242,28 @@ try {
         <div class="col-1">
             <div class="card-body text-center d-flex justify-content-center" id="cards_body1">
 
-                <div class="div-home text-center d-flex align-items-center justify-content-center" id="div_home" onclick="to_home()" href="home_main.php">
+            <div class="div-home text-center d-flex align-items-center justify-content-center" id="div_home" onclick="to_adminhome()" href="home_main.php">
                     <button class="btn btn-secondary" type="button" id="icon_home">
                         <i class="fas fa-home"></i>
                         <h3 style="margin-top: -39px; margin-left: 60px;">Home</h3>
                     </button>
                 </div>
 
-                <div class="div-feedbacks text-center d-flex align-items-center justify-content-center" id="div_feedbacks" onclick="to_feedbacks()" href="admin_feedbacks.php">
+                <div class="div-feedbacks text-center d-flex align-items-center justify-content-center" id="div_feedbacks" onclick="to_adminfeedbacks()" href="admin_feedbacks.php">
                     <button class="btn btn-secondary" type="button" id="icon_feedbacks">
                         <i class="fas fa-comment"></i>
                         <h3 style="margin-top: -39px; margin-left: 60px;">Feedbacks</h3>
                     </button>
                 </div>
 
-                <div class="div-customers text-center d-flex align-items-center justify-content-center" id="div_customers" onclick="to_customers()" href="admin_customers.php">
+                <div class="div-customers text-center d-flex align-items-center justify-content-center" id="div_customers" onclick="to_admincustomers()" href="admin_customers.php">
                     <button class="btn btn-secondary" type="button" id="icon_customers">
                         <i class="fas fa-users"></i>
                         <h3 style="margin-top: -39px; margin-left: 60px;">Customers</h3>
                     </button>
                 </div>
 
-                <div class="div-notifications text-center d-flex align-items-center justify-content-center" id="div_notifications" onclick="to_notifications()" href="admin_notifications.php">
+                <div class="div-notifications text-center d-flex align-items-center justify-content-center" id="div_notifications" onclick="to_adminnotifications()" href="admin_notifications.php">
                     <button class="btn btn-secondary" type="button" id="icon_notifications">
                         <i class="fas fa-bell"></i>
                         <h3 style="margin-top: -39px; margin-left: 60px;">Notifications</h3>
@@ -296,6 +296,7 @@ try {
                     </button>
                 </div>
 
+                
                 <div class="div-history text-center d-flex align-items-center justify-content-center" id="div_history" onclick="to_adminhistory()" href="admin_history.php">
                     <button class="btn btn-secondary" type="button" id="icon_history">
                         <i class="fas fa-history"></i>
@@ -303,7 +304,7 @@ try {
                     </button>
                 </div>
                 
-                <div class="div-settings text-center d-flex align-items-center justify-content-center" id="div_settings" data-bs-toggle="modal" data-bs-target="#modal_settings">
+                <div class="div-settings text-center d-flex align-items-center justify-content-center" id="div_settings" onclick="to_adminsettings()" href="admin_settings.php">
                     <button class="btn btn-secondary" type="button" id="icon_settings">
                         <i class="fas fa-cog"></i>
                         <h3 style="margin-top: -39px; margin-left: 60px;">Settings</h3>

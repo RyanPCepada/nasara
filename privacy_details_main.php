@@ -81,7 +81,7 @@
         <header>
             <!-- <a class="back-button" href="landing_main.php">&#8592;</a> -->
             <img class="logo" src="pages/privacy_details/ICON_PRIVACY_DETAILS.png" alt="">
-            <h1>Privacy Details for Customer Feedback Management System</h1>
+            <h1>Privacy Details for Nasara Store<br>Customer Feedback Management System</h1>
         </header>
 
         <section>
@@ -137,7 +137,7 @@
 
         <footer>
             <p>Thank you for providing valuable feedback that helps us serve you better.</p>
-            <p>Octawiz-Devbugs 2023</p>
+            <p>Nasara Store @2024</p>
         </footer>
     </div>
 </body>
