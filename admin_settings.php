@@ -455,43 +455,32 @@ if (isset($_SESSION['customerID'])) {
 </body>
 </html>
 
-<script>
-    function to_home() {
-        window.location.href = 'home_main.php';
-    }
-</script>
 
 <script>
-    function to_aboutUs() {
-        window.location.href = 'aboutus_main.php';
+    function to_adminhome() {
+        window.location.href = 'admin_main.php';
     }
-</script>
-
-<script>
-    function to_contactUs() {
-        window.location.href = 'contactus_main.php';
+    function to_adminacc() {
+        window.location.href = 'admin_account.php';
     }
-</script>
-
-<script>
-    function to_account() {
-        window.location.href = 'account_main.php';
+    function to_adminfeedbacks() {
+        window.location.href = 'admin_feedbacks.php';
     }
-</script>
-
-<script>
-    function to_back() {
-        $.post("pages/account/back_acc.php", {},function (data) {
-            $("#nav_contents").html(data);
+    function to_admincustomers() {
+        window.location.href = 'admin_customers.php';
+    }
+    function to_adminnotifications() {
+        window.location.href = 'admin_notifications.php';
+    }
+    function to_adminhistory() {
+        window.location.href = 'admin_history.php';
+    }
+    function to_adminsettings() {
+        window.location.href = 'admin_settings.php';
+    }
+    function to_adminlogin() {
+        $.post("admin_login.php", {},function (data) {
+            $("#contents").html(data);  
         });
-    }
+    }  
 </script>
-
-<script>
-    function to_nav(){
-        $.post("navigation/nav.php", {}, function (data) {
-            $("#nav_contents").html(data);
-        });
-    }
-</script>
-

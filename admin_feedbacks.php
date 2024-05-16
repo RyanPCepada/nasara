@@ -296,8 +296,7 @@ try {
                     </button>
                 </div>
 
-                
-                <div class="div-history text-center d-flex align-items-center justify-content-center" id="div_history" data-bs-toggle="modal" data-bs-target="#modal_adminhistory">
+                <div class="div-history text-center d-flex align-items-center justify-content-center" id="div_history" onclick="to_adminhistory()" href="admin_history.php">
                     <button class="btn btn-secondary" type="button" id="icon_history">
                         <i class="fas fa-history"></i>
                         <h3 style="margin-top: -39px; margin-left: 60px;">History</h3>
@@ -868,25 +867,25 @@ try {
 
 
 <script>
-    function to_home() {
+    function to_adminhome() {
         window.location.href = 'admin_main.php';
     }
     function to_adminacc() {
         window.location.href = 'admin_account.php';
     }
-    function to_feedbacks() {
+    function to_adminfeedbacks() {
         window.location.href = 'admin_feedbacks.php';
     }
-    function to_customers() {
+    function to_admincustomers() {
         window.location.href = 'admin_customers.php';
     }
-    function to_notifications() {
+    function to_adminnotifications() {
         window.location.href = 'admin_notifications.php';
     }
-    function to_history() {
+    function to_adminhistory() {
         window.location.href = 'admin_history.php';
     }
-    function to_settings() {
+    function to_adminsettings() {
         window.location.href = 'admin_settings.php';
     }
     function to_adminlogin() {
