@@ -249,20 +249,19 @@ try {
                     </button>
                 </div>
 
-                <div class="div-feedbacks text-center d-flex align-items-center justify-content-center" id="div_feedbacks">
-                    <button class="btn btn-secondary" type="button" id="icon_feedbacks" onclick="to_feedbacks()" href="feedbacks_main.php">
+                <div class="div-feedbacks text-center d-flex align-items-center justify-content-center" id="div_feedbacks" onclick="to_feedbacks()" href="admin_feedbacks.php">
+                    <button class="btn btn-secondary" type="button" id="icon_feedbacks">
                         <i class="fas fa-comment"></i>
                         <h3 style="margin-top: -39px; margin-left: 60px;">Feedbacks</h3>
                     </button>
                 </div>
 
-                <div class="div-customers text-center d-flex align-items-center justify-content-center" id="div_customers">
-                    <button class="btn btn-secondary" type="button" id="icon_customers" onclick="to_customers()" href="customers_main.php">
+                <div class="div-customers text-center d-flex align-items-center justify-content-center" id="div_customers" onclick="to_customers()" href="admin_customers.php">
+                    <button class="btn btn-secondary" type="button" id="icon_customers">
                         <i class="fas fa-users"></i>
                         <h3 style="margin-top: -39px; margin-left: 60px;">Customers</h3>
                     </button>
                 </div>
-
 
                 <div class="div-notification text-center d-flex align-items-center justify-content-center" id="div_notification"  data-bs-toggle="modal" data-bs-target="#modal_adminnotif">
                     <button class="btn btn-secondary" type="button" id="icon_notification">

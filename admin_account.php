@@ -243,14 +243,14 @@ try {
                 </div>
 
                 <div class="div-feedbacks text-center d-flex align-items-center justify-content-center" id="div_feedbacks">
-                    <button class="btn btn-secondary" type="button" id="icon_feedbacks" onclick="to_feedbacks()" href="feedbacks_main.php">
+                    <button class="btn btn-secondary" type="button" id="icon_feedbacks" onclick="to_feedbacks()" href="admin_feedbacks_main.php">
                         <i class="fas fa-comment"></i>
                         <h3 style="margin-top: -39px; margin-left: 60px;">Feedbacks</h3>
                     </button>
                 </div>
 
                 <div class="div-customers text-center d-flex align-items-center justify-content-center" id="div_customers">
-                    <button class="btn btn-secondary" type="button" id="icon_customers" onclick="to_customers()" href="customers_main.php">
+                    <button class="btn btn-secondary" type="button" id="icon_customers" onclick="to_customers()" href="admin_customers.php">
                         <i class="fas fa-users"></i>
                         <h3 style="margin-top: -39px; margin-left: 60px;">Customers</h3>
                     </button>
