@@ -47,7 +47,7 @@ try {
     // Update customer information in tbl_customer_info without changing the dateAdded
     $updateAccount = $conn->prepare('UPDATE tbl_customer_info 
     SET firstName = ?, middleName = ?, lastName = ?, street = ?, barangay = ?, municipality = ?, province = ?, zipcode = ?, birthDate = ?,
-        gender = ?, phoneNumber = ?,  dateAdded = dateAdded, dateModified = NOW()
+        gender = ?, phoneNumber = ?, dateModified = NOW()
     WHERE customer_ID = ?');
     $updateAccount->execute([$fname, $mname, $lname, $st, $brgy, $mun, $prov, $zipc, $bdate, $gend, $pnum, $customerID]);
 

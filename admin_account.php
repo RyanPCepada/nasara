@@ -243,26 +243,32 @@ try {
                     <button class="btn btn-secondary" type="button" id="icon_notification">
                         <i class="fas fa-bell"></i>
                         <h3 style="margin-top: -39px; margin-left: 56px;">Notifs</h3>
-                            <span id="notification-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                <?php
-                                // Fetch the count of new feedbacks for today
-                                $sqlFeedback = "SELECT COUNT(feedback_ID) AS feedbackCount FROM tbl_feedback WHERE DATE(date) = CURDATE()"; // WHERE DATE(date) = CURDATE()
-                                $stmtFeedback = $conn->prepare($sqlFeedback);
-                                $stmtFeedback->execute();
-                                $feedbackCount = $stmtFeedback->fetchColumn();
+                        <span id="notification-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?php
+                            // Fetch the count of new feedbacks for today
+                            $sqlFeedback = "SELECT COUNT(feedback_ID) AS feedbackCount FROM tbl_feedback WHERE DATE(date) = CURDATE()"; 
+                            $stmtFeedback = $conn->prepare($sqlFeedback);
+                            $stmtFeedback->execute();
+                            $feedbackCount = $stmtFeedback->fetchColumn();
 
-                                // Fetch the count of new customers for today
-                                $sqlCustomers = "SELECT COUNT(customer_ID) AS customerCount FROM tbl_customer_info WHERE DATE(dateAdded) = CURDATE()"; // WHERE DATE(dateAdded) = CURDATE()
-                                $stmtCustomers = $conn->prepare($sqlCustomers);
-                                $stmtCustomers->execute();
-                                $customerCount = $stmtCustomers->fetchColumn();
+                            // Fetch the count of new customers for today
+                            $sqlCustomers = "SELECT COUNT(customer_ID) AS customerCount FROM tbl_customer_info WHERE DATE(dateAdded) = CURDATE()"; 
+                            $stmtCustomers = $conn->prepare($sqlCustomers);
+                            $stmtCustomers->execute();
+                            $customerCount = $stmtCustomers->fetchColumn();
 
-                                // Calculate and display the combined count of feedbacks and new customers
-                                $totalNotifications = $feedbackCount + $customerCount;
-                                echo $totalNotifications;
-                                ?>
-                                <span class="visually-hidden">unread messages</span>
-                            </span>
+                            // Fetch the count of activity logs for today
+                            $sqlActivityLogs = "SELECT COUNT(*) AS activityLogCount FROM tbl_activity_logs WHERE activity='Updated the profile' AND DATE(dateAdded) = CURDATE()"; 
+                            $stmtActivityLogs = $conn->prepare($sqlActivityLogs);
+                            $stmtActivityLogs->execute();
+                            $activityLogCount = $stmtActivityLogs->fetchColumn();
+
+                            // Calculate and display the combined count of feedbacks, new customers, and activity logs
+                            $totalNotifications = $feedbackCount + $customerCount + $activityLogCount;
+                            echo $totalNotifications;
+                            ?>
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
                     </button>
                 </div>
                 
@@ -294,7 +300,7 @@ try {
         </div>
 
        <!-- ADMIN NOTIFICATIONS MODAL -- FOR VIEWING ADMIN NOTIFICATIONS -->
-        <div class="modal fade" id="modal_adminnotif" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+       <div class="modal fade" id="modal_adminnotif" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -306,6 +312,18 @@ try {
                         <div class="" style="position: relative;">
                         <?php
                             // Fetch and display customer registrations and feedback submissions
+                            
+                            // $sqlNotifications = "
+                            //     (SELECT CONCAT(firstName, ' ', lastName) AS name, dateAdded AS date, 'registration' AS type
+                            //     FROM tbl_customer_info) 
+                            //     UNION
+                            //     (SELECT CONCAT(firstName, ' ', lastName) AS name, date, 'feedback' AS type
+                            //     FROM tbl_customer_info ci
+                            //     JOIN tbl_feedback f ON ci.customer_id = f.customer_id)
+                            //     ORDER BY date DESC
+                            // ";
+
+
                             $sqlNotifications = "
                                 (SELECT CONCAT(firstName, ' ', lastName) AS name, dateAdded AS date, 'registration' AS type
                                 FROM tbl_customer_info) 
@@ -313,8 +331,14 @@ try {
                                 (SELECT CONCAT(firstName, ' ', lastName) AS name, date, 'feedback' AS type
                                 FROM tbl_customer_info ci
                                 JOIN tbl_feedback f ON ci.customer_id = f.customer_id)
+                                UNION
+                                (SELECT CONCAT(firstName, ' ', lastName) AS name, dateModified AS date, 'profile_update' AS type
+                                FROM tbl_customer_info ci
+                                JOIN tbl_activity_logs al ON ci.customer_id = al.customer_ID
+                                WHERE al.activity = 'Updated the profile')
                                 ORDER BY date DESC
                             ";
+
 
                             $stmtNotifications = $conn->prepare($sqlNotifications);
                             $stmtNotifications->execute();
@@ -345,11 +369,20 @@ try {
                                     echo '<div class="row" style="background-color: #f0ecff; border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); 
                                         border-radius: 5px; font-size: 20px; width: 450px; margin-left: 15px; margin-top: 10px;">';
 
-                                    if ($notification['type'] == 'registration') {
-                                        echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has registered an account.</p>';
-                                    } elseif ($notification['type'] == 'feedback') {
-                                        echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has submitted feedback.</p>';
-                                    }
+                                        // if ($notification['type'] == 'registration') {
+                                        //     echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has registered an account.</p>';
+                                        // } elseif ($notification['type'] == 'feedback') {
+                                        //     echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has submitted feedback.</p>';
+                                        // }
+
+                                        if ($notification['type'] == 'registration') {
+                                            echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has registered an account.</p>';
+                                        } elseif ($notification['type'] == 'feedback') {
+                                            echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has submitted feedback.</p>';
+                                        } elseif ($notification['type'] == 'profile_update') {
+                                            echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has updated profile.</p>';
+                                        }
+                                        
 
                                     echo '<p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($notification['date'], $heading) . '</p>';
                                     echo '</div>';
