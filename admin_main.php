@@ -288,7 +288,7 @@ try {
                 </div>
 
                 <div class="div-profile text-center d-flex align-items-center justify-content-center" id="div_profile" onclick="to_adminacc()">
-                    <img src="images/<?php echo $adminimage; ?>" id="icon_profile" class="img-fluid zoomable-image rounded-square">
+                    <img src="images_admin/<?php echo $adminimage; ?>" id="icon_profile" class="img-fluid zoomable-image rounded-square">
 
                     <h3 style="color: white; margin-top: 8px; margin-left: 42px; cursor: pointer;">Profile</h3>
                 </div>

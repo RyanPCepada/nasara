@@ -647,7 +647,8 @@ try {
                 <div class="container text-center d-flex align-items-center justify-content-center bg-transparent" id="div_profile_page">
                 
                 
-                    <div class="row" style="background-color: #ecffed; width: 95%;">
+                    <div class="row" style="background-color: #ecffed; width: 95%; padding-bottom: 50px; margin-left: 100px; margin-top: 60px;
+                        border-radius: 20px; box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.166);">
 
                         <div class="">
                             <div class="m-2">
@@ -670,11 +671,16 @@ try {
 
 
 
-                        <div class="row text-center d-flex align-items-center justify-content-center">
-                            <h1 class="" style="color: slateblue; width: 750px; font-size: 90px; margin-left: 0px; margin-top: 0px;">
+                        <div class="row text-center d-flex align-items-center justify-content-center" style="width: 1500px;">
+                            <h1 class="" style="color: slateblue; width: 1500px; font-size: 90px; margin-left: 0px; margin-top: 0px;">
                                 <?php echo $userName; ?>
                             </h1>
                             <!-- <p class="text-light" name="bio" style="width: 300px; margin-left: -30px;">"Trust the Process, Everything takes Time."</p> -->
+                            <button type="button" class="btn btn-primary" id="icon_edit_profile" data-bs-toggle="modal" data-bs-target="#modal_profile"
+                                    style="width: 200px; height: 44px; margin-top: 0px">
+                                <i class="fas fa-pencil-alt"></i> Edit Profile
+                            </button>
+
                         </div>
                     </div>
 
@@ -759,172 +765,8 @@ try {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-        <!--////////////////////////OLD////////////////////////////-->
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- PARALLAX -->
-    <div class="container-fluid">
-        <div class="parallax">
-
-
-
-
-
-
-            <!-- <hr> -->
-
-
-
-
-            <div class="accbg">
-                <div class="container">
-                </div>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-4 bg-transparent">
-                            <div class="col-2 ">
-                                <!-- <button class="text-primary" style="width: 200px;">Profile</button> -->
-                                <button type="button" class="btn btn-primary" id="todashboardbtn" style="width: 200px; height: 44px; margin-top: 30px;" onclick="window.location.href='admin_main.php';">
-                                    Dashboard
-                                </button>
-                            </div>
-                            <div class="col-2 ">
-                                <p> </p>
-                            </div>
-                            <div class="col-2 ">
-                                <button type="button" class="btn btn-primary" id="openProfileModalBtn" data-bs-toggle="modal" data-bs-target="#modal_profile"
-                                    style="width: 200px; height: 44px; margin-top: 0px">
-                                    Profile
-                                </button>
-                            </div>
-                            <div class="col-2 ">
-                                <p> </p>
-                            </div>
-                            <div class="col-2 ">
-                                <button type="button" class="btn btn-primary" id="openSettingsModalBtn" data-bs-toggle="modal" data-bs-target="#modal_settings"
-                                    style="width: 200px; height: 44px;">
-                                    Settings
-                                </button>
-                            </div>
-                            <div class="col-2 ">
-                                <p> </p>
-                            </div>
-                            <div class="col-2 text-danger">
-                                <form action="actions_admin/logoutAction_admin.php" method="post">
-                                    <style>
-                                        .blue-button {
-                                            background-color: black;
-                                            color: white;
-                                            height: 44px;
-                                            padding: 10px 20px;
-                                            border: none;
-                                            border-radius: 5px;
-                                        }
-                                    </style>
-
-                                    <button class="btn btn-primary"  style="width: 200px; height: 44px;" type="submit" id="logout" onclick="window.location.href='login_main.php'"
-                                    >Log Out</button>
-
-                                </form>
-
-                            </div>
-                            <div class="col-2 ">
-                                <p> </p>
-                            </div>
-                        </div>
-                        <div class="col-8 bg-transparent">
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="m-2" style="width: 80%; position: relative;">
-                                        <?php
-                                            $sql = "SELECT image FROM tbl_admin WHERE admin_ID = :adminID";
-                                            $stmt = $conn->prepare($sql);
-                                            $stmt->bindParam(':adminID', $adminID, PDO::PARAM_INT);
-                                            $stmt->execute();
-
-                                            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-                                            $adminimage = $result['image'];
-                                        ?>
-
-                                        <!-- <img src="images/<?php echo $adminimage; ?>" class="img-fluid zoomable-image rounded-square" style="width: 2in; height: 2in;">
-
-                                        <i class="fa fa-camera" onclick="openChangeProfilePicModal()"></i> -->
-                                        
-                                    </div>
-                                </div>
-
-
-
-                                <div class="col-8">
-                                    <h1 class="" style="color: lightblue; width: 700px; font-size: 90px; margin-left: -30px; margin-top: 50px;">
-                                        <?php echo $userName; ?>
-                                    </h1>
-                                    <!-- <p class="text-light" name="bio" style="width: 300px; margin-left: -30px;">"Trust the Process, Everything takes Time."</p> -->
-                                </div>
-
-                                
-
-
-                            </div>
-                            <div class="row" style="margin-left: 20px; margin-top: 50px;">
-                                <!-- <div class="col text-light">
-                                    <h3 class="text-light">Hobbies:</h3>
-                                    <hr>
-                                    <p name="hobby1">Hobby 1</p>
-                                    <p name="hobby2">Hobby 2</p>
-                                    <p name="hobby3">Hobby 3</p>
-                                    <p name="hobby4">Hobby 4</p>
-                                </div>
-                                <div class="col text-light">
-                                    <h3 class="text-light">Favorites:</h3>
-                                    <hr>
-                                    <p name="favorite1">Favorite 1</p>
-                                    <p name="favorite2">Favorite 2</p>
-                                    <p name="favorite3">Favorite 3</p>
-                                    <p name="favorite4">Favorite 4</p>
-                                </div> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-            
-        </div>
-    </div>
-    <!-- END PARALLAX -->
-
-
-    
-
-    
-    
-
-    <!-- PROFILE MODAL -- FOR EDITING PROFILE -->
-    <div class="modal fade" id="modal_profile" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+ <!-- PROFILE MODAL -- FOR EDITING PROFILE -->
+ <div class="modal fade" id="modal_profile" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -961,205 +803,26 @@ try {
 
 
 
-    <!-- PROFILE PICTURE MODAL -- FOR CHANGING PROFILE PICTURE -->
-    <div class="modal fade" id="changeProfilePicModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Change Profile Picture</h5>
-                </div>
-                <div class="modal-body">
-                    <form class="form" id="form" action="actions_admin/update_profile_admin.php" enctype="multipart/form-data" method="post">
-                        <div class="upload">
-                            <?php
-                                $sql = "SELECT image FROM tbl_admin WHERE admin_ID = :adminID";
-                                $stmt = $conn->prepare($sql);
-                                $stmt->bindParam(':adminID', $adminID, PDO::PARAM_INT);
-                                $stmt->execute();
-
-                                $result = $stmt->fetch(PDO::FETCH_ASSOC);
-                                $image = $result['image'];
-                            ?>
-                            <img src="images/<?php echo $image; ?>" id="selectedImage" style="width: 2in; height: 2in; margin-bottom: 20px;">
-                            <div class="round">
-                                <input type="hidden" name="id" value="<?php echo $adminID; ?>">
-                                <input type="hidden" name="name" value="<?php echo $userName; ?>">
-                                <input type="file" class="image" name="image" id="image" accept=".jpg, .jpeg, .png">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary" name="submit" id="saveProfilePic">Save</button>
-                            <button type="button" class="btn btn-secondary" id="profpic_closeModalBtn" data-bs-dismiss="modal">Cancel</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END PROFILE PICTURE MODAL -- FOR CHANGING PROFILE PICTURE -->
-
-    <!-- JavaScript code to open the modal -->
-    <script type="text/javascript">
-        function openChangeProfilePicModal() {
-            $('#changeProfilePicModal').modal('show');
-        }
-    </script>
-
-
-    <!-- TO DISPLAY THE NEW CHOSEN PICTURE FROM THE COMPUTER -->
-    <script>
-        document.getElementById("image").addEventListener("change", function() {
-            const selectedFile = this.files[0];
-            if (selectedFile) {
-                const selectedImage = document.getElementById("selectedImage");
-                const objectURL = URL.createObjectURL(selectedFile);
-                selectedImage.src = objectURL;
-            } else {
-                // You can handle the case when no file is selected
-            }
-        });
-    </script>
-
-
-    <!--SCRIPT FROM DAVID -- NOT FOUND BUT STORED IN DATABASE-->
-    <script type="text/javascript">
-        function openChangeProfilePicModal() {
-            $('#changeProfilePicModal').modal('show');
-        }
-        document.getElementById("image").onchange = function(){
-            document.getElementById("form").submit();
-        };
-    </script>
-
-
-    
-    <!-- SETTINGS MODAL -- FOR EDITING SETTINGS -->
-    <div class="modal fade custom-fade" id="modal_settings" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Settings</h5>
-                    <img src="pages/account/GIF_SETTINGS.gif" style="width: 1.5in; height: 1in; margin-left: 0px;" id="settings_gif">
-                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
-                </div>
-                <div class="modal-body">
-
-
-                    <form id="registration_form" method="POST"> <!--action="actions/edit_profile.php" -->
-                        <div class="input" id="inputfields" style="height: 400px;">
-
-                            <button type="button" class="btn btn-secondary" id="openChangeYourPasswordModalBtn" data-bs-toggle="modal" data-bs-target="#modal_changeyourpassword"
-                                style="width: 250px; height: 50px; margin-top: 20px; margin-left: 105px;">
-                                Change Your Password
-                            </button>
-                            <br>
-                            <button type="button" class="btn btn-secondary" id="openHistoryModalBtn" data-bs-toggle="modal" data-bs-target="#modal_history"
-                                style="width: 250px; height: 50px; margin-top: 20px; margin-left: 105px;">
-                                History
-                            </button>
-                            <br>
-                            <!-- <button type="button" class="btn btn-secondary" id="openAppearanceAndThemeModalBtn" data-bs-toggle="modal" data-bs-target="#modal_appearanceandtheme"
-                                style="width: 250px; height: 50px; margin-top: 20px; margin-left: 105px;">
-                                Appearance and Theme
-                            </button>
-                            <br>
-                            <button type="button" class="btn btn-secondary" id="openTermsAndPrivacyPolicyModalBtn" data-bs-toggle="modal" data-bs-target="#modal_termsandprivacypolicy"
-                                style="width: 250px; height: 50px; margin-top: 20px; margin-left: 105px;">
-                                Terms and Privacy Policy
-                            </button> -->
-                        </div>
-                        
-                            <button type="button" class="btn btn-secondary" id="sett_closeModalBtn" data-bs-dismiss="modal"
-                            window.location.href = 'account_main.php';>Close</button>
-                        
-                    </form>
-                    
-                        
-            
-                </div>
-            
-            </div>
-        </div>
-    </div>
-    <!-- <script>
-        function openmodal_settings() {
-            $('#modal_settings').modal('show');
-        }
-    </script> -->
-    <!-- END SETTINGS MODAL -- FOR EDITING SETTINGS -->
 
 
 
 
 
 
-    <!-- CHANGE PASSWORD MODAL -- FOR CHANGING YOUR PASSWORD -->
-    <div class="modal fade" id="modal_changeyourpassword" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Change Your Password</h5>
-                    <img src="pages/account/GIF_PASSWORD.gif" style="width: 1.6in; height: .9in; margin-right: -15px;" id="password_gif">
-                </div>
-                <div class="modal-body">
-                    <form id="change_password_form" method="POST" action="actions_admin/change_pword_admin.php">
-                        <div class="input" id="inputfields" style="height: 350px;">
 
-                            <div class="row">
-                                <br>
-                                <h style="margin-top: 10px; margin-left: 83px;">Enter old password</h>
-                                <input type="password" class="oldpassword" name="oldpassword" id="cyp_row1" style="margin-top: 10px;"/>
-                                <br>
-                                <h style="margin-top: 10px; margin-left: 83px;">Enter new password</h>
-                                <input type="password" class="newpassword" name="newpassword" id="cyp_row2" style="margin-top: 10px;"/>
-                                <br>
-                                <h style="margin-top: 10px; margin-left: 83px;">Confirm new password</h>
-                                <input type="password" class="confirmnewpassword" name="confirmnewpassword" id="cyp_row3" style="margin-top: 10px;"/>
-                            </div>
-                        </div>
-                        <button type="submit" class="submit" name="submit" id="sett_cyp_modalsave">Save</button>
 
-                        <button type="button" class="btn btn-secondary" id="sett_cyp_closeModalBtn" data-bs-dismiss="modal">Close</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+        <!--////////////////////////OLD////////////////////////////-->
 
-    
-    <script>
-        document.getElementById("sett_cyp_modalsave").addEventListener("click", function(event) {
-            //event.preventDefault(); // Prevent the form from being submitted
 
-            <?php
-                $password = $admin['password'];
-            ?>
-            
-            let oldPassword = document.querySelector('.oldpassword').value;
-            let newPassword = document.querySelector('.newpassword').value;
-            let confirmNewPassword = document.querySelector('.confirmnewpassword').value;
-            let password = "<?php echo $password; ?>"; // Echo the PHP variable as a JavaScript variable
 
-            if (oldPassword === password) {
-                if (newPassword.length !== 0) {
-                    if (newPassword === confirmNewPassword) {
-                        // alert("Password changed successfully");
-                        document.getElementById("change_password_form").submit();
-                    } else {
-                        event.preventDefault();
-                        alert("Passwords don't match");
-                    }
-                } else {
-                    event.preventDefault();
-                    alert("New password can't be empty");
-                }
-            } else {
-                event.preventDefault();
-                alert("Old password is incorrect");
-            }
-        });
-    </script>
-    <!-- END CHANGE PASSWORD MODAL -- FOR CHANGING YOUR PASSWORD -->
+
+
+
+
+
+
+
+
 
 
     <!-- TERMS AND POLICY MODAL -- FOR VIEWING TERMS AND POLICY -->

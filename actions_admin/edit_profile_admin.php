@@ -31,8 +31,8 @@ try {
     $updateAccount->execute([$uname, $adminID]);
 
     // Insert an activity log in tbl_activity_logs
-    // $insertActivity = $conn->prepare('INSERT INTO tbl_activity_logs (activity, admin_ID) VALUES (?, ?)');
-    // $insertActivity->execute(["Updated the profile", $adminID]);
+    $insertActivity = $conn->prepare('INSERT INTO tbl_activity_logs (activity, admin_ID) VALUES (?, ?)');
+    $insertActivity->execute(["You updated your profile", $adminID]);
 
     $conn->commit();
     echo '<script>alert("Profile Updated Successfully!");';
