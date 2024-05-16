@@ -311,13 +311,67 @@ try {
                     </button>
                 </div>
                 
-                <div action="actions_admin/logoutAction_admin.php" method="post" class="div-logout text-center d-flex align-items-center justify-content-center"
+                <!-- <div class="div-logout text-center d-flex align-items-center justify-content-center"
                     id="div_logout" onclick="window.location.href='login_main.php'" data-bs-toggle="modal" data-bs-target="#modal_logout">
                     <button class="btn btn-secondary" type="submit" id="icon_logout">
                         <i class="fas fa-sign-out-alt"></i>
                         <h3 style="margin-top: -39px; margin-left: 60px;">Logout</h3>
                     </button>
+                </div> -->
+
+                <div class="div-logout text-center d-flex align-items-center justify-content-center" id="div_logout" data-bs-toggle="modal" data-bs-target="#modal_logout">
+                    <button class="btn btn-secondary" type="button" id="icon_logout" onclick="confirmLogout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <h3 style="margin-top: -39px; margin-left: 60px;">Logout</h3>
+                    </button>
                 </div>
+
+                <div class="modal fade" id="modal_logout" tabindex="-1" role="dialog" aria-labelledby="modal_logoutLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal_logoutLabel">Logout Confirmation</h5>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to logout?
+                            </div>
+                            <div class="modal-footer" >
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="no()">No</button>
+                                <button type="button" class="btn btn-primary" onclick="logout()">Yes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    function confirmLogout() {
+                        // Display the logout confirmation modal
+                        $('#modal_logout').modal('show');
+                    }
+                    function no() {
+                        // Dismiss the modal
+                        $('#modal_logout').modal('hide');
+                        
+                        // Remove the modal backdrop
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
+                    }
+                    function logout() {
+                        // Perform logout action
+                        $.ajax({
+                            url: 'actions_admin/logoutAction_admin.php',
+                            type: 'POST',
+                            success: function(response) {
+                                // Redirect to the logout page
+                                window.location.href = './login_main.php';
+                            },
+                            error: function(xhr, status, error) {
+                                // Handle errors if any
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    }
+                </script>
 
             </div>
         </div>
@@ -1745,6 +1799,11 @@ try {
     }
     function to_adminlogin() {
         $.post("admin_login.php", {},function (data) {
+            $("#contents").html(data);  
+        });
+    } 
+    function to_adminlogout() {
+        $.post("actions_admin/logoutAction_admin.php", {},function (data) {
             $("#contents").html(data);  
         });
     }  
