@@ -281,7 +281,7 @@ try {
                 </div>
 
                 <div class="div-profile text-center d-flex align-items-center justify-content-center" id="div_profile" onclick="to_adminacc()">
-                    <img src="images/<?php echo $adminimage; ?>" id="icon_profile" class="img-fluid zoomable-image rounded-square">
+                    <img src="images_admin/<?php echo $adminimage; ?>" id="icon_profile" class="img-fluid zoomable-image rounded-square">
 
                     <h3 style="color: white; margin-top: 8px; margin-left: 42px; cursor: pointer;">Profile</h3>
                 </div>
@@ -646,9 +646,8 @@ try {
 
                 <div class="container text-center d-flex align-items-center justify-content-center bg-transparent" id="div_profile_page">
                 
-                    <!-- <div class="modal-body" id="dashbody" style="justify-content: center; background: yellow;">  BODY COLOR -->
                 
-                    <div class="row">
+                    <div class="row" style="background-color: #ecffed; width: 95%;">
 
                         <div class="">
                             <div class="m-2">
@@ -662,7 +661,7 @@ try {
                                     $adminimage = $result['image'];
                                 ?>
 
-                                <img src="images/<?php echo $adminimage; ?>" class="img-fluid zoomable-image rounded-square" style="width: 3in; height: 3in;">
+                                <img src="images_admin/<?php echo $adminimage; ?>" class="img-fluid zoomable-image rounded-square" style="width: 3in; height: 3in;">
 
                                 <i class="fa fa-camera" onclick="openChangeProfilePicModal()" id="icon_camera"></i>
                                         
@@ -672,7 +671,7 @@ try {
 
 
                         <div class="row text-center d-flex align-items-center justify-content-center">
-                            <h1 class="" style="color: lightblue; width: 700px; font-size: 90px; margin-left: 0px; margin-top: 0px;">
+                            <h1 class="" style="color: slateblue; width: 750px; font-size: 90px; margin-left: 0px; margin-top: 0px;">
                                 <?php echo $userName; ?>
                             </h1>
                             <!-- <p class="text-light" name="bio" style="width: 300px; margin-left: -30px;">"Trust the Process, Everything takes Time."</p> -->
@@ -707,7 +706,7 @@ try {
                                 $result = $stmt->fetch(PDO::FETCH_ASSOC);
                                 $image = $result['image'];
                             ?>
-                            <img src="images/<?php echo $image; ?>" id="selectedImage" style="width: 2in; height: 2in; margin-bottom: 20px;">
+                            <img src="images_admin/<?php echo $image; ?>" id="selectedImage" style="width: 2in; height: 2in; margin-bottom: 20px;">
                             <div class="round">
                                 <input type="hidden" name="id" value="<?php echo $adminID; ?>">
                                 <input type="hidden" name="name" value="<?php echo $userName; ?>">

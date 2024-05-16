@@ -199,9 +199,6 @@
 
 
 
-
-
-
 #accountLink{
   /* display: flex;
   position: absolute;
@@ -692,8 +689,9 @@ width: 250px;
 }
 
 .zoomable-image{
-  width: 1in;
-  height: 1in;
+  width: 3in;
+  height: 3in;
+  margin-top: 100px;
   border: 5px solid rgb(157, 145, 255);
   border-radius: 150px;
   filter: drop-shadow(5px 5px 15px rgba(62, 62, 62, 0.5));
@@ -706,7 +704,7 @@ width: 250px;
 #icon_camera {
   position: absolute;
   margin-left: -60px !important;
-  margin-top: 200px;
+  margin-top: 300px;
   font-size: 0.55in;
   color: rgb(212, 255, 0); /* Blue Gradient */
   border-radius: 50%; /* Apply a circular shape to mimic bevel style */

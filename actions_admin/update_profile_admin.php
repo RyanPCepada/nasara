@@ -34,7 +34,7 @@ if (isset($_SESSION['adminID'])) {
                 $newImageName = $adminID . '_' . date("Y.m.d") . '_' . date("h.i.sa") . '.' . $imageExtension;
 
                 // Save the image to your server
-                $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/nasara/images/' . $newImageName;
+                $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/nasara/images_admin/' . $newImageName;
                 move_uploaded_file($tmpName, $uploadPath);
 
                 // Update the admin's profile picture in tbl_admin
