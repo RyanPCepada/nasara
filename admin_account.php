@@ -213,10 +213,13 @@ try {
 
         <img src="icons/NASARA_LOGO_WHITE_PNG.png" class="img-fluid" id="NASARA_LOGO" alt="">
 
-        <form action="actions_admin/logoutAction_admin.php" method="post">
+        <!-- <form action="actions_admin/logoutAction_admin.php" method="post">
             <button class="btn" type="submit" id="logout" onclick="window.location.href='login_main.php'"
             >Log Out</button>
-        </form>
+        </form> -->
+
+        <img src="images_admin/<?php echo $adminimage; ?>" id="icon_profile" class="img-fluid zoomable-image rounded-square" onclick="to_adminacc()">
+        
     </nav>
 
 
@@ -232,17 +235,32 @@ try {
         <div class="col-1">
             <div class="card-body text-center d-flex justify-content-center" id="cards_body1">
 
-                <div class="div-home text-center d-flex align-items-center justify-content-center" id="div_home" onclick="to_dashboard()" href="admin_main.php">
+                <div class="div-home text-center d-flex align-items-center justify-content-center" id="div_home" onclick="to_home()" href="home_main.php">
                     <button class="btn btn-secondary" type="button" id="icon_home">
                         <i class="fas fa-home"></i>
-                        <h3 style="margin-top: -39px; margin-left: 56px;">Home</h3>
+                        <h3 style="margin-top: -39px; margin-left: 60px;">Home</h3>
                     </button>
                 </div>
+
+                <div class="div-feedbacks text-center d-flex align-items-center justify-content-center" id="div_feedbacks">
+                    <button class="btn btn-secondary" type="button" id="icon_feedbacks" onclick="to_feedbacks()" href="feedbacks_main.php">
+                        <i class="fas fa-comment"></i>
+                        <h3 style="margin-top: -39px; margin-left: 60px;">Feedbacks</h3>
+                    </button>
+                </div>
+
+                <div class="div-customers text-center d-flex align-items-center justify-content-center" id="div_customers">
+                    <button class="btn btn-secondary" type="button" id="icon_customers" onclick="to_customers()" href="customers_main.php">
+                        <i class="fas fa-users"></i>
+                        <h3 style="margin-top: -39px; margin-left: 60px;">Customers</h3>
+                    </button>
+                </div>
+
 
                 <div class="div-notification text-center d-flex align-items-center justify-content-center" id="div_notification"  data-bs-toggle="modal" data-bs-target="#modal_adminnotif">
                     <button class="btn btn-secondary" type="button" id="icon_notification">
                         <i class="fas fa-bell"></i>
-                        <h3 style="margin-top: -39px; margin-left: 56px;">Notifs</h3>
+                        <h3 style="margin-top: -39px; margin-left: 60px;">Notifications</h3>
                         <span id="notification-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                             <?php
                             // Fetch the count of new feedbacks for today
@@ -271,29 +289,28 @@ try {
                         </span>
                     </button>
                 </div>
+
                 
                 <div class="div-history text-center d-flex align-items-center justify-content-center" id="div_history" data-bs-toggle="modal" data-bs-target="#modal_adminhistory">
                     <button class="btn btn-secondary" type="button" id="icon_history">
                         <i class="fas fa-history"></i>
-                        <h3 style="margin-top: -39px; margin-left: 56px;">History</h3>
+                        <h3 style="margin-top: -39px; margin-left: 60px;">History</h3>
                     </button>
                 </div>
                 
                 <div class="div-settings text-center d-flex align-items-center justify-content-center" id="div_settings" data-bs-toggle="modal" data-bs-target="#modal_settings">
                     <button class="btn btn-secondary" type="button" id="icon_settings">
                         <i class="fas fa-cog"></i>
-                        <h3 style="margin-top: -39px; margin-left: 56px;">Settings</h3>
+                        <h3 style="margin-top: -39px; margin-left: 60px;">Settings</h3>
                     </button>
                 </div>
-
-                <div class="div-profile text-center d-flex align-items-center justify-content-center" id="div_profile" onclick="to_adminacc()">
-                    <img src="images_admin/<?php echo $adminimage; ?>" id="icon_profile" class="img-fluid zoomable-image rounded-square">
-
-                    <h3 style="color: white; margin-top: 8px; margin-left: 42px; cursor: pointer;">Profile</h3>
-                </div>
-
-                <div class = " m-2 text-light" >   
-                    <b class = "bg-transparent "  id="accountLink" onclick="to_account()" style=" cursor: pointer;"> <img src="navigation/user.png" alt=""></b>
+                
+                <div action="actions_admin/logoutAction_admin.php" method="post" class="div-logout text-center d-flex align-items-center justify-content-center"
+                    id="div_logout" onclick="window.location.href='login_main.php'" data-bs-toggle="modal" data-bs-target="#modal_logout">
+                    <button class="btn btn-secondary" type="submit" id="icon_logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <h3 style="margin-top: -39px; margin-left: 60px;">Logout</h3>
+                    </button>
                 </div>
 
             </div>
@@ -971,52 +988,31 @@ try {
 </html>
 
 
-
-
-
-
-
-
-
 <script>
-    function to_dashboard() {
+    function to_home() {
         window.location.href = 'admin_main.php';
     }
-</script>
-
-
-<script>
     function to_adminacc() {
         window.location.href = 'admin_account.php';
     }
-</script>
-
-
-
-
-
-<script>
+    function to_feedbacks() {
+        window.location.href = 'admin_feedbacks.php';
+    }
+    function to_customers() {
+        window.location.href = 'admin_customers.php';
+    }
+    function to_notifications() {
+        window.location.href = 'admin_notifications.php';
+    }
+    function to_history() {
+        window.location.href = 'admin_history.php';
+    }
+    function to_settings() {
+        window.location.href = 'admin_settings.php';
+    }
     function to_adminlogin() {
-$.post("admin_login.php", {},function (data) {
-      $("#contents").html(data);  
-    });
-}   
-</script>
-
-
-<script>
-    function to_back() {
-        $.post("pages/account/back_acc.php", {},function (data) {
-            $("#nav_contents").html(data);
+        $.post("admin_login.php", {},function (data) {
+            $("#contents").html(data);  
         });
-    }
+    }  
 </script>
-
-<script>
-    function to_nav(){
-        $.post("navigation/nav.php", {}, function (data) {
-            $("#nav_contents").html(data);
-        });
-    }
-</script>
-

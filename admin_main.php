@@ -220,10 +220,13 @@ try {
 
         <img src="icons/NASARA_LOGO_WHITE_PNG.png" class="img-fluid" id="NASARA_LOGO" alt="">
 
-        <form action="actions_admin/logoutAction_admin.php" method="post">
+        <!-- <form action="actions_admin/logoutAction_admin.php" method="post">
             <button class="btn" type="submit" id="logout" onclick="window.location.href='login_main.php'"
             >Log Out</button>
-        </form>
+        </form> -->
+
+        <img src="images_admin/<?php echo $adminimage; ?>" id="icon_profile" class="img-fluid zoomable-image rounded-square" onclick="to_adminacc()">
+        
     </nav>
 
 
@@ -239,17 +242,32 @@ try {
         <div class="col-1">
             <div class="card-body text-center d-flex justify-content-center" id="cards_body1">
 
-                <div class="div-home text-center d-flex align-items-center justify-content-center" id="div_home">
-                    <button class="btn btn-secondary" type="button" id="icon_home" onclick="to_home()" href="home_main.php">
+                <div class="div-home text-center d-flex align-items-center justify-content-center" id="div_home" onclick="to_home()" href="home_main.php">
+                    <button class="btn btn-secondary" type="button" id="icon_home">
                         <i class="fas fa-home"></i>
-                        <h3 style="margin-top: -39px; margin-left: 56px;">Home</h3>
+                        <h3 style="margin-top: -39px; margin-left: 60px;">Home</h3>
                     </button>
                 </div>
+
+                <div class="div-feedbacks text-center d-flex align-items-center justify-content-center" id="div_feedbacks">
+                    <button class="btn btn-secondary" type="button" id="icon_feedbacks" onclick="to_feedbacks()" href="feedbacks_main.php">
+                        <i class="fas fa-comment"></i>
+                        <h3 style="margin-top: -39px; margin-left: 60px;">Feedbacks</h3>
+                    </button>
+                </div>
+
+                <div class="div-customers text-center d-flex align-items-center justify-content-center" id="div_customers">
+                    <button class="btn btn-secondary" type="button" id="icon_customers" onclick="to_customers()" href="customers_main.php">
+                        <i class="fas fa-users"></i>
+                        <h3 style="margin-top: -39px; margin-left: 60px;">Customers</h3>
+                    </button>
+                </div>
+
 
                 <div class="div-notification text-center d-flex align-items-center justify-content-center" id="div_notification"  data-bs-toggle="modal" data-bs-target="#modal_adminnotif">
                     <button class="btn btn-secondary" type="button" id="icon_notification">
                         <i class="fas fa-bell"></i>
-                        <h3 style="margin-top: -39px; margin-left: 56px;">Notifs</h3>
+                        <h3 style="margin-top: -39px; margin-left: 60px;">Notifications</h3>
                         <span id="notification-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                             <?php
                             // Fetch the count of new feedbacks for today
@@ -283,25 +301,23 @@ try {
                 <div class="div-history text-center d-flex align-items-center justify-content-center" id="div_history" data-bs-toggle="modal" data-bs-target="#modal_adminhistory">
                     <button class="btn btn-secondary" type="button" id="icon_history">
                         <i class="fas fa-history"></i>
-                        <h3 style="margin-top: -39px; margin-left: 56px;">History</h3>
+                        <h3 style="margin-top: -39px; margin-left: 60px;">History</h3>
                     </button>
                 </div>
                 
                 <div class="div-settings text-center d-flex align-items-center justify-content-center" id="div_settings" data-bs-toggle="modal" data-bs-target="#modal_settings">
                     <button class="btn btn-secondary" type="button" id="icon_settings">
                         <i class="fas fa-cog"></i>
-                        <h3 style="margin-top: -39px; margin-left: 56px;">Settings</h3>
+                        <h3 style="margin-top: -39px; margin-left: 60px;">Settings</h3>
                     </button>
                 </div>
-
-                <div class="div-profile text-center d-flex align-items-center justify-content-center" id="div_profile" onclick="to_adminacc()">
-                    <img src="images_admin/<?php echo $adminimage; ?>" id="icon_profile" class="img-fluid zoomable-image rounded-square">
-
-                    <h3 style="color: white; margin-top: 8px; margin-left: 42px; cursor: pointer;">Profile</h3>
-                </div>
-
-                <div class = " m-2 text-light" >   
-                    <b class = "bg-transparent "  id="accountLink" onclick="to_account()" style=" cursor: pointer;"> <img src="navigation/user.png" alt=""></b>
+                
+                <div action="actions_admin/logoutAction_admin.php" method="post" class="div-logout text-center d-flex align-items-center justify-content-center"
+                    id="div_logout" onclick="window.location.href='login_main.php'" data-bs-toggle="modal" data-bs-target="#modal_logout">
+                    <button class="btn btn-secondary" type="submit" id="icon_logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <h3 style="margin-top: -39px; margin-left: 60px;">Logout</h3>
+                    </button>
                 </div>
 
             </div>
@@ -665,9 +681,9 @@ try {
 
             <div class="body">
             
-                <h5 style="position: absolute; margin-top: 40px; margin-bottom: 25px; margin-left: 140px; font-size: 70px; color: gray;"
+                <h5 style="position: absolute; margin-top: 40px; margin-bottom: 25px; margin-left: 210px; font-size: 70px; color: gray;"
                 >Dashboard</h5>
-                <img src="icons/GIF_REPORT.gif" style="position: absolute; width: 2.15in; height: 1.1in; margin-left: 480px; margin-top: 35px;" id="newfb_gif">
+                <img src="icons/GIF_REPORT.gif" style="position: absolute; width: 2.15in; height: 1.1in; margin-left: 1150px; margin-top: 35px;" id="newfb_gif">
 
                 <div class="container">
                 
@@ -683,7 +699,7 @@ try {
                         
                             <h5 style="margin-top: 5px; margin-left: 30px; margin-bottom: -10px;">Today's data</h5>
                             
-                            <h6 style="position: absolute; margin-top: -12px; margin-left: 960px; color: grey">Newest data appears first</h6>
+                            <h6 style="position: absolute; margin-top: -12px; margin-left: 912px; color: grey">Newest data appears first</h6>
 
                             <hr>
 
@@ -746,7 +762,7 @@ try {
                                     
                                 </div>
 
-                                <div class="col-8" style="position: absolute; margin-left: 380px; margin-top: -200px;">
+                                <div class="col-8" style="position: absolute; margin-left: 330px; margin-top: -200px;">
                                     <?php
                                     $sql = "SELECT * FROM tbl_customer_info";
                                     $stmt = $conn->prepare($sql);
@@ -874,7 +890,7 @@ try {
                                     
                                 </div>
 
-                                <div class="col-8" style="position: absolute; margin-left: 380px; margin-top: -200px;">
+                                <div class="col-8" style="position: absolute; margin-left: 330px; margin-top: -200px;">
 
                                     <?php
                                         $sql = "SELECT * FROM tbl_customer_info";
@@ -1015,7 +1031,7 @@ try {
                                     
                                 </div>
 
-                                <div class="col-8" style="position: absolute; margin-left: 380px; margin-top: -200px;">
+                                <div class="col-8" style="position: absolute; margin-left: 330px; margin-top: -200px;">
 
                                     <?php
                                         $sql = "SELECT * FROM tbl_feedback";
@@ -1125,7 +1141,7 @@ try {
                                     
                                 </div>
 
-                                <div class="col-8" style="position: absolute; margin-left: 380px; margin-top: -200px;">
+                                <div class="col-8" style="position: absolute; margin-left: 330px; margin-top: -200px;">
 
                                     <?php
                                         $sql = "SELECT * FROM tbl_customer_info";
@@ -1256,7 +1272,7 @@ try {
                                     
                                 </div>
 
-                                <div class="col-8" style="position: absolute; margin-left: 380px; margin-top: -200px;">
+                                <div class="col-8" style="position: absolute; margin-left: 330px; margin-top: -200px;">
 
                                     <?php
                                         $sql = "SELECT * FROM tbl_feedback";
@@ -2042,49 +2058,31 @@ try {
 </html>
 
 
-
 <script>
+    function to_home() {
+        window.location.href = 'admin_main.php';
+    }
     function to_adminacc() {
         window.location.href = 'admin_account.php';
     }
+    function to_feedbacks() {
+        window.location.href = 'admin_feedbacks.php';
+    }
+    function to_customers() {
+        window.location.href = 'admin_customers.php';
+    }
+    function to_notifications() {
+        window.location.href = 'admin_notifications.php';
+    }
+    function to_history() {
+        window.location.href = 'admin_history.php';
+    }
+    function to_settings() {
+        window.location.href = 'admin_settings.php';
+    }
+    function to_adminlogin() {
+        $.post("admin_login.php", {},function (data) {
+            $("#contents").html(data);  
+        });
+    }  
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

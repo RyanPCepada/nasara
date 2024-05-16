@@ -37,28 +37,85 @@
 
 
 
+
+
+
+#icon_profile{
+  margin-left: 1440px;
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  font-size: 30px;
+  border: solid 3px rgb(255, 255, 255);
+  border-radius: 25px;
+  transition: border-color 0.2s ease;
+}
+
+#icon_profile:hover {
+  border-color: rgb(255, 255, 255);
+}
+
+
+
+
+
+
+
+
+
+
 #div_home{
   position: absolute;
   margin-left: 0px;
   margin-top: 20px;
-  width: 210px !important;
+  width: 270px !important;
   height: 80px;
   border-radius: 40px;
   background-color: rgba(255, 255, 255, 0.075);
+  /* background-color: rgba(255, 255, 255, 0.221) !important; */
+  cursor: pointer;
 }
 #div_home:hover{
   background-color: rgba(255, 255, 255, 0.221) !important;
 }
 
+#div_feedbacks{
+  position: absolute;
+  margin-left: 0px;
+  margin-top: 110px;
+  width: 270px !important;
+  height: 80px;
+  border-radius: 40px;
+  background-color: rgba(255, 255, 255, 0.075);
+  cursor: pointer;
+}
+#div_feedbacks:hover{
+  background-color: rgba(255, 255, 255, 0.221) !important;
+}
+
+#div_customers{
+  position: absolute;
+  margin-left: 0px;
+  margin-top: 200px;
+  width: 270px !important;
+  height: 80px;
+  border-radius: 40px;
+  background-color: rgba(255, 255, 255, 0.075);
+  cursor: pointer;
+}
+#div_customers:hover{
+  background-color: rgba(255, 255, 255, 0.221) !important;
+}
 
 #div_notification{
   position: absolute;
   margin-left: 0px;
-  margin-top: 110px;
-  width: 210px !important;
+  margin-top: 290px;
+  width: 270px !important;
   height: 80px;
   border-radius: 40px;
   background-color: rgba(255, 255, 255, 0.075);
+  cursor: pointer;
 }
 #div_notification:hover{
   background-color: rgba(255, 255, 255, 0.221) !important;
@@ -67,11 +124,12 @@
 #div_history{
   position: absolute;
   margin-left: 0px;
-  margin-top: 200px;
-  width: 210px !important;
+  margin-top: 380px;
+  width: 270px !important;
   height: 80px;
   border-radius: 40px;
   background-color: rgba(255, 255, 255, 0.075);
+  cursor: pointer;
 }
 #div_history:hover{
   background-color: rgba(255, 255, 255, 0.221) !important;
@@ -81,28 +139,29 @@
 #div_settings{
   position: absolute;
   margin-left: 0px;
-  margin-top: 290px;
-  width: 210px !important;
+  margin-top: 470px;
+  width: 270px !important;
   height: 80px;
   border-radius: 40px;
   background-color: rgba(255, 255, 255, 0.075);
+  cursor: pointer;
 }
 #div_settings:hover{
   background-color: rgba(255, 255, 255, 0.221) !important;
 }
 
 
-#div_profile{
+#div_logout{
   position: absolute;
   margin-left: 0px;
-  margin-top: 380px;
-  width: 210px !important;
+  margin-top: 560px;
+  width: 270px !important;
   height: 80px;
   border-radius: 40px;
   background-color: rgba(255, 255, 255, 0.075);
-  background-color: rgba(255, 255, 255, 0.221) !important;
+  cursor: pointer;
 }
-#div_profile:hover{
+#div_logout:hover{
   background-color: rgba(255, 255, 255, 0.221) !important;
 }
 
@@ -121,7 +180,7 @@
   height: 60px;
   border: solid 2px lightblue;
   border-radius: 30px;
-  margin-left: -120px;
+  margin-left: -188px;
   transition: border-color 0.2s ease;
 }
 
@@ -129,6 +188,65 @@
   border-color: rgb(255, 255, 255);
 }
 
+#icon_feedbacks {
+  position: absolute;
+  width: 60px;
+  font-size: 30px;
+  height: 60px;
+  border: solid 2px lightblue;
+  border-radius: 30px;
+  margin-left: -188px;
+  transition: border-color 0.2s ease;
+}
+
+#icon_feedbacks:hover {
+  border-color: rgb(255, 255, 255);
+}
+
+#icon_customers {
+  position: absolute;
+  width: 60px;
+  font-size: 30px;
+  height: 60px;
+  border: solid 2px lightblue;
+  border-radius: 30px;
+  margin-left: -188px;
+  transition: border-color 0.2s ease;
+}
+
+#icon_customers:hover {
+  border-color: rgb(255, 255, 255);
+}
+
+#icon_notification {
+  position: absolute;
+  width: 60px;
+  font-size: 30px;
+  height: 60px;
+  border: solid 2px lightblue;
+  border-radius: 30px;
+  margin-left: -188px;
+  transition: border-color 0.2s ease;
+}
+
+#icon_notification:hover {
+  border-color: rgb(255, 255, 255);
+}
+
+#icon_history {
+  position: absolute;
+  width: 60px;
+  font-size: 30px;
+  height: 60px;
+  border: solid 2px lightblue;
+  border-radius: 30px;
+  margin-left: -188px;
+  transition: border-color 0.2s ease;
+}
+
+#icon_history:hover {
+  border-color: rgb(255, 255, 255);
+}
 
 
 #icon_settings {
@@ -138,7 +256,7 @@
   height: 60px;
   border: solid 2px lightblue;
   border-radius: 30px;
-  margin-left: -120px;
+  margin-left: -188px;
   transition: border-color 0.2s ease;
 }
 
@@ -146,53 +264,22 @@
   border-color: rgb(255, 255, 255);
 }
 
-
-#icon_history {
+#icon_logout{
   position: absolute;
   width: 60px;
   font-size: 30px;
   height: 60px;
   border: solid 2px lightblue;
   border-radius: 30px;
-  margin-left: -120px;
+  margin-left: -188px;
   transition: border-color 0.2s ease;
 }
 
-#icon_history:hover {
+#icon_logout:hover {
   border-color: rgb(255, 255, 255);
 }
 
 
-#icon_notification {
-  position: absolute;
-  width: 60px;
-  font-size: 30px;
-  height: 60px;
-  border: solid 2px lightblue;
-  border-radius: 30px;
-  margin-left: -120px;
-  transition: border-color 0.2s ease;
-}
-
-#icon_notification:hover {
-  border-color: rgb(255, 255, 255);
-}
-
-#icon_profile {
-  position: absolute;
-  width: 60px;
-  font-size: 30px;
-  height: 60px;
-  border: solid 2px lightblue;
-  border-radius: 30px;
-  margin-left: -120px;
-  margin-top: 0px;
-  transition: border-color 0.2s ease;
-}
-
-#icon_profile:hover {
-  border-color: rgb(255, 255, 255);
-}
 
 
 
@@ -355,10 +442,11 @@ thead th {
   width: 1530px;
 }
 
+
 #cards_body1{
   position: absolute;
-  width: 230px;
-  height: 2200px;
+  width: 300px; /*+70*/
+  height: 3923px;
   background: midnightblue;
 }
 
