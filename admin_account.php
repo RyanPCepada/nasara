@@ -257,8 +257,8 @@ try {
                 </div>
 
 
-                <div class="div-notification text-center d-flex align-items-center justify-content-center" id="div_notification"  data-bs-toggle="modal" data-bs-target="#modal_adminnotif">
-                    <button class="btn btn-secondary" type="button" id="icon_notification">
+                <div class="div-notifications text-center d-flex align-items-center justify-content-center" id="div_notifications" onclick="to_notifications()" href="admin_notifications.php">
+                    <button class="btn btn-secondary" type="button" id="icon_notifications">
                         <i class="fas fa-bell"></i>
                         <h3 style="margin-top: -39px; margin-left: 60px;">Notifications</h3>
                         <span id="notification-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
