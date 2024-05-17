@@ -815,73 +815,81 @@ try {
 
                                 
                                 <div class="row">
-                                    <?php
-                                        // Step 2: Fetch all data from tbl_customer_info with column aliases
-                                        $sql = "SELECT customer_ID AS 'Customer ID',
-                                                firstName AS 'Firstname',
-                                                middleName AS 'Middlename',
-                                                lastName AS 'Lastname',
-                                                street AS 'Street',
-                                                barangay AS 'Barangay',
-                                                municipality AS 'Municipality',
-                                                province AS 'Province',
-                                                zipcode AS 'Zipcode',
-                                                phoneNumber AS 'Phone Number',
-                                                birthDate AS 'Birthdate',
-                                                gender AS 'Gender',
-                                                email AS 'Email',
-                                                password AS 'Password',
-                                                dateAdded AS 'Creation Date'
-                                        FROM tbl_customer_info";
+                                <?php
+// Step 2: Fetch all data from tbl_customer_info with column aliases
+$sql = "SELECT CONCAT('images/', image) AS 'Image',  -- Concatenate the image path with the 'image' column
+        customer_ID AS 'Customer ID',
+        firstName AS 'Firstname',
+        middleName AS 'Middlename',
+        lastName AS 'Lastname',
+        street AS 'Street',
+        barangay AS 'Barangay',
+        municipality AS 'Municipality',
+        province AS 'Province',
+        zipcode AS 'Zipcode',
+        phoneNumber AS 'Phone Number',
+        birthDate AS 'Birthdate',
+        gender AS 'Gender',
+        email AS 'Email',
+        password AS 'Password',
+        dateAdded AS 'Creation Date'
+FROM tbl_customer_info";
 
-                                        // $sql = "SELECT customer_ID AS 'Customer ID',
-                                        //     CONCAT(firstName, ' ', lastName) AS 'Full Name',
-                                        //     email AS 'Email',
-                                        //     dateAdded AS 'Creation Date'
-                                        // FROM tbl_customer_info";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
 
-                                        $stmt = $conn->prepare($sql);
-                                        $stmt->execute();
+// Step 3: Create arrays to store the data
+$customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 
-                                        // Step 3: Create arrays to store the data
-                                        $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                    ?>
+<style>
+    /* Define custom CSS for rounded square images */
+    .rounded-square {
+        border-radius: 60px; /* Adjust the border-radius to control the roundness */
+    }
+</style>
 
-                                    <div class="scrollable-content" id="table1">
-                                        <table class="table table-bordered class alternate-row-table" id="list_table">
-                                            <thead>
-                                                <tr>
-                                                    <?php
-                                                    // Display column aliases as headers
-                                                    if (!empty($customerData)) {
-                                                        $aliasRow = $customerData[0]; // Assuming the first row contains aliases
-                                                        foreach ($aliasRow as $alias => $value) {
-                                                            echo "<th style='background-color: #cacbe8; color: black;'>$alias</th>";
-                                                        }
-                                                    }
-                                                    ?>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php
-                                                if (empty($customerData)) {
-                                                    // Display the "No feedback yet for today" message in the table body
-                                                    echo '<tr><td colspan="6" style="text-align: center; background-color: transparent; color: black;"
-                                                    >No feedbacks yet for today</td></tr>';
-                                                } else {
-                                                    // Loop through the data and populate the table
-                                                    foreach ($customerData as $row) {
-                                                        echo "<tr>";
-                                                        foreach ($row as $value) {
-                                                            echo "<td>$value</td>";
-                                                        }
-                                                        echo "</tr>";
-                                                    }
-                                                }
-                                                ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
+<div class="scrollable-content" id="table1">
+    <table class="table table-bordered class alternate-row-table" id="list_table">
+        <thead>
+            <tr>
+                <?php
+                // Display column aliases as headers
+                if (!empty($customerData)) {
+                    $aliasRow = $customerData[0]; // Assuming the first row contains aliases
+                    foreach ($aliasRow as $alias => $value) {
+                        echo "<th style='background-color: #cacbe8; color: black;'>$alias</th>";
+                    }
+                }
+                ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            if (empty($customerData)) {
+                // Display the "No feedback yet for today" message in the table body
+                echo '<tr><td colspan="6" style="text-align: center; background-color: transparent; color: black;">No feedbacks yet for today</td></tr>';
+            } else {
+                // Loop through the data and populate the table
+                foreach ($customerData as $row) {
+                    echo "<tr>";
+                    foreach ($row as $key => $value) {
+                        if ($key === 'Image') {
+                            echo "<td><img src='$value' style='width: 90px; height: 90px; border: solid 0px lightblue; border-radius: 45px; background-color: white;'></td>";
+                        } else {
+                            echo "<td>$value</td>";
+                        }
+                    }
+                    echo "</tr>";
+                }
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
+
+
+
                                 </div>
 
                             </div>
