@@ -39,6 +39,7 @@
   border: solid 1px lightblue;
   border-radius: 25px;
   margin-left: 1440px;
+  margin-top: 0px;
   transition: border-color 0.2s ease;
 }
 
@@ -83,7 +84,7 @@
   
 .acc_bg_odd {
     width: 100%;
-    height: 581px;
+    height: 500px;
     /* background-image: url('BG_DEFAULT.png'); */
     background-color: blue;
     background-position: center;
@@ -95,7 +96,7 @@
 }
 .acc_bg_even {
   width: 100%;
-  height: 581px;
+  height: 1500px;
   /* background-image: url('BG_DEFAULT.png'); */
   background-color: rgb(114, 114, 255);
   background-position: center;
@@ -581,4 +582,31 @@ background-color: #ffffff;
 .card:hover #img{
   transform: scale(1.1);
   box-shadow: 15px 15px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+
+
+
+
+
+
+#list_table{
+  position: relative;
+  height: 300px;
+  width: 100%;
+  margin-left: 0px;
+  overflow-y: auto;
+  width: 100%;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.166);
+}
+
+/*ALTERNATE TABLE ROW COLOR*/
+#list_table tbody tr:nth-child(odd) { /*COLOR CHANGED TO COLUMN FORMAT IF "tbody tr" IS REMOVED*/
+  background-color: #ecffed; /* Background color for odd rows */
+}
+#list_table tbody tr:nth-child(even) { /*COLOR CHANGED TO COLUMN FORMAT IF "tbody tr" IS REMOVED*/
+  background-color: #ddf7de; /* Background color for even rows */
 }

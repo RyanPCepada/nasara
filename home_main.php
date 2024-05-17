@@ -108,7 +108,7 @@ try {
 
         <img src="icons/NASARA_LOGO_WHITE_PNG.png" class="img-fluid" id="NASARA_LOGO" alt="">
 
-            <button class="btn btn-dark" type="button" id="icon_home" onclick="to_home()" href="home_main.php">
+            <button class="btn btn-secondary" type="button" id="icon_home" onclick="to_home()" href="home_main.php">
                 <i class="fas fa-home"></i>
             </button>
 

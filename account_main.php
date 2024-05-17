@@ -129,99 +129,94 @@ try {
 
         <img src="icons/NASARA_LOGO_WHITE_PNG.png" class="img-fluid" id="NASARA_LOGO" alt="">
 
-            <button class="btn btn-dark" type="button" id="icon_home" onclick="to_home()" href="home_main.php">
+            <button class="btn btn-secondary" type="button" id="icon_home" onclick="to_home()" href="home_main.php">
                 <i class="fas fa-home"></i>
             </button>
 
             <img src="images/<?php echo $image; ?>" id="icon_account" class="img-fluid zoomable-image rounded-square"
             onclick="to_account()">
 
-            <div class = " m-2 text-light" >   
-                <b class = "bg-transparent "  id="accountLink" onclick="to_account()" style=" cursor: pointer;"> <img src="navigation/user.png" alt=""></b>
-            </div>
-
     </nav>
 
     
 
     <div class="acc_bg_odd">
-        <div class="container"> <!-- style="background-color: yellow;"-->
-            <div class="row">
-                <div class="col-2 bg-transparent">
-                    <div class="col-2">
-                        <!-- <button class="text-primary" style="width: 200px;">Profile</button> -->
-                        <button type="button" class="btn btn-primary" id="openProfileModalBtn" data-bs-toggle="modal" data-bs-target="#modal_profile"
-                            style="position: absolute; width: 200px; height: 60px; margin-left: 240px; margin-top: 261px;"
-                            >Profile
-                        </button>
-                    </div>
-                    <div class="col-2">
-                        <button type="button" class="btn btn-primary" id="openSettingsModalBtn" data-bs-toggle="modal" data-bs-target="#modal_settings"
-                            style="position: absolute; width: 200px; height: 60px; margin-left: 650px; margin-top: 245px;"
-                            >Settings
-                        </button>
-                    </div>
-                    <div class="col-2 text-danger">
-                        <!-- <button class="text-danger" style="width: 200px;"><a id="logout" href="http://localhost/DevBugs/login_main.php">Log Out</a></button> -->
-                        <form action="actions/logoutAction.php" method="post">
-                            <style>
-                                .blue-button {
-                                    background-color: black;
-                                    color: white;
-                                    height: 44px;
-                                    padding: 10px 20px;
-                                    border: none;
-                                    border-radius: 5px;
-                                }
-                            </style>
+        <div class="container text-center d-flex align-items-center justify-content-center"> <!-- style="background-color: yellow;"-->
 
-                            <button class="btn btn-dark" type="submit" id="logout" onclick="window.location.href='login_main.php'"
-                            style="position: absolute; width: 150px; height: 60px; margin-left: 855px; margin-top: 245px;"
-                            >Log Out</button>
+            <!-- 1ST ROW -->
+            <div class="row col-12">
 
-                        </form>
+                <div class="col-3">
 
-                    </div>
                 </div>
-                <div class="col-10 bg-transparent">
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="m-2" style="width: 80%; position: relative;">
-                                <?php
-                                    $sql = "SELECT image FROM tbl_customer_info WHERE customer_ID = :customerID";
-                                    $stmt = $conn->prepare($sql);
-                                    $stmt->bindParam(':customerID', $customerID, PDO::PARAM_INT);
-                                    $stmt->execute();
 
-                                    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-                                    $image = $result['image'];
-                                ?>
+                <div class="col-6 bg-transparent">
+                    <!-- FOR PROFILE PICTURE -->
+                    <div class="row text-center d-flex align-items-center justify-content-center"> 
+                        <div class="m-2" style="width: 110%; position: relative; padding-top: 10px;">
+                            <?php
+                                $sql = "SELECT image FROM tbl_customer_info WHERE customer_ID = :customerID";
+                                $stmt = $conn->prepare($sql);
+                                $stmt->bindParam(':customerID', $customerID, PDO::PARAM_INT);
+                                $stmt->execute();
 
-                                <img src="images/<?php echo $image; ?>" class="img-fluid zoomable-image rounded-square" style="width: 2in; height: 2in;">
+                                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                                $image = $result['image'];
+                            ?>
+                            <img src="images/<?php echo $image; ?>" class="img-fluid zoomable-image rounded-square" style="width: 2in; height: 2in;">
+                            <i class="fa fa-camera" onclick="openChangeProfilePicModal()" style="position: absolute; margin-right: 218px;"></i>
+                        </div>
+                    </div> 
+                    <!-- END FOR PROFILE PICTURE -->
 
-                                <i class="fa fa-camera" onclick="openChangeProfilePicModal()" style="position: absolute; margin-right: 60px;"></i>
-                                
+                    <!-- FOR NAME -->
+                    <div class="row text-center d-flex align-items-center justify-content-center"> 
+                        <h1 class="text-light" style="position: relative; width: 700px; padding: 20px;">
+                            <?php echo $firstName . ' ' . $middleName. ' ' . $lastName; ?>
+                        </h1>
+                    </div> 
+                    <!-- END FOR NAME -->
+                    <hr style="color: white;">
+
+
+
+                    <div class="row col-12"> <!--FOR BUTTONS-->
+                            <div class="col-4">
+                                <!-- <button class="text-primary" style="width: 200px;">Profile</button> -->
+                                <button type="button" class="btn btn-primary" id="openProfileModalBtn" data-bs-toggle="modal" data-bs-target="#modal_profile"
+                                    style="position: relative; width: 200px; height: 60px;"
+                                    >Profile
+                                </button>
                             </div>
-                        </div>
-
-
-
-                        <div class="col-8">
-                            <h1 class="text-light" style="position: absolute; width: 700px; margin-left: -120px; margin-top: 70px;">
-                                <?php echo $firstName . ' ' . $middleName. ' ' . $lastName; ?>
-                                <!-- <h1>Welcome, <php echo $firstName . ' ' . $lastName; ?></h1> -->
-                            </h1>
-                            <!-- <p class="text-light" name="bio" style="position: absolute; width: 500px; margin-left: -120px; margin-top: 130px;"
-                            >?php echo $bio; ?></p> -->
-                        </div>
-
-                        <hr style="color: white; margin-left: 30px; margin-top: 100px; width: 70%;">
-
-                    </div>
-                    
+                            <div class="col-4">
+                                <button type="button" class="btn btn-primary" id="openSettingsModalBtn" data-bs-toggle="modal" data-bs-target="#modal_settings"
+                                    style="position: relative; width: 200px; height: 60px;"
+                                    >Settings
+                                </button>
+                            </div>
+                            <div class="col-4 text-danger">
+                                <form action="actions/logoutAction.php" method="post">
+                                    <button class="btn btn-dark" type="submit" id="logout" onclick="window.location.href='login_main.php'"
+                                        style="position: relative; width: 200px; height: 60px;"
+                                        >Log Out
+                                    </button>
+                                </form>
+                            </div>
+                        
+                    </div><!-- END FOR BUTTONS -->
                     
                 </div>
+
+
+                <div class="col-3">
+
+                </div>
+
             </div>
+            <!-- END 1ST ROW -->
+
+
+
         </div>
     </div>
 
@@ -454,10 +449,10 @@ try {
                                 History
                             </button>
                             <br>
-                            <button type="button" class="btn btn-secondary" id="openAppearanceAndThemeModalBtn" data-bs-toggle="modal" data-bs-target="#modal_appearanceandtheme"
+                            <!-- <button type="button" class="btn btn-secondary" id="openAppearanceAndThemeModalBtn" data-bs-toggle="modal" data-bs-target="#modal_appearanceandtheme"
                                 style="width: 250px; height: 50px; margin-top: 20px; margin-left: 105px;">
                                 Appearance and Theme
-                            </button>
+                            </button> -->
                             <br>
                             <button type="button" class="btn btn-secondary" id="openTermsAndPrivacyPolicyModalBtn" data-bs-toggle="modal" data-bs-target="#modal_termsandprivacypolicy"
                                 style="width: 250px; height: 50px; margin-top: 20px; margin-left: 105px;">
@@ -561,170 +556,6 @@ try {
 
     
     
-    <!-- HISTORY MODAL -- FOR VIEWING HISTORY -->
-    <!-- <div class="modal fade" id="modal_history" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">History</h5>
-                <img src="pages/account/GIF_HISTORY.gif" style="width: 1.75in; height: 1in; margin-left: 208px;" id="bginfo_gif">
-                <!-- <img src="pages/account/HISTORY_GIF.gif" style="width: 1.5in; height: 1in; margin-left: 0px;" id="bginfo_gif"> --
-            </div>
-
-                <div class="modal-body">
-                    <!-- <form id="feedback_history_form" method="POST" action="actions/change_password.php"> --
-                    <div class="row">
-                        <div class="col-1">
-                        </div>
-                        <div class="col-4" style="margin-bottom: 10px; margin-left: 0px;">
-                            <h><b>Activity</b></h>
-                        </div>
-                        <div class="col-2">
-                        </div>
-                        <div class="col-5" style="margin-bottom: 10px; margin-left: 0px;">
-                            <h><b>Date</b></h>
-                        </div>
-                    </div>
-                    
-                    <div class="scrollable-content" id="inputfields" style="height: 400px; overflow-y: auto;">
-                        <table class="table table-bordered">
-                            <!-- <thead>
-                                <tr>
-                                    <th class="col-5">Activities</th>
-                                    <th class="col-5">Dates</th>
-                                </tr>
-                            </thead> --
-                            <tbody>
-                                ?php
-                                // Assuming both arrays have the same length
-                                $count = count($activities);
-
-                                for ($i = $count - 1; $i >= 0; $i--) {
-                                ?>
-                                <tr>
-                                    <td class="col-5">?php echo $activities[$i]; ?></td>
-                                    <td class="col-5">?php echo $dates[$i]; ?></td>
-                                </tr>
-                                ?php
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-
-                    </div>
-                    <!-- <button type="submit" class="submit" name="submit" id="sett_cyp_modalsave">Save</button> --
-
-                    <button type="button" class="btn btn-secondary float-end" style="margin-top: 15px;" id="sett_h_closeModalBtn" data-bs-dismiss="modal">Close</button>
-                    <!-- </form> --
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-    function openmodal_history() {
-        $('#modal_history').modal('show');
-    }
-    </script> -->
-    <!-- END FEEDBACK HISTORY MODAL -- FOR VIEWING FEEDBACK HISTORY -->
-
-
-
-
-
-    <!-- CHECK HISTORY MODAL -- FOR CHECKING HISTORY -->
-    <div class="modal fade" id="modal_checkhistory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="header"> <!--DON'T USE MODAL-HEADER, HEADER ONLY-->
-                    <h1 class="modal-title" id="staticBackdropLabel" style="margin-left: 20px; margin-top: 30px; margin-bottom: -25px; line-height: 1.1;"
-                    >Feedback<br>History</h1>
-                    <img src="icons/GIF_FBHISTORY.gif" style="width: 2in; height: 1.15in; margin-left: 300px; margin-top: -80px;" id="fbhistory_gif">
-                <div>
-                </div class="row">
-                    <!-- <h style="margin-top: 5px; margin-left: 15px;"><?php echo 'all of <b>' . $firstName . ' ' . $middleName. ' ' . $lastName . '</b>\'s submitted feedbacks<br>'; ?></h> -->
-                </div>
-                <hr>
-                <div class="modal-body">
-                    <div class="scrollable-content" id="inputfields" style="height: 400px; overflow-y: auto;">
-
-                        <?php
-                            // Make sure you have the customer ID from the session
-                            $customerID = $_SESSION['customerID'];
-
-                            // Modify your SQL query to filter data for the current customer user
-                            $sql = "SELECT 
-                                        opinion AS 'Opinion',
-                                        suggestion AS 'Suggestion',
-                                        question AS 'Question',
-                                        rating AS 'Rating',
-                                        date AS 'Date'
-                                    FROM tbl_feedback
-                                    WHERE customer_ID = :customerID
-                                    ORDER BY date DESC";
-
-                            // Prepare and execute the query with the customer ID as a parameter
-                            $stmt = $conn->prepare($sql);
-                            $stmt->bindParam(':customerID', $customerID, PDO::PARAM_INT);
-                            $stmt->execute();
-
-                            // Fetch the data for the current customer user
-                            $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                        ?>
-
-                        <!-- Step 4: Display data in the table format with renamed columns -->
-                        <div class="scrollable-content" id="inputfields" style="max-height: 400px; overflow-y: auto;">
-                            <div class="row">
-                                <div class="col-12">
-                                    <table class="table table-bordered" style="color: black;">
-                                        <thead>
-                                            <tr>
-                                                <?php
-                                                // Display column aliases as headers
-                                                $aliasRow = $customerData[0]; // Assuming the first row contains aliases
-
-                                                foreach ($aliasRow as $alias => $value) {
-                                                    echo "<th style='background-color: white; color: black;'>$alias</th>";
-                                                }
-                                                ?>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            // Loop through the data and populate the table
-                                            foreach ($customerData as $row) {
-                                                echo "<tr>";
-                                                foreach ($row as $value) {
-                                                    echo "<td>$value</td>";
-                                                }
-                                                echo "</tr>";
-                                            }
-                                            ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- <button type="submit" class="submit" name="submit" id="sett_cyp_modalsave">Save</button> -->
-
-                    <button type="button" class="btn btn-secondary float-end" style="margin-top: 15px;" id="sett_h_closeModalBtn" data-bs-dismiss="modal">Close</button>
-                    <!-- </form> -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-    function openmodal_checkhistory() {
-        $('#modal_checkhistory').modal('show');
-    }
-    </script>
-    <!-- END CHECK HISTORY MODAL -- FOR CHECKING HISTORY -->
-
 
     
 
@@ -922,15 +753,147 @@ try {
 
 
     <div class="acc_bg_even bg-primary">
-        <!-- <div class="container">
-            <div class="row">
-                
+        <div class="container d-flex align-items-center justify-content-center" style="width: 100%; padding: 40px;">
+            <!-- 2ND ROW -->
+            <div class="row" style="width: 100%; padding: 40px; background: #ddf7de; border-radius: 20px;">
+                    <!-- <h5 style="margin-top: 5px; margin-left: 30px; margin-bottom: -10px;">All feedbacks</h5> -->
+                    <h5 style="position: relative; margin-top: 0px; margin-bottom: 10px; margin-left: 0px; font-size: 70px; color: gray;">Your Feedbacks</h5>
+                    <hr>
+                    <!-- <img src="icons/GIF_NEWFB.gif" style="width: 1.5in; height: .9in; margin-left: 445px; margin-top: 0px;" id="adminnotif_gif"> -->
+                    <!-- MY FEEDBACKS TABLE -->
+                    <div class="scrollable-content" id="inputfields" style="width: 100%; height: 1200px; overflow-y: auto; color: black; background: #ecffed;">
+                        <div class="" style="position: relative;">
+                            <?php
+                            // Fetch feedbacks for the current customer
+                            $sqlFeedbacks = "
+                            SELECT opinion, suggestion, question, rating, date
+                            FROM tbl_feedback
+                            WHERE customer_id = :customerID
+                            ORDER BY date DESC";
+
+                            $stmtFeedbacks = $conn->prepare($sqlFeedbacks);
+                            $stmtFeedbacks->bindParam(':customerID', $customerID, PDO::PARAM_INT);
+                            $stmtFeedbacks->execute();
+                            $feedbacks = $stmtFeedbacks->fetchAll();
+
+                            $todayFeedbacks = [];
+                            $yesterdayFeedbacks = [];
+                            $olderFeedbacks = [];
+
+                            $now = new DateTime();
+                            $yesterday = (clone $now)->modify('-1 day');
+
+                            foreach ($feedbacks as $feedback) {
+                                $feedbackDate = new DateTime($feedback['date']);
+
+                                if ($feedbackDate->format('Y-m-d') == $now->format('Y-m-d')) {
+                                    $todayFeedbacks[] = $feedback;
+                                } elseif ($feedbackDate->format('Y-m-d') == $yesterday->format('Y-m-d')) {
+                                    $yesterdayFeedbacks[] = $feedback;
+                                } else {
+                                    $olderFeedbacks[] = $feedback;
+                                }
+                            }
+
+                            // Function to display notifications
+                            function displayFeedbacks($feedbacks, $heading, $marginTop, $backgroundColor)
+                            {
+                                echo '<h4 style="margin-top: ' . $marginTop . '; margin-left: 15px; font-size: 20px; color: gray;">' . $heading . '</h4>';
+
+                                if (empty($feedbacks)) {
+                                    echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">You have no feedback submitted ' . strtolower($heading) . '.</p>';
+                                    echo '<hr>';
+                                } else {
+                                    // Display feedbacks
+                                    foreach ($feedbacks as $feedback) {
+                                        echo '<div class="row" style="background-color: #ecedff; border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);
+                                            padding: 20px; border-radius: 5px; font-size: 20px; width: 900px; margin-left: 15px; margin-top: 10px;">';
+                                        echo '<p style="margin: 0px;"><strong>Opinion:</strong> ' . $feedback['opinion'] . '</p>';
+                                        echo '<p style="margin: 0px;"><strong>Suggestion:</strong> ' . $feedback['suggestion'] . '</p>';
+                                        echo '<p style="margin: 0px;"><strong>Question:</strong> ' . $feedback['question'] . '</p>';
+                                        echo '<p style="margin: 0px;"><strong>Rating:</strong> ' . $feedback['rating'] . '</p>';
+                                        echo '<p style="color: blue; font-size: 15px; margin-top: 10px; margin-bottom: 0px;">' . formatRelativeDate($feedback['date'], $heading) . '</p>';
+                                        echo '</div>'; //IF YOU COMMENT THIS, THE CARDS LOOK SO NICE SLANTED FROM BIG TO SMALL
+                                    }
+                                    echo '<hr>';
+                                }
+                            }
+
+                            // Display "Today" feedbacks with background color #ecedff
+                            displayFeedbacks($todayFeedbacks, 'Today', '20px', '#f1e9e9');
+
+                            // Display "Yesterday" notifications with background color #ecffed
+                            displayFeedbacks($yesterdayFeedbacks, 'Yesterday', '20px', '#ecffed');
+
+                            // Display "Older" notifications with background color #f1e9e9
+                            displayFeedbacks($olderFeedbacks, 'Older', '20px', '#ecedff');
+
+                            // Function to format relative date and time
+                            function formatRelativeDate($date, $category)
+                            {
+                                $formattedDate = new DateTime($date);
+
+                                if ($category === 'Today') {
+                                    return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
+                                } elseif ($category === 'Yesterday') {
+                                    return 'Yesterday @ ' . $formattedDate->format('h:i A');
+                                } else {
+                                    $interval = (new DateTime())->diff($formattedDate);
+                                    return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
+                                }
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <!-- END MY FEEDBACKS TABLE -->
+                    <hr>
             </div>
-        </div> -->
+            <!-- END 2ND ROW -->
+
+        </div>
     </div>
 
 
 </body>
+
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <h5>About Us</h5>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra bibendum nulla, vitae dapibus felis tempor in.</p>
+      </div>
+      <div class="col-md-4">
+        <h5>Contact Us</h5>
+        <ul class="list-unstyled">
+          <li>Phone: +123456789</li>
+          <li>Email: info@example.com</li>
+          <li>Address: 123 Main Street, City, Country</li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h5>Follow Us</h5>
+        <ul class="list-unstyled">
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">Twitter</a></li>
+          <li><a href="#">Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <p>&copy; 2024 Your Company. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+
+
 </html>
 
 

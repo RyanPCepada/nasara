@@ -619,23 +619,28 @@ try {
                                         }
                                     }
 
-                                    // Display notifications function
+                                    // Function to display notifications
                                     function displayNotifications($notifications, $heading, $marginTop, $backgroundColor) {
                                         echo '<h4 style="margin-top: ' . $marginTop . '; margin-left: 15px; font-size: 20px; color: gray;">' . $heading . '</h4>';
-                                        foreach ($notifications as $notification) {
-                                            echo '<div class="row" style="background-color: ' . $backgroundColor . '; border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); 
-                                                border-radius: 5px; font-size: 20px; width: 900px; margin-left: 15px; margin-top: 10px;">';
 
-                                            if ($notification['type'] == 'registration') {
-                                                echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has registered an account.</p>';
-                                            } elseif ($notification['type'] == 'feedback') {
-                                                echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has submitted feedback.</p>';
-                                            } elseif ($notification['type'] == 'profile_update') {
-                                                echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has updated profile.</p>';
+                                        if (empty($notifications)) {
+                                            echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">No notifications ' . strtolower($heading) . '.</p>';
+                                        } else {
+                                            foreach ($notifications as $notification) {
+                                                echo '<div class="row" style="background-color: ' . $backgroundColor . '; border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); 
+                                                    border-radius: 5px; font-size: 20px; width: 900px; margin-left: 15px; margin-top: 10px;">';
+
+                                                if ($notification['type'] == 'registration') {
+                                                    echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has registered an account.</p>';
+                                                } elseif ($notification['type'] == 'feedback') {
+                                                    echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has submitted feedback.</p>';
+                                                } elseif ($notification['type'] == 'profile_update') {
+                                                    echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has updated profile.</p>';
+                                                }
+
+                                                echo '<p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($notification['date'], $heading) . '</p>';
+                                                echo '</div>';
                                             }
-
-                                            echo '<p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($notification['date'], $heading) . '</p>';
-                                            echo '</div>';
                                         }
                                     }
 
@@ -663,6 +668,7 @@ try {
                                         }
                                     }
                                     ?>
+
                                 </div>
                             </div>
                             <!-- END NOTIFICATIONS TABLE -->
