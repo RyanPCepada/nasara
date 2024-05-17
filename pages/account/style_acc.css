@@ -78,7 +78,39 @@
 
 
 
+#icon_editprofile, #icon_password, #icon_history, #icon_privacy, #icon_blank {
+  position: relative;
+  width: 120px;
+  height: 60px;
+  font-size: 30px;
+  border: solid 2px lightblue;
+  border-radius: 30px;
+  margin-left: 0px;
+  transition: border-color 0.2s ease;
+}
 
+#icon_editprofile:hover {
+  border-color: rgb(255, 255, 255);
+}
+
+
+
+
+
+#icon_logout {
+  position: relative;
+  width: 120px;
+  height: 60px;
+  font-size: 30px;
+  border: solid 2px lightblue;
+  border-radius: 30px;
+  margin-left: 0px;
+  transition: border-color 0.2s ease;
+}
+
+#icon_logout:hover {
+  border-color: rgb(255, 255, 255);
+}
 
 
   

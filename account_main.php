@@ -181,27 +181,57 @@ try {
 
 
                     <div class="row col-12"> <!--FOR BUTTONS-->
-                            <div class="col-4">
-                                <!-- <button class="text-primary" style="width: 200px;">Profile</button> -->
-                                <button type="button" class="btn btn-primary" id="openProfileModalBtn" data-bs-toggle="modal" data-bs-target="#modal_profile"
-                                    style="position: relative; width: 200px; height: 60px;"
-                                    >Profile
+                            <div class="col-2">
+                                <button class="btn btn-secondary" type="button" id="icon_editprofile" data-bs-toggle="modal" data-bs-target="#modal_profile">
+                                    <i class="fas fa-user-edit"></i>
                                 </button>
                             </div>
-                            <div class="col-4">
+                            <div class="col-2">
+                                <button class="btn btn-secondary" type="button" id="icon_password" data-bs-toggle="modal" data-bs-target="#modal_changeyourpassword">
+                                    <i class="fas fa-key"></i>
+                                </button>
+                            </div>
+                            <div class="col-2">
+                                <button class="btn btn-secondary" type="button" id="icon_history" data-bs-toggle="modal" data-bs-target="#modal_history">
+                                    <i class="fas fa-history"></i>
+                                </button>
+                            </div>
+                            <div class="col-2">
+                                <button class="btn btn-secondary" type="button" id="icon_privacy" data-bs-toggle="modal" data-bs-target="#modal_termsandprivacypolicy">
+                                    <i class="fas fa-file-alt"></i>
+                                    <!-- <i class="fas fa-file-contract"></i> -->
+                                </button>
+                            </div>
+                            <div class="col-2">
+                                <button class="btn btn-secondary" type="button" id="icon_blank" data-bs-toggle="modal" data-bs-target="#modal_profile">
+                                    <i class=""></i>
+                                </button>
+                            </div>
+                            <div class="col-2">
+                                <form action="actions/logoutAction.php" method="post">
+                                    <button class="btn btn-secondary" type="submit" id="icon_logout" onclick="window.location.href='login_main.php'">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                    </button>
+                                </form>
+                            </div>
+
+
+
+
+                            <!-- <div class="col-2">
                                 <button type="button" class="btn btn-primary" id="openSettingsModalBtn" data-bs-toggle="modal" data-bs-target="#modal_settings"
                                     style="position: relative; width: 200px; height: 60px;"
                                     >Settings
                                 </button>
                             </div>
-                            <div class="col-4 text-danger">
+                            <div class="col-2 text-danger">
                                 <form action="actions/logoutAction.php" method="post">
                                     <button class="btn btn-dark" type="submit" id="logout" onclick="window.location.href='login_main.php'"
                                         style="position: relative; width: 200px; height: 60px;"
                                         >Log Out
                                     </button>
                                 </form>
-                            </div>
+                            </div> -->
                         
                     </div><!-- END FOR BUTTONS -->
                     
@@ -444,7 +474,7 @@ try {
                                 Change Your Password
                             </button>
                             <br>
-                            <button type="button" class="btn btn-secondary" id="openCheckHistoryModalBtn" data-bs-toggle="modal" data-bs-target="#modal_checkhistory"
+                            <button type="button" class="btn btn-secondary" id="openHistoryModalBtn" data-bs-toggle="modal" data-bs-target="#modal_history"
                                 style="width: 250px; height: 50px; margin-top: 20px; margin-left: 105px;">
                                 History
                             </button>
@@ -555,7 +585,74 @@ try {
     <!-- END CHANGE PASSWORD MODAL -- FOR CHANGING YOUR PASSWORD -->
 
     
-    
+    <!-- HISTORY MODAL -- FOR VIEWING HISTORY -->
+    <div class="modal fade" id="modal_history" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">History</h5>
+                <img src="pages/account/GIF_HISTORY.gif" style="width: 1.75in; height: 1in; margin-left: 208px;" id="bginfo_gif">
+                <!-- <img src="pages/account/HISTORY_GIF.gif" style="width: 1.5in; height: 1in; margin-left: 0px;" id="bginfo_gif"> -->
+            </div>
+
+                <div class="modal-body">
+                    <!-- <form id="feedback_history_form" method="POST" action="actions/change_password.php"> -->
+                    <div class="row">
+                        <div class="col-1">
+                        </div>
+                        <div class="col-4" style="margin-bottom: 10px; margin-left: 0px;">
+                            <h><b>Activity</b></h>
+                        </div>
+                        <div class="col-2">
+                        </div>
+                        <div class="col-5" style="margin-bottom: 10px; margin-left: 0px;">
+                            <h><b>Date</b></h>
+                        </div>
+                    </div>
+                    
+                    <div class="scrollable-content" id="inputfields" style="height: 400px; overflow-y: auto;">
+                        <table class="table table-bordered">
+                            <!-- <thead>
+                                <tr>
+                                    <th class="col-5">Activities</th>
+                                    <th class="col-5">Dates</th>
+                                </tr>
+                            </thead> -->
+                            <tbody>
+                                <?php
+                                // Assuming both arrays have the same length
+                                $count = count($activities);
+
+                                for ($i = $count - 1; $i >= 0; $i--) {
+                                ?>
+                                <tr>
+                                    <td class="col-5"><?php echo $activities[$i]; ?></td>
+                                    <td class="col-5"><?php echo $dates[$i]; ?></td>
+                                </tr>
+                                <?php
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <!-- <button type="submit" class="submit" name="submit" id="sett_cyp_modalsave">Save</button> -->
+
+                    <button type="button" class="btn btn-secondary float-end" style="margin-top: 15px;" id="sett_h_closeModalBtn" data-bs-dismiss="modal">Close</button>
+                    <!-- </form> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function openmodal_history() {
+        $('#modal_history').modal('show');
+    }
+    </script>
+    <!-- END FEEDBACK HISTORY MODAL -- FOR VIEWING FEEDBACK HISTORY -->
+
+
 
     
 
