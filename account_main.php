@@ -182,7 +182,7 @@ try {
 
                     <div class="row col-12"> <!--FOR BUTTONS-->
                             <div class="col-2">
-                                <button class="btn btn-secondary" type="button" id="icon_editprofile" data-bs-toggle="modal" data-bs-target="#modal_profile">
+                                <button class="btn btn-primary" type="button" id="icon_editprofile" data-bs-toggle="modal" data-bs-target="#modal_profile">
                                     <i class="fas fa-user-edit"></i>
                                 </button>
                             </div>
@@ -192,24 +192,24 @@ try {
                                 </button>
                             </div>
                             <div class="col-2">
-                                <button class="btn btn-secondary" type="button" id="icon_history" data-bs-toggle="modal" data-bs-target="#modal_history">
+                                <button class="btn btn-danger" type="button" id="icon_history" data-bs-toggle="modal" data-bs-target="#modal_history">
                                     <i class="fas fa-history"></i>
                                 </button>
                             </div>
                             <div class="col-2">
-                                <button class="btn btn-secondary" type="button" id="icon_privacy" data-bs-toggle="modal" data-bs-target="#modal_termsandprivacypolicy">
+                                <button class="btn btn-warning" type="button" id="icon_privacy" data-bs-toggle="modal" data-bs-target="#modal_termsandprivacypolicy">
                                     <i class="fas fa-file-alt"></i>
                                     <!-- <i class="fas fa-file-contract"></i> -->
                                 </button>
                             </div>
                             <div class="col-2">
-                                <button class="btn btn-secondary" type="button" id="icon_blank" data-bs-toggle="modal" data-bs-target="#modal_profile">
+                                <button class="btn btn-success" type="button" id="icon_blank" data-bs-toggle="modal" data-bs-target="#modal_profile">
                                     <i class=""></i>
                                 </button>
                             </div>
                             <div class="col-2">
                                 <form action="actions/logoutAction.php" method="post">
-                                    <button class="btn btn-secondary" type="submit" id="icon_logout" onclick="window.location.href='login_main.php'">
+                                    <button class="btn btn-dark" type="submit" id="icon_logout" onclick="window.location.href='login_main.php'">
                                         <i class="fas fa-sign-out-alt"></i>
                                     </button>
                                 </form>
@@ -852,7 +852,7 @@ try {
     <div class="acc_bg_even bg-primary">
         <div class="container d-flex align-items-center justify-content-center" style="width: 100%; padding: 40px;">
             <!-- 2ND ROW -->
-            <div class="row" style="width: 100%; padding: 40px; background: #ddf7de; border-radius: 20px;">
+            <div class="row" style="width: 100%; padding: 40px; background: #ddf7de; border-radius: 20px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166)">
                     <!-- <h5 style="margin-top: 5px; margin-left: 30px; margin-bottom: -10px;">All feedbacks</h5> -->
                     <h5 style="position: relative; margin-top: 0px; margin-bottom: 10px; margin-left: 0px; font-size: 70px; color: gray;">Your Feedbacks</h5>
                     <hr>
