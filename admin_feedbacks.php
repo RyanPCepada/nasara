@@ -816,31 +816,24 @@ try {
                                 
                                 <div class="row">
                                     <?php
-                                    // Step 2: Fetch all data from tbl_customer_info
-                                    $sql = "SELECT * FROM tbl_customer_info";
-                                    $stmt = $conn->prepare($sql);
-                                    $stmt->execute();
+                                        // Step 2: Fetch data from tbl_customer_info
+                                        $sql = "SELECT
+                                            CONCAT('images/', ci.image) AS 'Image',
+                                            ci.customer_ID AS 'Customer ID',
+                                            CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS 'Full Name',
+                                            fb.opinion AS 'Opinion',
+                                            fb.suggestion AS 'Suggestion',
+                                            fb.question AS 'Question',
+                                            fb.rating AS 'Rating',
+                                            fb.date AS 'Date'
+                                        FROM tbl_customer_info AS ci
+                                        JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID";
 
-                                    // Step 3: Create arrays to store the data
-                                    $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute();
 
-                                    // Step 2: Fetch data from tbl_customer_info
-                                    $sql = "SELECT
-                                        ci.customer_ID AS 'Customer ID',
-                                        CONCAT(ci.firstName, ' ', ci.MiddleName, ' ',ci.lastName) AS 'Full Name',
-                                        fb.opinion AS 'Opinion',
-                                        fb.suggestion AS 'Suggestion',
-                                        fb.question AS 'Question',
-                                        fb.rating AS 'Rating',
-                                        fb.date AS 'Date'
-                                    FROM tbl_customer_info AS ci
-                                    JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID";
-
-                                    $stmt = $conn->prepare($sql);
-                                    $stmt->execute();
-
-                                    // Step 3: Create arrays to store the data
-                                    $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                        // Step 3: Create arrays to store the data
+                                        $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     ?>
 
                                     <div class="scrollable-content" id="table1">
@@ -862,14 +855,17 @@ try {
                                                 <?php
                                                 if (empty($customerData)) {
                                                     // Display the "No feedback yet for today" message in the table body
-                                                    echo '<tr><td colspan="6" style="text-align: center; background-color: transparent; color: black;"
-                                                    >No feedbacks yet for today</td></tr>';
+                                                    echo '<tr><td colspan="8" style="text-align: center; background-color: transparent; color: black;">No feedbacks yet for today</td></tr>';
                                                 } else {
                                                     // Loop through the data and populate the table
                                                     foreach ($customerData as $row) {
                                                         echo "<tr>";
-                                                        foreach ($row as $value) {
-                                                            echo "<td>$value</td>";
+                                                        foreach ($row as $key => $value) {
+                                                            if ($key === 'Image') {
+                                                                echo "<td><img src='$value' style='width: 90px; height: 90px; border: solid 0px lightblue; border-radius: 45px; background-color: white;'></td>";
+                                                            } else {
+                                                                echo "<td>$value</td>";
+                                                            }
                                                         }
                                                         echo "</tr>";
                                                     }
@@ -878,6 +874,7 @@ try {
                                             </tbody>
                                         </table>
                                     </div>
+
                                 </div>
 
                             </div>
