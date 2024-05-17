@@ -622,17 +622,17 @@ try {
                             <!-- NOTIFICATIONS TABLE -->
                             <div class="scrollable-content" id="inputfields" style="height: 1000px; overflow-y: auto; color: black; background: white;">
                                 <div class="" style="position: relative;">
-                                    <?php
+                                <?php
                                     // Fetch and display customer registrations, feedback submissions, and profile updates
                                     $sqlNotifications = "
-                                        (SELECT CONCAT(firstName, ' ', lastName) AS name, dateAdded AS date, 'registration' AS type
+                                        (SELECT CONCAT('images/', image) AS image, CONCAT(firstName, ' ', lastName) AS name, dateAdded AS date, 'registration' AS type
                                         FROM tbl_customer_info) 
                                         UNION
-                                        (SELECT CONCAT(firstName, ' ', lastName) AS name, date, 'feedback' AS type
+                                        (SELECT CONCAT('images/', ci.image) AS image, CONCAT(firstName, ' ', lastName) AS name, date, 'feedback' AS type
                                         FROM tbl_customer_info ci
                                         JOIN tbl_feedback f ON ci.customer_id = f.customer_id)
                                         UNION
-                                        (SELECT CONCAT(firstName, ' ', lastName) AS name, dateModified AS date, 'profile_update' AS type
+                                        (SELECT CONCAT('images/', ci.image) AS image, CONCAT(firstName, ' ', lastName) AS name, dateModified AS date, 'profile_update' AS type
                                         FROM tbl_customer_info ci
                                         JOIN tbl_activity_logs al ON ci.customer_id = al.customer_ID
                                         WHERE al.activity = 'Updated the profile')
@@ -672,32 +672,35 @@ try {
                                                 echo '<div class="row" style="background-color: ' . $backgroundColor . '; border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); 
                                                     border-radius: 5px; font-size: 20px; width: 900px; margin-left: 15px; margin-top: 10px;">';
 
-                                                if ($notification['type'] == 'registration') {
-                                                    echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has registered an account.</p>';
-                                                } elseif ($notification['type'] == 'feedback') {
-                                                    echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has submitted feedback.</p>';
-                                                } elseif ($notification['type'] == 'profile_update') {
-                                                    echo '<p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> has updated profile.</p>';
-                                                }
+                                                echo '<div class="col-auto">
+                                                        <img src="' . $notification['image'] . '" style="width: 60px; height: 60px; border-radius: 30px; background-color: white; margin-top: 12px;">
+                                                    </div>';
+                                                echo '<div class="col">
+                                                        <p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> ' . getActivityMessage($notification['type']) . '</p>
+                                                        <p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($notification['date'], $heading) . '</p>
+                                                    </div>';
 
-                                                echo '<p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($notification['date'], $heading) . '</p>';
                                                 echo '</div>';
                                             }
                                         }
                                     }
 
-                                    // Display "Today" notifications with background color #ecedff
-                                    displayNotifications($todayNotifications, 'Today', '20px', '#f1e9e9');
-
-                                    // Display "Yesterday" notifications with background color #ecffed
-                                    displayNotifications($yesterdayNotifications, 'Yesterday', '20px', '#ecffed');
-
-                                    // Display "Older" notifications with background color #f1e9e9
-                                    displayNotifications($olderNotifications, 'Older', '20px', '#ecedff');
+                                    // Function to return activity message based on the type
+                                    function getActivityMessage($type) {
+                                        switch ($type) {
+                                            case 'registration':
+                                                return 'has registered an account.';
+                                            case 'feedback':
+                                                return 'has submitted feedback.';
+                                            case 'profile_update':
+                                                return 'has updated profile.';
+                                            default:
+                                                return '';
+                                        }
+                                    }
 
                                     // Function to format relative date and time
-                                    function formatRelativeDate($date, $category)
-                                    {
+                                    function formatRelativeDate($date, $category) {
                                         $formattedDate = new DateTime($date);
 
                                         if ($category === 'Today') {
@@ -709,8 +712,16 @@ try {
                                             return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
                                         }
                                     }
-                                    ?>
 
+                                    // Display "Today" notifications with background color #ecffed
+                                    displayNotifications($todayNotifications, 'Today', '20px', '#ecffed');
+
+                                    // Display "Yesterday" notifications with background color #f1e9e9
+                                    displayNotifications($yesterdayNotifications, 'Yesterday', '20px', '#f1e9e9');
+
+                                    // Display "Older" notifications with background color #ecedff
+                                    displayNotifications($olderNotifications, 'Older', '20px', '#ecedff');
+                                ?>
                                 </div>
                             </div>
                             <!-- END NOTIFICATIONS TABLE -->
