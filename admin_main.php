@@ -805,28 +805,23 @@ try {
 
                                 <div class="col-8" style="position: absolute; margin-left: 330px; margin-top: -200px;">
                                     <?php
-                                    $sql = "SELECT * FROM tbl_customer_info";
-                                    $stmt = $conn->prepare($sql);
-                                    $stmt->execute();
+                                        $sql = "SELECT
+                                            CONCAT('images/', ci.image) AS 'Profpic',
+                                            CONCAT(ci.firstName, ' ', ci.MiddleName, ' ', ci.lastName) AS 'Customer',
+                                            fb.opinion AS 'Opinion',
+                                            fb.suggestion AS 'Suggestion',
+                                            fb.question AS 'Question',
+                                            fb.rating AS 'Rating',
+                                            fb.date AS 'Date'
+                                        FROM tbl_customer_info AS ci
+                                        JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID
+                                        WHERE DATE(fb.date) = CURDATE()
+                                        ORDER BY fb.date DESC";
 
-                                    $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute();
 
-                                    $sql = "SELECT
-                                        CONCAT(ci.firstName, ' ', ci.MiddleName, ' ',ci.lastName) AS 'Customer',
-                                        fb.opinion AS 'Opinion',
-                                        fb.suggestion AS 'Suggestion',
-                                        fb.question AS 'Question',
-                                        fb.rating AS 'Rating',
-                                        fb.date AS 'Date'
-                                    FROM tbl_customer_info AS ci
-                                    JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID
-                                    WHERE DATE(date) = CURDATE()
-                                    ORDER BY date DESC";
-
-                                    $stmt = $conn->prepare($sql);
-                                    $stmt->execute();
-
-                                    $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                        $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     ?>
 
                                     <div class="scrollable-content" id="table1">
@@ -848,14 +843,17 @@ try {
                                                 <?php
                                                 if (empty($customerData)) {
                                                     // Display the "No feedback yet for today" message in the table body
-                                                    echo '<tr><td colspan="6" style="text-align: center; background-color: transparent; color: black;"
-                                                    >No feedbacks yet for today</td></tr>';
+                                                    echo '<tr><td colspan="7" style="text-align: center; background-color: transparent; color: black;">No feedbacks yet for today</td></tr>';
                                                 } else {
                                                     // Loop through the data and populate the table
                                                     foreach ($customerData as $row) {
                                                         echo "<tr>";
-                                                        foreach ($row as $value) {
-                                                            echo "<td>$value</td>";
+                                                        foreach ($row as $key => $value) {
+                                                            if ($key === 'Profpic') {
+                                                                echo "<td><img src='$value' style='width: 60px; height: 60px; border-radius: 50%; background-color: white;'></td>";
+                                                            } else {
+                                                                echo "<td>$value</td>";
+                                                            }
                                                         }
                                                         echo "</tr>";
                                                     }
@@ -865,6 +863,7 @@ try {
                                         </table>
                                     </div>
                                 </div>
+
 
                                 
                             </div>
@@ -932,24 +931,19 @@ try {
                                 </div>
 
                                 <div class="col-8" style="position: absolute; margin-left: 330px; margin-top: -200px;">
-
                                     <?php
-                                        $sql = "SELECT * FROM tbl_customer_info";
-                                        $stmt = $conn->prepare($sql);
-                                        $stmt->execute();
-
-                                        $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+                                        // SQL query to fetch customer information along with the image path
                                         $sql = "SELECT
-                                            fb.opinion AS 'Opinion',
-                                            fb.suggestion AS 'Suggestion',
-                                            fb.question AS 'Question',
-                                            fb.rating AS 'Rating',
-                                            fb.date AS 'Date',
-                                            CONCAT(ci.firstName, ' ', ci.MiddleName, ' ',ci.lastName) AS 'Customer'
-                                        FROM tbl_customer_info AS ci
-                                        JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID
-                                        ORDER BY date DESC";
+                                                    CONCAT('images/', ci.image) AS 'Profpic',
+                                                    CONCAT(ci.firstName, ' ', ci.MiddleName, ' ', ci.lastName) AS 'Customer',
+                                                    fb.opinion AS 'Opinion',
+                                                    fb.suggestion AS 'Suggestion',
+                                                    fb.question AS 'Question',
+                                                    fb.rating AS 'Rating',
+                                                    fb.date AS 'Date'
+                                                FROM tbl_customer_info AS ci
+                                                JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID
+                                                ORDER BY date DESC";
 
                                         $stmt = $conn->prepare($sql);
                                         $stmt->execute();
@@ -957,8 +951,7 @@ try {
                                         $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     ?>
 
-                                    <div class="scrollable-content" id="table2"> <!-- border: black 5px solid;-->
-                                    
+                                    <div class="scrollable-content" id="table2">
                                         <table class="table table-bordered class alternate-row-table" id="card2_table">
                                             <thead>
                                                 <tr>
@@ -977,8 +970,13 @@ try {
                                                 // Loop through the data and populate the table
                                                 foreach ($customerData as $row) {
                                                     echo "<tr>";
-                                                    foreach ($row as $value) {
-                                                        echo "<td>$value</td>";
+                                                    foreach ($row as $key => $value) {
+                                                        if ($key === 'Profpic') {
+                                                            // If the current column is for the image, display it
+                                                            echo "<td><img src='$value' style='width: 60px; height: 60px; border-radius: 50%; background-color: white;'></td>";
+                                                        } else {
+                                                            echo "<td>$value</td>";
+                                                        }
                                                     }
                                                     echo "</tr>";
                                                 }
@@ -986,8 +984,8 @@ try {
                                             </tbody>
                                         </table>
                                     </div>
-
                                 </div>
+
                             </div>
                             <!-- END ROW 2 -->
 
@@ -1183,20 +1181,15 @@ try {
                                 </div>
 
                                 <div class="col-8" style="position: absolute; margin-left: 330px; margin-top: -200px;">
-
                                     <?php
-                                        $sql = "SELECT * FROM tbl_customer_info";
-                                        $stmt = $conn->prepare($sql);
-                                        $stmt->execute();
-
-                                        $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+                                        // SQL query to fetch customer information along with the image path
                                         $sql = "SELECT
-                                            ci.customer_ID AS 'ID',
-                                            CONCAT(ci.firstName, ' ', ci.MiddleName, ' ',ci.lastName) AS 'Customer',
-                                            ci.dateAdded AS 'Registration Date'
-                                        FROM tbl_customer_info AS ci
-                                        ORDER BY customer_ID DESC";
+                                                    CONCAT('images/', ci.image) AS 'Profpic',
+                                                    ci.customer_ID AS 'ID',
+                                                    CONCAT(ci.firstName, ' ', ci.MiddleName, ' ',ci.lastName) AS 'Customer',
+                                                    ci.dateAdded AS 'Registration Date'
+                                                FROM tbl_customer_info AS ci
+                                                ORDER BY customer_ID DESC";
 
                                         $stmt = $conn->prepare($sql);
                                         $stmt->execute();
@@ -1204,8 +1197,7 @@ try {
                                         $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     ?>
 
-                                    <div class="scrollable-content" id="table4"> <!-- border: black 5px solid;-->
-                                    
+                                    <div class="scrollable-content" id="table4">
                                         <table class="table table-bordered class alternate-row-table" id="card4_table">
                                             <thead>
                                                 <tr>
@@ -1224,8 +1216,13 @@ try {
                                                 // Loop through the data and populate the table
                                                 foreach ($customerData as $row) {
                                                     echo "<tr>";
-                                                    foreach ($row as $value) {
-                                                        echo "<td>$value</td>";
+                                                    foreach ($row as $key => $value) {
+                                                        if ($key === 'Profpic') {
+                                                            // If the current column is for the image, display it
+                                                            echo "<td><img src='$value' style='width: 60px; height: 60px; border-radius: 50%; background-color: white;'></td>";
+                                                        } else {
+                                                            echo "<td>$value</td>";
+                                                        }
                                                     }
                                                     echo "</tr>";
                                                 }
@@ -1233,8 +1230,8 @@ try {
                                             </tbody>
                                         </table>
                                     </div>
-
                                 </div>
+
                                 
                             </div>
 
@@ -1314,22 +1311,16 @@ try {
                                 </div>
 
                                 <div class="col-8" style="position: absolute; margin-left: 330px; margin-top: -200px;">
-
                                     <?php
-                                        $sql = "SELECT * FROM tbl_feedback";
-                                        $stmt = $conn->prepare($sql);
-                                        $stmt->execute();
-
-                                        $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+                                        // SQL query to fetch customer information along with the image path
                                         $sql = "SELECT
-                                            fb.rating AS 'Rating',
-                                            CONCAT(ci.firstName, ' ', ci.MiddleName, ' ',ci.lastName) AS 'Customer',
-                                            fb.date AS 'Date'
-                                        FROM tbl_customer_info AS ci
-                                        JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID
-                                        WHERE rating = 5
-                                        ORDER BY date DESC";
+                                                    ci.image AS 'Profpic',
+                                                    CONCAT(ci.firstName, ' ', ci.MiddleName, ' ',ci.lastName) AS 'Customer',
+                                                    fb.date AS 'Date'
+                                                FROM tbl_customer_info AS ci
+                                                JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID
+                                                WHERE rating = 5
+                                                ORDER BY date DESC";
 
                                         $stmt = $conn->prepare($sql);
                                         $stmt->execute();
@@ -1337,8 +1328,7 @@ try {
                                         $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     ?>
 
-                                    <div class="scrollable-content" id="table5"> <!-- border: black 5px solid;-->
-                                    
+                                    <div class="scrollable-content" id="table5">
                                         <table class="table table-bordered class alternate-row-table" id="card5_table">
                                             <thead>
                                                 <tr>
@@ -1357,8 +1347,13 @@ try {
                                                 // Loop through the data and populate the table
                                                 foreach ($customerData as $row) {
                                                     echo "<tr>";
-                                                    foreach ($row as $value) {
-                                                        echo "<td>$value</td>";
+                                                    foreach ($row as $key => $value) {
+                                                        if ($key === 'Profpic') {
+                                                            // If the current column is for the image, display it
+                                                            echo "<td><img src='images/$value' style='width: 60px; height: 60px; border-radius: 50%; background-color: white;'></td>";
+                                                        } else {
+                                                            echo "<td>$value</td>";
+                                                        }
                                                     }
                                                     echo "</tr>";
                                                 }
@@ -1366,8 +1361,8 @@ try {
                                             </tbody>
                                         </table>
                                     </div>
-
                                 </div>
+
 
                             </div>
 

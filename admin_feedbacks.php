@@ -818,7 +818,7 @@ try {
                                     <?php
                                         // Step 2: Fetch data from tbl_customer_info
                                         $sql = "SELECT
-                                            CONCAT('images/', ci.image) AS 'Image',
+                                            CONCAT('images/', ci.image) AS 'Profile picture',
                                             ci.customer_ID AS 'Customer ID',
                                             CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS 'Full Name',
                                             fb.opinion AS 'Opinion',
@@ -861,8 +861,8 @@ try {
                                                     foreach ($customerData as $row) {
                                                         echo "<tr>";
                                                         foreach ($row as $key => $value) {
-                                                            if ($key === 'Image') {
-                                                                echo "<td><img src='$value' style='width: 90px; height: 90px; border: solid 0px lightblue; border-radius: 45px; background-color: white;'></td>";
+                                                            if ($key === 'Profile picture') {
+                                                                echo "<td><img src='$value' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: white;'></td>";
                                                             } else {
                                                                 echo "<td>$value</td>";
                                                             }

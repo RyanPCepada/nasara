@@ -817,7 +817,7 @@ try {
                                 <div class="row">
                                     <?php
                                         // Step 2: Fetch all d``````ata from tbl_customer_info with column aliases
-                                        $sql = "SELECT CONCAT('images/', image) AS 'Image',  -- Concatenate the image path with the 'image' column
+                                        $sql = "SELECT CONCAT('images/', image) AS 'Profile picture',  -- Concatenate the image path with the 'image' column
                                                 customer_ID AS 'Customer ID',
                                                 firstName AS 'Firstname',
                                                 middleName AS 'Middlename',
@@ -867,8 +867,8 @@ try {
                                                     foreach ($customerData as $row) {
                                                         echo "<tr>";
                                                         foreach ($row as $key => $value) {
-                                                            if ($key === 'Image') {
-                                                                echo "<td><img src='$value' style='width: 90px; height: 90px; border: solid 0px lightblue; border-radius: 45px; background-color: white;'></td>";
+                                                            if ($key === 'Profile picture') {
+                                                                echo "<td><img src='$value' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: white;'></td>";
                                                             } else {
                                                                 echo "<td>$value</td>";
                                                             }
