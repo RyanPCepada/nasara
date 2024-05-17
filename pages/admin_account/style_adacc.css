@@ -439,7 +439,7 @@ thead th {
   position: absolute;
   margin-top: 10px;
   background: rgb(235, 235, 235);
-  height: 2200px;
+  height: 1000px;
   width: 1530px;
 }
 
@@ -447,7 +447,7 @@ thead th {
 #cards_body1{
   position: absolute;
   width: 300px; /*+70*/
-  height: 3923px;
+  height: 1000px;
   background: midnightblue;
 }
 

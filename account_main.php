@@ -848,11 +848,11 @@ try {
 
 
 
-
+    <!-- 2ND ROW -->
     <div class="acc_bg_even bg-primary">
-        <div class="container d-flex align-items-center justify-content-center" style="width: 100%; padding: 40px;">
-            <!-- 2ND ROW -->
-            <div class="row" style="width: 100%; padding: 40px; background: #ddf7de; border-radius: 20px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166)">
+        <div class="col-12 container d-flex align-items-center justify-content-center" style="width: 100%; padding: 40px;">
+            <div class="row col-6">
+                <div class="row" style="width: 100%; padding: 40px; background: #ddf7de; border-radius: 20px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166)">
                     <!-- <h5 style="margin-top: 5px; margin-left: 30px; margin-bottom: -10px;">All feedbacks</h5> -->
                     <h5 style="position: relative; margin-top: 0px; margin-bottom: 10px; margin-left: 0px; font-size: 70px; color: gray;">Your Feedbacks</h5>
                     <hr>
@@ -904,7 +904,7 @@ try {
                                     // Display feedbacks
                                     foreach ($feedbacks as $feedback) {
                                         echo '<div class="row" style="background-color: #ecedff; border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);
-                                            padding: 20px; border-radius: 5px; font-size: 20px; width: 900px; margin-left: 15px; margin-top: 10px;">';
+                                            padding: 20px; border-radius: 5px; font-size: 20px; width: 95%; margin-left: 15px; margin-top: 10px;">';
                                         echo '<p style="margin: 0px;"><strong>Opinion:</strong> ' . $feedback['opinion'] . '</p>';
                                         echo '<p style="margin: 0px;"><strong>Suggestion:</strong> ' . $feedback['suggestion'] . '</p>';
                                         echo '<p style="margin: 0px;"><strong>Question:</strong> ' . $feedback['question'] . '</p>';
@@ -944,11 +944,16 @@ try {
                     </div>
                     <!-- END MY FEEDBACKS TABLE -->
                     <hr>
-            </div>
-            <!-- END 2ND ROW -->
+                </div>
 
+            </div>
+            
+            <div class="row col-6">
+
+            </div>
         </div>
     </div>
+    <!-- END 2ND ROW -->
 
 
 </body>

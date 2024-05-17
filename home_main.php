@@ -670,7 +670,7 @@ try {
                             </script>
 
 
-                        <button class="btn btn-primary" id="sendRecording" style="border: 1px solid lightblue;" disabled>Send Voice Feedback</button>
+                        <button class="btn btn-primary" id="sendRecording" style="border: 1px solid lightblue;" disabled>Send Audio Feedback</button>
                         
                     </div>
                     <div class="modal-footer">
