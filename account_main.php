@@ -66,6 +66,16 @@ if (isset($_SESSION['customerID'])) {
 
 
 
+
+        
+
+        // Fetch all audio feedback files for the customer
+        $query = $conn->prepare("SELECT audio FROM tbl_audio_feedback WHERE customer_ID = :customerID");
+        $query->bindParam(':customerID', $customerID, PDO::PARAM_INT);
+        $query->execute();
+        $audioFiles = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
         $customerID = $_SESSION['customerID'];
         
     } catch (PDOException $e) {
@@ -950,7 +960,30 @@ try {
             
             <div class="row col-6">
 
+                <div class="card-body" id="cards_body2" style="justify-content: center; background: white;">
+                    
+                    <h5 style="margin-top: 5px; margin-left: 30px; margin-bottom: -10px;">All Audio Records</h5>
+                    
+                    <h6 style="position: absolute; margin-top: -12px; margin-left: 912px; color: grey">Newest data appears first</h6>
+
+                    <hr>
+
+                    <img src="pages/admin/GIF_NOTIFICATIONS.gif" style="width: 1.5in; height: .9in; margin-left: 445px; margin-top: 0px;" id="adminnotif_gif">
+
+                    
+
+
+                    <hr>
+
+                </div>
+
             </div>
+
+
+
+
+
+
         </div>
     </div>
     <!-- END 2ND ROW -->

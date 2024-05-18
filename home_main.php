@@ -45,6 +45,13 @@ if (isset($_SESSION['customerID'])) {
         $image = $user['image'];
 
 
+        // Fetch all audio feedback files for the customer
+        $query = $conn->prepare("SELECT audio FROM tbl_audio_feedback WHERE customer_ID = :customerID");
+        $query->bindParam(':customerID', $customerID, PDO::PARAM_INT);
+        $query->execute();
+        $audioFiles = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
@@ -105,21 +112,22 @@ try {
   
 
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-
         <img src="icons/NASARA_LOGO_WHITE_PNG.png" class="img-fluid" id="NASARA_LOGO" alt="">
 
-            <button class="btn btn-secondary" type="button" id="icon_home" onclick="to_home()" href="home_main.php">
-                <i class="fas fa-home"></i>
-            </button>
+        <button class="btn btn-secondary" type="button" id="icon_home" onclick="to_home()" href="home_main.php">
+            <i class="fas fa-home"></i>
+        </button>
 
-            <img src="images/<?php echo $image; ?>" id="icon_account" class="img-fluid zoomable-image rounded-square"
-            onclick="to_account()">
+        <img src="images/<?php echo $image; ?>" id="icon_account" class="img-fluid zoomable-image rounded-square" onclick="to_account()">
 
-            <div class = " m-2 text-light" >   
-                <b class = "bg-transparent "  id="accountLink" onclick="to_account()" style=" cursor: pointer;"> <img src="navigation/user.png" alt=""></b>
-            </div>
+        <div class="m-2 text-light">
+            <b class="bg-transparent" id="accountLink" onclick="to_account()" style="cursor: pointer;">
+                <img src="navigation/user.png" alt="">
+            </b>
+        </div>
 
     </nav>
+
 
 
 
@@ -706,6 +714,7 @@ try {
                     // Handle the error appropriately
                 });
             }
+
         </script>
         <!-- END VOICE MESSAGE MODAL -- FOR RECORDING VOICE MESSAGE -->
 
