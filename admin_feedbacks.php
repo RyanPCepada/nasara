@@ -285,10 +285,16 @@ try {
                             $sqlActivityLogs = "SELECT COUNT(*) AS activityLogCount FROM tbl_activity_logs WHERE activity='Updated the profile' AND DATE(dateAdded) = CURDATE()"; 
                             $stmtActivityLogs = $conn->prepare($sqlActivityLogs);
                             $stmtActivityLogs->execute();
-                            $activityLogCount = $stmtActivityLogs->fetchColumn();
+                            $activityLogCount1 = $stmtActivityLogs->fetchColumn();
+
+                            // Fetch the count of activity logs for today
+                            $sqlActivityLogs = "SELECT COUNT(*) AS activityLogCount FROM tbl_activity_logs WHERE activity='Changed Profile Picture' AND DATE(dateAdded) = CURDATE()"; 
+                            $stmtActivityLogs = $conn->prepare($sqlActivityLogs);
+                            $stmtActivityLogs->execute();
+                            $activityLogCount2 = $stmtActivityLogs->fetchColumn();
 
                             // Calculate and display the combined count of feedbacks, new customers, and activity logs
-                            $totalNotifications = $feedbackCount + $customerCount + $activityLogCount;
+                            $totalNotifications = $feedbackCount + $customerCount + $activityLogCount1 + $activityLogCount2;
                             echo $totalNotifications;
                             ?>
                             <span class="visually-hidden">unread messages</span>
@@ -296,7 +302,6 @@ try {
                     </button>
                 </div>
 
-                
                 <div class="div-history text-center d-flex align-items-center justify-content-center" id="div_history" onclick="to_adminhistory()" href="admin_history.php">
                     <button class="btn btn-secondary" type="button" id="icon_history">
                         <i class="fas fa-history"></i>
@@ -827,7 +832,8 @@ try {
                                             fb.rating AS 'Rating',
                                             fb.date AS 'Date'
                                         FROM tbl_customer_info AS ci
-                                        JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID";
+                                        JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID
+                                        ORDER BY fb.feedback_ID DESC";
 
                                         $stmt = $conn->prepare($sql);
                                         $stmt->execute();

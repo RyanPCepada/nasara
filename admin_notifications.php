@@ -285,10 +285,16 @@ try {
                             $sqlActivityLogs = "SELECT COUNT(*) AS activityLogCount FROM tbl_activity_logs WHERE activity='Updated the profile' AND DATE(dateAdded) = CURDATE()"; 
                             $stmtActivityLogs = $conn->prepare($sqlActivityLogs);
                             $stmtActivityLogs->execute();
-                            $activityLogCount = $stmtActivityLogs->fetchColumn();
+                            $activityLogCount1 = $stmtActivityLogs->fetchColumn();
+
+                            // Fetch the count of activity logs for today
+                            $sqlActivityLogs = "SELECT COUNT(*) AS activityLogCount FROM tbl_activity_logs WHERE activity='Changed Profile Picture' AND DATE(dateAdded) = CURDATE()"; 
+                            $stmtActivityLogs = $conn->prepare($sqlActivityLogs);
+                            $stmtActivityLogs->execute();
+                            $activityLogCount2 = $stmtActivityLogs->fetchColumn();
 
                             // Calculate and display the combined count of feedbacks, new customers, and activity logs
-                            $totalNotifications = $feedbackCount + $customerCount + $activityLogCount;
+                            $totalNotifications = $feedbackCount + $customerCount + $activityLogCount1 + $activityLogCount2;
                             echo $totalNotifications;
                             ?>
                             <span class="visually-hidden">unread messages</span>
@@ -296,7 +302,6 @@ try {
                     </button>
                 </div>
 
-                
                 <div class="div-history text-center d-flex align-items-center justify-content-center" id="div_history" onclick="to_adminhistory()" href="admin_history.php">
                     <button class="btn btn-secondary" type="button" id="icon_history">
                         <i class="fas fa-history"></i>
@@ -623,20 +628,25 @@ try {
                             <div class="scrollable-content" id="inputfields" style="height: 1000px; overflow-y: auto; color: black; background: white;">
                                 <div class="" style="position: relative;">
                                 <?php
-                                    // Fetch and display customer registrations, feedback submissions, and profile updates
+                                    // Database connection
+                                    // Assuming you have already established a connection to the database using $conn
+
+                                    // Fetch and display customer activities from tbl_activity_logs
                                     $sqlNotifications = "
-                                        (SELECT CONCAT('images/', image) AS image, CONCAT(firstName, ' ', lastName) AS name, dateAdded AS date, 'registration' AS type
-                                        FROM tbl_customer_info) 
-                                        UNION
-                                        (SELECT CONCAT('images/', ci.image) AS image, CONCAT(firstName, ' ', lastName) AS name, date, 'feedback' AS type
-                                        FROM tbl_customer_info ci
-                                        JOIN tbl_feedback f ON ci.customer_id = f.customer_id)
-                                        UNION
-                                        (SELECT CONCAT('images/', ci.image) AS image, CONCAT(firstName, ' ', lastName) AS name, dateModified AS date, 'profile_update' AS type
-                                        FROM tbl_customer_info ci
-                                        JOIN tbl_activity_logs al ON ci.customer_id = al.customer_ID
-                                        WHERE al.activity = 'Updated the profile')
-                                        ORDER BY date DESC";
+                                    SELECT 
+                                        ci.customer_id,
+                                        CONCAT('images/', ci.image) AS image,
+                                        CONCAT(ci.firstName, ' ', ci.middlename, ' ', ci.lastName) AS name,
+                                        al.dateAdded AS date,
+                                        al.activity AS type
+                                    FROM 
+                                        tbl_activity_logs al
+                                    JOIN 
+                                        tbl_customer_info ci ON al.customer_id = ci.customer_id
+                                    WHERE 
+                                        al.activity IN ('Sent feedback', 'Registered an account', 'Updated the profile', 'Changed Profile Picture')
+                                    ORDER BY 
+                                        al.dateAdded DESC";
 
                                     $stmtNotifications = $conn->prepare($sqlNotifications);
                                     $stmtNotifications->execute();
@@ -688,12 +698,14 @@ try {
                                     // Function to return activity message based on the type
                                     function getActivityMessage($type) {
                                         switch ($type) {
-                                            case 'registration':
+                                            case 'Registered an account':
                                                 return 'has registered an account.';
-                                            case 'feedback':
+                                            case 'Sent feedback':
                                                 return 'has submitted feedback.';
-                                            case 'profile_update':
+                                            case 'Updated the profile':
                                                 return 'has updated profile.';
+                                            case 'Changed Profile Picture':
+                                                return 'has changed their profile picture.';
                                             default:
                                                 return '';
                                         }
@@ -713,15 +725,23 @@ try {
                                         }
                                     }
 
-                                    // Display "Today" notifications with background color #ecffed
-                                    displayNotifications($todayNotifications, 'Today', '20px', '#ecffed');
+                                    ?>
 
-                                    // Display "Yesterday" notifications with background color #f1e9e9
-                                    displayNotifications($yesterdayNotifications, 'Yesterday', '20px', '#f1e9e9');
+                                    <div class="scrollable-content" id="inputfields" style="height: 1000px; overflow-y: auto; color: black; background: white;">
+                                        <div class="" style="position: relative;">
+                                            <?php
+                                            // Display "Today" notifications with background color #ecffed
+                                            displayNotifications($todayNotifications, 'Today', '20px', '#ecffed');
 
-                                    // Display "Older" notifications with background color #ecedff
-                                    displayNotifications($olderNotifications, 'Older', '20px', '#ecedff');
-                                ?>
+                                            // Display "Yesterday" notifications with background color #f1e9e9
+                                            displayNotifications($yesterdayNotifications, 'Yesterday', '20px', '#f1e9e9');
+
+                                            // Display "Older" notifications with background color #ecedff
+                                            displayNotifications($olderNotifications, 'Older', '20px', '#ecedff');
+                                            ?>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                             <!-- END NOTIFICATIONS TABLE -->
