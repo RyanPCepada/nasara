@@ -637,6 +637,7 @@ try {
                                         ci.customer_id,
                                         CONCAT('images/', ci.image) AS image,
                                         CONCAT(ci.firstName, ' ', ci.middlename, ' ', ci.lastName) AS name,
+                                        ci.gender,
                                         al.dateAdded AS date,
                                         al.activity AS type
                                     FROM 
@@ -686,7 +687,7 @@ try {
                                                         <img src="' . $notification['image'] . '" style="width: 60px; height: 60px; border-radius: 30px; background-color: white; margin-top: 12px;">
                                                     </div>';
                                                 echo '<div class="col">
-                                                        <p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> ' . getActivityMessage($notification['type']) . '</p>
+                                                        <p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> ' . getActivityMessage($notification['type'], $notification['gender']) . '</p>
                                                         <p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($notification['date'], $heading) . '</p>
                                                     </div>';
 
@@ -695,17 +696,19 @@ try {
                                         }
                                     }
 
-                                    // Function to return activity message based on the type
-                                    function getActivityMessage($type) {
+                                    // Function to return activity message based on the type and gender
+                                    function getActivityMessage($type, $gender) {
+                                        $pronoun = ($gender == 'Male') ? 'his' : (($gender == 'Female') ? 'her' : 'his/her');
+
                                         switch ($type) {
                                             case 'Registered an account':
                                                 return 'has registered an account.';
                                             case 'Sent feedback':
                                                 return 'has submitted feedback.';
                                             case 'Updated the profile':
-                                                return 'has updated profile.';
+                                                return 'has updated ' . $pronoun . ' profile.';
                                             case 'Changed Profile Picture':
-                                                return 'has changed their profile picture.';
+                                                return 'has changed ' . $pronoun . ' profile picture.';
                                             default:
                                                 return '';
                                         }
@@ -724,23 +727,22 @@ try {
                                             return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
                                         }
                                     }
+                                ?>
 
-                                    ?>
+                                <div class="scrollable-content" id="inputfields" style="height: 1000px; overflow-y: auto; color: black; background: white;">
+                                    <div class="" style="position: relative;">
+                                        <?php
+                                        // Display "Today" notifications with background color #ecffed
+                                        displayNotifications($todayNotifications, 'Today', '20px', '#ecffed');
 
-                                    <div class="scrollable-content" id="inputfields" style="height: 1000px; overflow-y: auto; color: black; background: white;">
-                                        <div class="" style="position: relative;">
-                                            <?php
-                                            // Display "Today" notifications with background color #ecffed
-                                            displayNotifications($todayNotifications, 'Today', '20px', '#ecffed');
+                                        // Display "Yesterday" notifications with background color #f1e9e9
+                                        displayNotifications($yesterdayNotifications, 'Yesterday', '20px', '#f1e9e9');
 
-                                            // Display "Yesterday" notifications with background color #f1e9e9
-                                            displayNotifications($yesterdayNotifications, 'Yesterday', '20px', '#f1e9e9');
-
-                                            // Display "Older" notifications with background color #ecedff
-                                            displayNotifications($olderNotifications, 'Older', '20px', '#ecedff');
-                                            ?>
-                                        </div>
+                                        // Display "Older" notifications with background color #ecedff
+                                        displayNotifications($olderNotifications, 'Older', '20px', '#ecedff');
+                                        ?>
                                     </div>
+                                </div>
 
                                 </div>
                             </div>
