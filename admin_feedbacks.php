@@ -751,68 +751,79 @@ try {
 
                             <!-- FEEDBACKS COUNT -->
                             <div class="text-center d-flex align-items-center justify-content-center" style="padding: 20px; border-radius: 15px;">
-
-                                <div class="row justify-content-center";>
-
+                                <div class="row justify-content-center">
                                     <?php
-                                    // Step 2: Fetch all data from tbl_feedback
-                                    $sql = "SELECT * FROM tbl_feedback";
-                                    $stmt = $conn->prepare($sql);
-                                    $stmt->execute();
+                                    // Fetch count of written feedbacks from tbl_feedback
+                                    $sqlWrittenFeedbacks = "SELECT COUNT(feedback_ID) AS writtenFeedbacks FROM tbl_feedback";
+                                    $stmtWrittenFeedbacks = $conn->prepare($sqlWrittenFeedbacks);
+                                    $stmtWrittenFeedbacks->execute();
+                                    $writtenFeedbacks = $stmtWrittenFeedbacks->fetch(PDO::FETCH_ASSOC)['writtenFeedbacks'];
 
-                                    // Step 3: Create arrays to store the data
-                                    $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                    // Fetch count of audio feedbacks from tbl_audio_feedback
+                                    $sqlAudioFeedbacks = "SELECT COUNT(audio_ID) AS audioFeedbacks FROM tbl_audio_feedback";
+                                    $stmtAudioFeedbacks = $conn->prepare($sqlAudioFeedbacks);
+                                    $stmtAudioFeedbacks->execute();
+                                    $audioFeedbacks = $stmtAudioFeedbacks->fetch(PDO::FETCH_ASSOC)['audioFeedbacks'];
 
-                                    $sql = "SELECT COUNT(feedback_ID) AS feedbackCount
-                                            FROM tbl_feedback";
-                                    $stmt = $conn->prepare($sql);
-                                    $stmt->execute();
-
-                                    // Fetch the count of feedback entries
-                                    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-                                    $feedbackCount = $result['feedbackCount'];
+                                    // Calculate total feedback count
+                                    $totalFeedbacks = $writtenFeedbacks + $audioFeedbacks;
                                     ?>
-
-                                    
                                     <div class="card border-0 fixed-width-element" id="count_card">
                                         <div class="card-body" style="text-align: left;">
                                             <div class="card-body">
-                                                <h1 class="card-title"style="font-size: 120px; position: absolute; margin-top: -35px;"><?php echo $feedbackCount; ?></h1>
-                                                <h6 class="card-subtitle mb-2 text-muted" style="font-size: 30px; position: absolute; margin-top: 100px;"
-                                                >Total Feedbacks</h6>
+                                                <h1 class="card-title" style="font-size: 120px; position: absolute; margin-top: -35px;"><?php echo $totalFeedbacks; ?></h1>
+                                                <h6 class="card-subtitle mb-2 text-muted" style="font-size: 30px; position: absolute; margin-top: 100px;">Total Feedbacks</h6>
                                                 <img src="icons/GIF_NEWFB.gif" style="width: 1.4in; height: .80in; margin-left: 135px; margin-top: -27px;" id="newfb_gif">
-
-                                                <div style="position: absolute; margin-left: 1px; margin-top: 67px; width: 280px; line-height: 1.1;">
-                                                    <?php
-                                                        // Step 1: Get the count of total customers from tbl_customer_info
-                                                        $sqlTotalCustomers = "SELECT COUNT(*) AS totalCustomers FROM tbl_customer_info";
-                                                        $stmtTotalCustomers = $conn->prepare($sqlTotalCustomers);
-                                                        $stmtTotalCustomers->execute();
-                                                        $resultTotalCustomers = $stmtTotalCustomers->fetch(PDO::FETCH_ASSOC);
-                                                        $totalCustomers = $resultTotalCustomers['totalCustomers'];
-
-                                                        // Step 2: Get the count of feedback entries for today from tbl_feedback
-                                                        $sqlFeedbackToday = "SELECT COUNT(DISTINCT customer_ID) AS feedbackCount FROM tbl_feedback WHERE DATE(date) = CURDATE()";
-                                                        $stmtFeedbackToday = $conn->prepare($sqlFeedbackToday);
-                                                        $stmtFeedbackToday->execute();
-                                                        $resultFeedbackToday = $stmtFeedbackToday->fetch(PDO::FETCH_ASSOC);
-                                                        $feedbackCountToday = $resultFeedbackToday['feedbackCount'];
-
-                                                        // Display the result
-                                                        // echo "$feedbackCountToday out of $totalCustomers customers sent us new feedbacks today.";
-                                                    ?>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
+                            </div>
+                            <div class="text-center d-flex align-items-center justify-content-center" style="margin-top: 20px;">
+                                <?php
+                                    echo "<h3>$writtenFeedbacks written feedbacks and $audioFeedbacks audio feedbacks</h3>";
+                                ?>
                             </div>
                             <!-- END FEEDBACKS COUNT -->
 
+                        </div>
+
+                    </div>  <!-- END ROW 1 - ADMIN DASHBOARD - REPORTS -->
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="row">
+
+                        <div class="card-body" id="cards_body3" style="justify-content: center; background: white;">
 
 
                             <!-- FEEDBACKS TABLE -->
@@ -820,6 +831,7 @@ try {
 
                                 
                                 <div class="row">
+                                    <h3 style="margin-top: 10px; margin-bottom: 40px; margin-left: -405px; color: gray;">Written Feedbacks</h3>
                                     <?php
                                         // Step 2: Fetch data from tbl_customer_info
                                         $sql = "SELECT
@@ -886,134 +898,160 @@ try {
                             </div>
                             <!-- END FEEDBACKS TABLE -->
 
-                            <hr>
+                        </div>
+
+                    </div>  <!-- END ROW 1 - ADMIN DASHBOARD - REPORTS -->
 
 
 
-                          <!-- AUDIO FEEDBACKS TABLE -->
-<div class="card-body" id="" style="position: relative; justify-content: center; background: white; margin-top: 50px;">
 
-<h5 style="margin-top: 5px; margin-left: 30px; margin-bottom: -10px;">Audio Records</h5>
 
-<hr>
+                    <div class="row">
 
-<div class="scrollable-content" id="table_audio_fb">
-    <?php
-    // Fetch and display customer activities from tbl_activity_logs and audio records from tbl_audio_feedback
-    $sqlAudios = "
-        SELECT 
-            CONCAT('images/', ci.image) AS 'Profile picture',
-            ci.customer_ID AS 'Customer ID',
-            CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS 'Full Name',
-            af.audio AS 'Audio',
-            af.dateAdded AS 'Date'
-        FROM tbl_customer_info AS ci
-        JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
-        ORDER BY af.audio_ID DESC";
+                        <div class="card-body" id="cards_body4" style="justify-content: center; background: white;">
 
-    $stmtAudios = $conn->prepare($sqlAudios);
-    $stmtAudios->execute();
-    $audios = $stmtAudios->fetchAll();
 
-    $todayAudios = [];
-    $yesterdayAudios = [];
-    $olderAudios = [];
+                            <!-- AUDIO FEEDBACKS TABLE -->
+                            <div class="card-body" id="" style="position: relative; justify-content: center; background: white; margin-top: 0px;">
 
-    $now = new DateTime();
-    $yesterday = (clone $now)->modify('-1 day');
+                                <h3 style="margin: 20px; color: gray;">Audio Feedbacks</h3>
 
-    foreach ($audios as $audio) {
-        $audioDate = new DateTime($audio['Date']);
+                                <!-- <hr> -->
 
-        if ($audioDate->format('Y-m-d') == $now->format('Y-m-d')) {
-            $todayAudios[] = $audio;
-        } elseif ($audioDate->format('Y-m-d') == $yesterday->format('Y-m-d')) {
-            $yesterdayAudios[] = $audio;
-        } else {
-            $olderAudios[] = $audio;
-        }
-    }
+                                <div class="scrollable-content" id="table_audio_fb">
+                                    <?php
+                                    // Fetch and display customer activities from tbl_activity_logs and audio records from tbl_audio_feedback
+                                    $sqlAudios = "
+                                        SELECT 
+                                            CONCAT('images/', ci.image) AS 'Profile picture',
+                                            ci.customer_ID AS 'Customer ID',
+                                            CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS 'Full Name',
+                                            af.audio AS 'Audio',
+                                            af.dateAdded AS 'Date'
+                                        FROM tbl_customer_info AS ci
+                                        JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
+                                        ORDER BY af.audio_ID DESC";
 
-    function displayAudios($audios, $heading, $marginTop) {
-        echo '<h4 style="margin-top: ' . $marginTop . '; margin-left: 15px; font-size: 20px; color: gray;">' . $heading . '</h4>';
+                                    $stmtAudios = $conn->prepare($sqlAudios);
+                                    $stmtAudios->execute();
+                                    $audios = $stmtAudios->fetchAll();
 
-        if (empty($audios)) {
-            echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">No audio records ' . strtolower($heading) . '.</p>';
-        } else {
-            foreach ($audios as $audio) {
-                echo '<div class="row" style="margin-left: 15px; margin-top: 10px; padding-bottom: 10px;">';
+                                    $todayAudios = [];
+                                    $yesterdayAudios = [];
+                                    $olderAudios = [];
 
-                echo '<div class="col-auto">';
-                echo '<img src="' . htmlspecialchars($audio['Profile picture']) . '" alt="Profile picture" style="width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 50%; background-color: white;">';
-                echo '</div>';
+                                    $now = new DateTime();
+                                    $yesterday = (clone $now)->modify('-1 day');
 
-                echo '<div class="col">';
-                echo '<p style="margin-top: 10px; font-weight: bold;">' . htmlspecialchars($audio['Full Name']) . '</p>';
-                echo '<p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($audio['Date'], $heading) . '</p>';
-                echo '</div>';
+                                    foreach ($audios as $audio) {
+                                        $audioDate = new DateTime($audio['Date']);
 
-                echo '<div class="col-auto">';
-                echo '<audio controls style="width: 500px; margin-right: 50px; margin-top: 12px;">';
-                echo '<source src="http://localhost/nasara/audios/' . htmlspecialchars($audio['Audio']) . '" type="audio/' . pathinfo($audio['Audio'], PATHINFO_EXTENSION) . '">';
-                echo 'Your browser does not support the audio element.';
-                echo '</audio>';
-                echo '</div>';
+                                        if ($audioDate->format('Y-m-d') == $now->format('Y-m-d')) {
+                                            $todayAudios[] = $audio;
+                                        } elseif ($audioDate->format('Y-m-d') == $yesterday->format('Y-m-d')) {
+                                            $yesterdayAudios[] = $audio;
+                                        } else {
+                                            $olderAudios[] = $audio;
+                                        }
+                                    }
 
-                echo '</div>';
-            }
-        }
-    }
+                                    function displayAudios($audios, $heading, $marginTop) {
+                                        echo '<h4 style="margin-top: ' . $marginTop . '; padding: 15px; margin-left: 12px; font-size: 20px; color: gray;">' . $heading . '</h4>';
 
-    // Function to format relative date and time
-    function formatRelativeDate($date, $category) {
-        $formattedDate = new DateTime($date);
+                                        if (empty($audios)) {
+                                            echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">No audio records ' . strtolower($heading) . '.</p>';
+                                        } else {
+                                            foreach ($audios as $audio) {
+                                                echo '<div class="row" style="margin-left: 15px; margin-top: 10px; padding-bottom: 10px;">';
 
-        if ($category === 'Today') {
-            return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
-        } elseif ($category === 'Yesterday') {
-            return 'Yesterday @ ' . $formattedDate->format('h:i A');
-        } else {
-            $interval = (new DateTime())->diff($formattedDate);
-            return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
-        }
-    }
-    ?>
+                                                echo '<div class="col-auto">';
+                                                echo '<img src="' . htmlspecialchars($audio['Profile picture']) . '" alt="Profile picture" style="width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 50%; background-color: white;">';
+                                                echo '</div>';
 
-    <div class="scrollable-content" id="inputfields" style="height: 1000px; overflow-y: auto; color: black; background: white;">
-        <div class="" style="position: relative;">
-            <?php
-            // Display "Today" audio records with background color #ecffed
-            echo '<div style="background-color: #ecffed;">';
-            displayAudios($todayAudios, 'Today', '20px');
-            echo '</div>';
+                                                echo '<div class="col">';
+                                                echo '<p style="margin-top: 10px; font-weight: bold;">' . htmlspecialchars($audio['Full Name']) . '</p>';
+                                                echo '<p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($audio['Date'], $heading) . '</p>';
+                                                echo '</div>';
 
-            // Display "Yesterday" audio records with background color #f1e9e9
-            echo '<div style="background-color: #f1e9e9;">';
-            displayAudios($yesterdayAudios, 'Yesterday', '20px');
-            echo '</div>';
+                                                echo '<div class="col-auto">';
+                                                echo '<audio controls style="width: 500px; margin-right: 50px; margin-top: 12px;">';
+                                                echo '<source src="http://localhost/nasara/audios/' . htmlspecialchars($audio['Audio']) . '" type="audio/' . pathinfo($audio['Audio'], PATHINFO_EXTENSION) . '">';
+                                                echo 'Your browser does not support the audio element.';
+                                                echo '</audio>';
+                                                echo '</div>';
 
-            // Display "Older" audio records with background color #ecedff
-            echo '<div style="background-color: #ecedff;">';
-            displayAudios($olderAudios, 'Older', '20px');
-            echo '</div>';
-            ?>
-        </div>
-    </div>
-</div>
-</div>
-<!-- END AUDIO RECORDS TABLE -->
+                                                echo '</div>';
+                                            }
+                                        }
+                                    }
 
-<hr>
+                                    // Function to format relative date and time
+                                    function formatRelativeDate($date, $category) {
+                                        $formattedDate = new DateTime($date);
 
-</div>
-<!-- END AUDIO FEEDBACKS TABLE -->
+                                        if ($category === 'Today') {
+                                            return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
+                                        } elseif ($category === 'Yesterday') {
+                                            return 'Yesterday @ ' . $formattedDate->format('h:i A');
+                                        } else {
+                                            $interval = (new DateTime())->diff($formattedDate);
+                                            return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
+                                        }
+                                    }
+                                    ?>
+
+                                    <div class="scrollable-content">
+                                        <div class="" style="position: relative; width: 98%;"> <!--REASON WHY AUDIO FEEDBACK TABLE SCROOLBAR BELOW-->
+                                            <?php
+                                            // Display "Today" audio records with background color #ecffed
+                                            echo '<div style="background-color: #ecffed;">';
+                                            displayAudios($todayAudios, 'Today', '20px');
+                                            echo '</div>';
+
+                                            // Display "Yesterday" audio records with background color #f1e9e9
+                                            echo '<div style="background-color: #f1e9e9;">';
+                                            displayAudios($yesterdayAudios, 'Yesterday', '20px');
+                                            echo '</div>';
+
+                                            // Display "Older" audio records with background color #ecedff
+                                            echo '<div style="background-color: #ecedff;">';
+                                            displayAudios($olderAudios, 'Older', '20px');
+                                            echo '</div>';
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                <!-- END AUDIO RECORDS TABLE -->
+
+                            </div>
+                            <!-- END AUDIO FEEDBACKS TABLE -->
 
 
 
 
                         </div>
 
-                    </div>  <!-- END ROW 1 - ADMIN DASHBOARD - REPORTS -->
+                        </div>  <!-- END ROW 1 - ADMIN DASHBOARD - REPORTS -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                     
 

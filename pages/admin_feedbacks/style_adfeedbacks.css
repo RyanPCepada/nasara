@@ -514,24 +514,45 @@ thead th {
   position: absolute;
   margin-top: 10px;
   background: rgb(235, 235, 235);
-  height: 2530px;
+  height: 3200px;
   width: 1530px;
 }
 
 #cards_body1{
   position: absolute;
   width: 300px; /*+70*/
-  height: 2530px;
+  height: 3200px;
   background: midnightblue;
 }
 
 #cards_body2{
-  position: absolute;
   width: 1150px;
-  height: 2350px;
+  height: 400px;
   margin-left: 160px;
   margin-top: 150px;
-  margin-bottom: 20px;
+  margin-bottom: 35px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.166);
+}
+
+#cards_body3{
+  width: 1150px;
+  height: 1000px;
+  margin-left: 160px;
+  margin-top: 0px;
+  margin-bottom: 35px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.166);
+}
+
+#cards_body4{
+  width: 1150px;
+  height: 1540px;
+  margin-left: 160px;
+  margin-top: 0px;
+  margin-bottom: 35px;
   background: white;
   border-radius: 15px;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.166);
@@ -549,23 +570,24 @@ thead th {
 }
 
 #table_written_fb{
-  height: 800px;
+  height: 840px;
   width: 1000px;
   margin-left: 0px;
   overflow-y: auto;
   width: 100%;
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.166);
+  /* box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.166); */
 }
 
+/*  style="height: 1400px; overflow-y: auto; color: black; background: white;"*/
 #table_audio_fb{
-  height: 1000px;
+  height: 1400px;
   width: 100%;
   margin-left: 0px;
   overflow-y: auto;
   width: 100%;
   background: white;
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.166);
-}
+  /* box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.166); */
+} 
 
 /*ALTERNATE TABLE ROW COLOR*/
 #list_table tbody tr:nth-child(odd) { /*COLOR CHANGED TO COLUMN FORMAT IF "tbody tr" IS REMOVED*/
