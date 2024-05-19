@@ -627,7 +627,7 @@ try {
                             <!-- NOTIFICATIONS TABLE -->
                             <div class="scrollable-content" id="inputfields" style="height: 1000px; overflow-y: auto; color: black; background: white;">
                                 <div class="" style="position: relative;">
-                                <?php
+                                    <?php
                                     // Database connection
                                     // Assuming you have already established a connection to the database using $conn
 
@@ -645,7 +645,7 @@ try {
                                     JOIN 
                                         tbl_customer_info ci ON al.customer_id = ci.customer_id
                                     WHERE 
-                                        al.activity IN ('Sent feedback', 'Registered an account', 'Updated the profile', 'Changed Profile Picture')
+                                        al.activity IN ('Sent feedback', 'Sent audio feedback', 'Registered an account', 'Updated the profile', 'Changed Profile Picture')
                                     ORDER BY 
                                         al.dateAdded DESC";
 
@@ -684,10 +684,10 @@ try {
                                                     border-radius: 5px; font-size: 20px; width: 900px; margin-left: 15px; margin-top: 10px;">';
 
                                                 echo '<div class="col-auto">
-                                                        <img src="' . $notification['image'] . '" style="width: 60px; height: 60px; border-radius: 30px; background-color: white; margin-top: 12px;">
+                                                        <img src="' . htmlspecialchars($notification['image']) . '" style="width: 60px; height: 60px; border-radius: 30px; background-color: white; margin-top: 12px;">
                                                     </div>';
                                                 echo '<div class="col">
-                                                        <p style="margin-top: 10px;"><strong>' . $notification['name'] . '</strong> ' . getActivityMessage($notification['type'], $notification['gender']) . '</p>
+                                                        <p style="margin-top: 10px;"><strong>' . htmlspecialchars($notification['name']) . '</strong> ' . getActivityMessage($notification['type'], $notification['gender']) . '</p>
                                                         <p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($notification['date'], $heading) . '</p>
                                                     </div>';
 
@@ -709,6 +709,8 @@ try {
                                                 return 'has updated ' . $pronoun . ' profile.';
                                             case 'Changed Profile Picture':
                                                 return 'has changed ' . $pronoun . ' profile picture.';
+                                            case 'Sent audio feedback':
+                                                return 'has submitted an audio feedback.';
                                             default:
                                                 return '';
                                         }
@@ -717,32 +719,41 @@ try {
                                     // Function to format relative date and time
                                     function formatRelativeDate($date, $category) {
                                         $formattedDate = new DateTime($date);
+                                        $now = new DateTime();
+                                        $interval = $now->diff($formattedDate);
 
                                         if ($category === 'Today') {
                                             return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
                                         } elseif ($category === 'Yesterday') {
                                             return 'Yesterday @ ' . $formattedDate->format('h:i A');
                                         } else {
-                                            $interval = (new DateTime())->diff($formattedDate);
-                                            return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
+                                            if ($interval->days == 1) {
+                                                return '1 day ago @ ' . $formattedDate->format('h:i A');
+                                            } elseif ($interval->days == 7) {
+                                                return '1 week ago @ ' . $formattedDate->format('h:i A');
+                                            } elseif ($interval->days > 7) {
+                                                return $formattedDate->format('F j, Y @ h:i A');
+                                            } else {
+                                                return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
+                                            }
                                         }
                                     }
-                                ?>
+                                    ?>
 
-                                <div class="scrollable-content" id="inputfields" style="height: 1000px; overflow-y: auto; color: black; background: white;">
-                                    <div class="" style="position: relative;">
-                                        <?php
-                                        // Display "Today" notifications with background color #ecffed
-                                        displayNotifications($todayNotifications, 'Today', '20px', '#ecffed');
+                                    <div class="scrollable-content" id="inputfields" style="height: 1000px; overflow-y: auto; color: black; background: white;">
+                                        <div class="" style="position: relative;">
+                                            <?php
+                                            // Display "Today" notifications with background color #ecffed
+                                            displayNotifications($todayNotifications, 'Today', '20px', '#ecffed');
 
-                                        // Display "Yesterday" notifications with background color #f1e9e9
-                                        displayNotifications($yesterdayNotifications, 'Yesterday', '20px', '#f1e9e9');
+                                            // Display "Yesterday" notifications with background color #f1e9e9
+                                            displayNotifications($yesterdayNotifications, 'Yesterday', '20px', '#f1e9e9');
 
-                                        // Display "Older" notifications with background color #ecedff
-                                        displayNotifications($olderNotifications, 'Older', '20px', '#ecedff');
-                                        ?>
+                                            // Display "Older" notifications with background color #ecedff
+                                            displayNotifications($olderNotifications, 'Older', '20px', '#ecedff');
+                                            ?>
+                                        </div>
                                     </div>
-                                </div>
 
                                 </div>
                             </div>
