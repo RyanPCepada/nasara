@@ -616,13 +616,15 @@ try {
                                         })
                                         .then(message => {
                                             console.log('Server Message:', message);
-                                            // Optionally, you can show a success message to the user
+                                            // Show a pop-up message
+                                            alert('Audio feedback sent successfully!');
                                         })
                                         .catch(error => {
                                             console.error('Error sending audio data:', error);
                                             // Handle the error appropriately
                                         });
                                     }
+
 
                                     function updateTimer() {
                                         seconds++;
