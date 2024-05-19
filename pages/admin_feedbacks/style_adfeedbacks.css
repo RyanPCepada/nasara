@@ -510,24 +510,25 @@ thead th {
   background-color: rgb(255, 255, 255); /* Optional, set the background color as needed */
 }
 
-#dash_bg{
+#dash_bg{ /*THE LIGHGRAY BACKGROUND*/
   position: absolute;
   margin-top: 10px;
   background: rgb(235, 235, 235);
-  height: 1370px;
+  height: 2530px;
   width: 1530px;
 }
 
 #cards_body1{
   position: absolute;
   width: 300px; /*+70*/
-  height: 1370px;
+  height: 2530px;
   background: midnightblue;
 }
 
 #cards_body2{
   position: absolute;
   width: 1150px;
+  height: 2350px;
   margin-left: 160px;
   margin-top: 150px;
   margin-bottom: 20px;
@@ -535,6 +536,7 @@ thead th {
   border-radius: 15px;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.166);
 }
+
 
 
 #count_card{
@@ -546,12 +548,22 @@ thead th {
   background-color: #ecffed;
 }
 
-#table1{
+#table_written_fb{
   height: 800px;
   width: 1000px;
   margin-left: 0px;
   overflow-y: auto;
   width: 100%;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.166);
+}
+
+#table_audio_fb{
+  height: 1000px;
+  width: 100%;
+  margin-left: 0px;
+  overflow-y: auto;
+  width: 100%;
+  background: white;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.166);
 }
 

@@ -464,19 +464,19 @@ try {
                             displayNotifications($olderNotifications, 'Older', '20px');
 
                             // Function to format relative date and time
-                            function formatRelativeDate($date, $category)
-                            {
-                                $formattedDate = new DateTime($date);
+                            // function formatRelativeDate($date, $category)
+                            // {
+                            //     $formattedDate = new DateTime($date);
 
-                                if ($category === 'Today') {
-                                    return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
-                                } elseif ($category === 'Yesterday') {
-                                    return 'Yesterday @ ' . $formattedDate->format('h:i A');
-                                } else {
-                                    $interval = (new DateTime())->diff($formattedDate);
-                                    return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
-                                }
-                            }
+                            //     if ($category === 'Today') {
+                            //         return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
+                            //     } elseif ($category === 'Yesterday') {
+                            //         return 'Yesterday @ ' . $formattedDate->format('h:i A');
+                            //     } else {
+                            //         $interval = (new DateTime())->diff($formattedDate);
+                            //         return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
+                            //     }
+                            // }
                         ?>
                         </div>
                     </div>
@@ -842,7 +842,7 @@ try {
                                         $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     ?>
 
-                                    <div class="scrollable-content" id="table1">
+                                    <div class="scrollable-content" id="table_written_fb">
                                         <table class="table table-bordered class alternate-row-table" id="list_table">
                                             <thead>
                                                 <tr>
@@ -890,123 +890,126 @@ try {
 
 
 
-                            <!-- AUDIO FEEDBACKS TABLE -->
-                            <div class="text-center d-flex align-items-center justify-content-center" style="margin-left: 0px; padding: 20px; border-radius: 15px;">
+                          <!-- AUDIO FEEDBACKS TABLE -->
+<div class="card-body" id="" style="position: relative; justify-content: center; background: white; margin-top: 50px;">
 
-                                
-                                <div class="card-body" id="cards_body2" style="justify-content: center; background: white;">
-                                    
-                                    <h5 style="margin-top: 5px; margin-left: 30px; margin-bottom: -10px;">All Audio Records</h5>
-                                    
-                                    <h6 style="position: absolute; margin-top: -12px; margin-left: 912px; color: grey">Newest data appears first</h6>
+<h5 style="margin-top: 5px; margin-left: 30px; margin-bottom: -10px;">Audio Records</h5>
 
-                                    <hr>
+<hr>
 
-                                    <img src="pages/admin/GIF_NOTIFICATIONS.gif" style="width: 1.5in; height: .9in; margin-left: 445px; margin-top: 0px;" id="adminnotif_gif">
+<div class="scrollable-content" id="table_audio_fb">
+    <?php
+    // Fetch and display customer activities from tbl_activity_logs and audio records from tbl_audio_feedback
+    $sqlAudios = "
+        SELECT 
+            CONCAT('images/', ci.image) AS 'Profile picture',
+            ci.customer_ID AS 'Customer ID',
+            CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS 'Full Name',
+            af.audio AS 'Audio',
+            af.dateAdded AS 'Date'
+        FROM tbl_customer_info AS ci
+        JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
+        ORDER BY af.audio_ID DESC";
 
-                                    <!-- AUDIO RECORDS TABLE -->
-                                    <div class="scrollable-content" id="inputfields" style="height: 1000px; overflow-y: auto; color: black; background: white;">
-                                        <div class="" style="position: relative;">
-                                        <?php
-                                            // Database connection
-                                            // Assuming you have already established a connection to the database using $conn
+    $stmtAudios = $conn->prepare($sqlAudios);
+    $stmtAudios->execute();
+    $audios = $stmtAudios->fetchAll();
 
-                                            // Fetch and display audio records from tbl_audio_feedback
-                                            $sqlAudio = "
-                                            SELECT 
-                                                af.audio_ID,
-                                                af.audio,
-                                                af.dateAdded AS date,
-                                                ci.customer_id,
-                                                CONCAT(ci.firstName, ' ', ci.middlename, ' ', ci.lastName) AS name
-                                            FROM 
-                                                tbl_audio_feedback af
-                                            JOIN 
-                                                tbl_customer_info ci ON af.customer_id = ci.customer_id
-                                            ORDER BY 
-                                                af.dateAdded DESC";
+    $todayAudios = [];
+    $yesterdayAudios = [];
+    $olderAudios = [];
 
-                                            $stmtAudio = $conn->prepare($sqlAudio);
-                                            $stmtAudio->execute();
-                                            $audioFiles = $stmtAudio->fetchAll();
+    $now = new DateTime();
+    $yesterday = (clone $now)->modify('-1 day');
 
-                                            $todayAudio = [];
-                                            $yesterdayAudio = [];
-                                            $olderAudio = [];
+    foreach ($audios as $audio) {
+        $audioDate = new DateTime($audio['Date']);
 
-                                            $now = new DateTime();
-                                            $yesterday = (clone $now)->modify('-1 day');
+        if ($audioDate->format('Y-m-d') == $now->format('Y-m-d')) {
+            $todayAudios[] = $audio;
+        } elseif ($audioDate->format('Y-m-d') == $yesterday->format('Y-m-d')) {
+            $yesterdayAudios[] = $audio;
+        } else {
+            $olderAudios[] = $audio;
+        }
+    }
 
-                                            foreach ($audioFiles as $audioFile) {
-                                                $audioDate = new DateTime($audioFile['date']);
+    function displayAudios($audios, $heading, $marginTop) {
+        echo '<h4 style="margin-top: ' . $marginTop . '; margin-left: 15px; font-size: 20px; color: gray;">' . $heading . '</h4>';
 
-                                                if ($audioDate->format('Y-m-d') == $now->format('Y-m-d')) {
-                                                    $todayAudio[] = $audioFile;
-                                                } elseif ($audioDate->format('Y-m-d') == $yesterday->format('Y-m-d')) {
-                                                    $yesterdayAudio[] = $audioFile;
-                                                } else {
-                                                    $olderAudio[] = $audioFile;
-                                                }
-                                            }
+        if (empty($audios)) {
+            echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">No audio records ' . strtolower($heading) . '.</p>';
+        } else {
+            foreach ($audios as $audio) {
+                echo '<div class="row" style="margin-left: 15px; margin-top: 10px; padding-bottom: 10px;">';
 
-                                            // Function to display audio records
-                                            function displayAudio($audioFiles, $heading, $marginTop) {
-                                                echo '<h4 style="margin-top: ' . $marginTop . '; margin-left: 15px; font-size: 20px; color: gray;">' . $heading . '</h4>';
+                echo '<div class="col-auto">';
+                echo '<img src="' . htmlspecialchars($audio['Profile picture']) . '" alt="Profile picture" style="width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 50%; background-color: white;">';
+                echo '</div>';
 
-                                                if (empty($audioFiles)) {
-                                                    echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">No audio records ' . strtolower($heading) . '.</p>';
-                                                } else {
-                                                    foreach ($audioFiles as $audioFile) {
-                                                        echo '<div class="row" style="margin-left: 15px; margin-top: 10px;">';
+                echo '<div class="col">';
+                echo '<p style="margin-top: 10px; font-weight: bold;">' . htmlspecialchars($audio['Full Name']) . '</p>';
+                echo '<p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($audio['Date'], $heading) . '</p>';
+                echo '</div>';
 
-                                                        echo '<div class="col">
-                                                                <p style="margin-top: 10px;"><strong>' . $audioFile['name'] . '</strong> has submitted an audio feedback.</p>
-                                                                <p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($audioFile['date'], $heading) . '</p>
-                                                            </div>';
-                                                        echo '<div class="col-auto">
-                                                                <audio controls style="margin-left: 10px; margin-top: 12px;">
-                                                                    <source src="http://localhost/nasara/audios/' . htmlspecialchars($audioFile['audio']) . '" type="audio/' . pathinfo($audioFile['audio'], PATHINFO_EXTENSION) . '">
-                                                                    Your browser does not support the audio element.
-                                                                </audio>
-                                                            </div>';
+                echo '<div class="col-auto">';
+                echo '<audio controls style="width: 500px; margin-right: 50px; margin-top: 12px;">';
+                echo '<source src="http://localhost/nasara/audios/' . htmlspecialchars($audio['Audio']) . '" type="audio/' . pathinfo($audio['Audio'], PATHINFO_EXTENSION) . '">';
+                echo 'Your browser does not support the audio element.';
+                echo '</audio>';
+                echo '</div>';
 
-                                                        echo '</div>';
-                                                    }
-                                                }
-                                            }
+                echo '</div>';
+            }
+        }
+    }
 
-                                            
-                                        ?>
+    // Function to format relative date and time
+    function formatRelativeDate($date, $category) {
+        $formattedDate = new DateTime($date);
 
-                                        <div class="scrollable-content" id="inputfields" style="height: 1000px; overflow-y: auto; color: black; background: white;">
-                                            <div class="" style="position: relative;">
-                                                <?php
-                                                // Display "Today" audio records
-                                                displayAudio($todayAudio, 'Today', '20px');
+        if ($category === 'Today') {
+            return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
+        } elseif ($category === 'Yesterday') {
+            return 'Yesterday @ ' . $formattedDate->format('h:i A');
+        } else {
+            $interval = (new DateTime())->diff($formattedDate);
+            return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
+        }
+    }
+    ?>
 
-                                                // Display "Yesterday" audio records
-                                                displayAudio($yesterdayAudio, 'Yesterday', '20px');
+    <div class="scrollable-content" id="inputfields" style="height: 1000px; overflow-y: auto; color: black; background: white;">
+        <div class="" style="position: relative;">
+            <?php
+            // Display "Today" audio records with background color #ecffed
+            echo '<div style="background-color: #ecffed;">';
+            displayAudios($todayAudios, 'Today', '20px');
+            echo '</div>';
 
-                                                // Display "Older" audio records
-                                                displayAudio($olderAudio, 'Older', '20px');
-                                                ?>
-                                            </div>
-                                        </div>
+            // Display "Yesterday" audio records with background color #f1e9e9
+            echo '<div style="background-color: #f1e9e9;">';
+            displayAudios($yesterdayAudios, 'Yesterday', '20px');
+            echo '</div>';
 
-                                        </div>
-                                    </div>
-                                    <!-- END AUDIO RECORDS TABLE -->
+            // Display "Older" audio records with background color #ecedff
+            echo '<div style="background-color: #ecedff;">';
+            displayAudios($olderAudios, 'Older', '20px');
+            echo '</div>';
+            ?>
+        </div>
+    </div>
+</div>
+</div>
+<!-- END AUDIO RECORDS TABLE -->
 
+<hr>
 
-                                    <hr>
-
-                                </div>
-
-                            </div>
-                            <!-- END AUDIO FEEDBACKS TABLE -->
+</div>
+<!-- END AUDIO FEEDBACKS TABLE -->
 
 
-                            
+
 
                         </div>
 

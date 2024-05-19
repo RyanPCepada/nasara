@@ -864,7 +864,9 @@ try {
             <div class="row col-6">
                 <div class="row" style="width: 100%; padding: 40px; background: #ddf7de; border-radius: 20px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166)">
                     <!-- <h5 style="margin-top: 5px; margin-left: 30px; margin-bottom: -10px;">All feedbacks</h5> -->
-                    <h5 style="position: relative; margin-top: 0px; margin-bottom: 10px; margin-left: 0px; font-size: 70px; color: gray;">Your Feedbacks</h5>
+                    <h5 style="position: relative; margin-top: 0px; margin-bottom: 10px; margin-left: 0px; font-size: 70px; color: gray;"
+                    >Feedbacks</h5>
+                    <!-- <h5 class="text-muted" style="margin-top: 0px; margin-left: 0px; margin-bottom: 5px;">Your Written Feedbacks</h5> -->
                     <hr>
                     <!-- <img src="icons/GIF_NEWFB.gif" style="width: 1.5in; height: .9in; margin-left: 445px; margin-top: 0px;" id="adminnotif_gif"> -->
                     <!-- MY FEEDBACKS TABLE -->
@@ -936,19 +938,19 @@ try {
                             displayFeedbacks($olderFeedbacks, 'Older', '20px', '#ecedff');
 
                             // Function to format relative date and time
-                            function formatRelativeDate($date, $category)
-                            {
-                                $formattedDate = new DateTime($date);
+                            // function formatRelativeDate($date, $category)
+                            // {
+                            //     $formattedDate = new DateTime($date);
 
-                                if ($category === 'Today') {
-                                    return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
-                                } elseif ($category === 'Yesterday') {
-                                    return 'Yesterday @ ' . $formattedDate->format('h:i A');
-                                } else {
-                                    $interval = (new DateTime())->diff($formattedDate);
-                                    return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
-                                }
-                            }
+                            //     if ($category === 'Today') {
+                            //         return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
+                            //     } elseif ($category === 'Yesterday') {
+                            //         return 'Yesterday @ ' . $formattedDate->format('h:i A');
+                            //     } else {
+                            //         $interval = (new DateTime())->diff($formattedDate);
+                            //         return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
+                            //     }
+                            // }
                             ?>
                         </div>
                     </div>
@@ -960,24 +962,21 @@ try {
             
             <div class="row col-6">
 
-                <div class="card-body" id="cards_body2" style="justify-content: center; background: white;">
+                <div class="card-body" id="cards_body2" style="justify-content: center; background: #ecedff; border-radius: 20px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166)">
                     
-                    <h5 style="margin-top: 5px; margin-left: 30px; margin-bottom: -10px;">All Audio Records</h5>
+                    <h5 style="margin-top: 5px; margin-left: 30px; margin-bottom: -10px;">Your Audio Feedbacks</h5>
                     
-                    <h6 style="position: absolute; margin-top: -12px; margin-left: 912px; color: grey">Newest data appears first</h6>
 
                     <hr>
 
-                    <img src="pages/admin/GIF_NOTIFICATIONS.gif" style="width: 1.5in; height: .9in; margin-left: 445px; margin-top: 0px;" id="adminnotif_gif">
+                    <!-- <img src="pages/admin/GIF_NOTIFICATIONS.gif" style="width: 1.5in; height: .9in; margin-left: 445px; margin-top: 0px;" id="adminnotif_gif"> -->
 
                     <!-- AUDIO RECORDS TABLE -->
                     <div class="scrollable-content" id="inputfields" style="height: 1000px; overflow-y: auto; color: black; background: white;">
                         <div class="" style="position: relative;">
                         <?php
-                            // Database connection
-                            // Assuming you have already established a connection to the database using $conn
 
-                            // Fetch and display audio records from tbl_audio_feedback
+                            // Fetch and display audio records from tbl_audio_feedback for the current customer
                             $sqlAudio = "
                             SELECT 
                                 af.audio_ID,
@@ -989,10 +988,13 @@ try {
                                 tbl_audio_feedback af
                             JOIN 
                                 tbl_customer_info ci ON af.customer_id = ci.customer_id
+                            WHERE 
+                                ci.customer_id = :currentCustomerId
                             ORDER BY 
                                 af.dateAdded DESC";
 
                             $stmtAudio = $conn->prepare($sqlAudio);
+                            $stmtAudio->bindParam(':currentCustomerId', $currentCustomerId, PDO::PARAM_INT);
                             $stmtAudio->execute();
                             $audioFiles = $stmtAudio->fetchAll();
 
@@ -1001,14 +1003,16 @@ try {
                             $olderAudio = [];
 
                             $now = new DateTime();
+                            $now->setTime(0, 0, 0); // Set to the start of the current day
                             $yesterday = (clone $now)->modify('-1 day');
 
                             foreach ($audioFiles as $audioFile) {
                                 $audioDate = new DateTime($audioFile['date']);
+                                $audioDate->setTime(0, 0, 0); // Set to the start of the audio date
 
-                                if ($audioDate->format('Y-m-d') == $now->format('Y-m-d')) {
+                                if ($audioDate == $now) {
                                     $todayAudio[] = $audioFile;
-                                } elseif ($audioDate->format('Y-m-d') == $yesterday->format('Y-m-d')) {
+                                } elseif ($audioDate == $yesterday) {
                                     $yesterdayAudio[] = $audioFile;
                                 } else {
                                     $olderAudio[] = $audioFile;
@@ -1026,8 +1030,7 @@ try {
                                         echo '<div class="row" style="margin-left: 15px; margin-top: 10px;">';
 
                                         echo '<div class="col">
-                                                <p style="margin-top: 10px;"><strong>' . $audioFile['name'] . '</strong> has submitted an audio feedback.</p>
-                                                <p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($audioFile['date'], $heading) . '</p>
+                                                <p style="margin-top: 10px;">You submitted an audio feedback ' . formatRelativeDate($audioFile['date'], $heading) . '.</p>
                                             </div>';
                                         echo '<div class="col-auto">
                                                 <audio controls style="margin-left: 10px; margin-top: 12px;">
@@ -1041,7 +1044,18 @@ try {
                                 }
                             }
 
-                            
+                            // Function to format relative date and time
+                            function formatRelativeDate($date, $category) {
+                                $formattedDate = new DateTime($date);
+
+                                if ($category === 'Today') {
+                                    return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
+                                } elseif ($category === 'Yesterday') {
+                                    return 'Yesterday @ ' . $formattedDate->format('h:i A');
+                                } else {
+                                    return 'On ' . $formattedDate->format('F j, Y @ h:i A'); // Full date with time
+                                }
+                            }
                         ?>
 
                         <div class="scrollable-content" id="inputfields" style="height: 1000px; overflow-y: auto; color: black; background: white;">
@@ -1063,12 +1077,12 @@ try {
                     </div>
                     <!-- END AUDIO RECORDS TABLE -->
 
-
                     <hr>
 
                 </div>
 
             </div>
+
 
 
 
