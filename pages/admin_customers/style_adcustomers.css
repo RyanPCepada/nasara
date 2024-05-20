@@ -552,7 +552,7 @@ thead th {
   margin-left: 0px;
   overflow-y: auto;
   width: 100%;
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.166);
+  /* box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.166); */
 }
 
 /*ALTERNATE TABLE ROW COLOR*/
