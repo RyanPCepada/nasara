@@ -1050,19 +1050,26 @@ try {
                                     }
                                 }
 
-                                function formatRelativeDate($date, $category)
-                                {
+                                // Function to format relative date and time
+                                function formatRelativeDate($date, $category) {
                                     $formattedDate = new DateTime($date);
-                                    $interval = (new DateTime())->diff($formattedDate);
+                                    $now = new DateTime();
+                                    $interval = $now->diff($formattedDate);
 
                                     if ($category === 'Today') {
                                         return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
                                     } elseif ($category === 'Yesterday') {
                                         return 'Yesterday @ ' . $formattedDate->format('h:i A');
                                     } else {
-                                        $daysAgo = $interval->days;
-                                        $dayText = $daysAgo === 1 ? '1 day ago' : "$daysAgo days ago";
-                                        return $dayText . ' @ ' . $formattedDate->format('h:i A');
+                                        if ($interval->days == 1) {
+                                            return '1 day ago @ ' . $formattedDate->format('h:i A');
+                                        } elseif ($interval->days == 7) {
+                                            return '1 week ago @ ' . $formattedDate->format('h:i A');
+                                        } elseif ($interval->days > 7) {
+                                            return $formattedDate->format('F j, Y @ h:i A');
+                                        } else {
+                                            return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
+                                        }
                                     }
                                 }
 

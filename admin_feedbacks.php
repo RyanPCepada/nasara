@@ -779,9 +779,15 @@ try {
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-center d-flex align-items-center justify-content-center" style="margin-top: 20px;">
+                            <div class="text-center d-flex align-items-center justify-content-center" style="margin-top: 0px;">
+                                <img src="icons/GIF_WRITTEN_WHITE_BG.gif" style="width: .8in; height: .80in; margin-left: 0px; margin-top: 0px;">
                                 <?php
-                                    echo "<h3>$writtenFeedbacks written feedbacks and $audioFeedbacks audio feedbacks</h3>";
+                                    echo "<h2>$writtenFeedbacks</h2>";
+                                ?>
+                                <div style="margin: 20px;"></div>
+                                <img src="icons/GIF_MIC_WHITE_BG.gif" style="width: .8in; height: .80in; margin-left: 0px; margin-top: 0px;">
+                                <?php
+                                echo "<h2 text>$audioFeedbacks</h2>";
                                 ?>
                             </div>
                             <!-- END FEEDBACKS COUNT -->
@@ -988,14 +994,23 @@ try {
                                     // Function to format relative date and time
                                     function formatRelativeDate($date, $category) {
                                         $formattedDate = new DateTime($date);
+                                        $now = new DateTime();
+                                        $interval = $now->diff($formattedDate);
 
                                         if ($category === 'Today') {
                                             return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
                                         } elseif ($category === 'Yesterday') {
                                             return 'Yesterday @ ' . $formattedDate->format('h:i A');
                                         } else {
-                                            $interval = (new DateTime())->diff($formattedDate);
-                                            return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
+                                            if ($interval->days == 1) {
+                                                return '1 day ago @ ' . $formattedDate->format('h:i A');
+                                            } elseif ($interval->days == 7) {
+                                                return '1 week ago @ ' . $formattedDate->format('h:i A');
+                                            } elseif ($interval->days > 7) {
+                                                return $formattedDate->format('F j, Y @ h:i A');
+                                            } else {
+                                                return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
+                                            }
                                         }
                                     }
                                     ?>
@@ -1020,7 +1035,6 @@ try {
                                             ?>
                                         </div>
                                     </div>
-                                </div>
                                 </div>
                                 <!-- END AUDIO RECORDS TABLE -->
 
