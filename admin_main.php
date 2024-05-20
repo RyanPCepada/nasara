@@ -1305,7 +1305,7 @@ try {
                                                         $formattedPercentage = number_format($percentage, 2);
 
                                                         // Display the result
-                                                        echo "$formattedPercentage% of feedbacks rated us with 5 stars.";
+                                                        echo "$formattedPercentage% of customers rated us with 5 stars.";
                                                     ?>
 
                                                 </div>
