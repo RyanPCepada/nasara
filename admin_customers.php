@@ -760,25 +760,25 @@ try {
                             <!-- CUSTOMERS COUNT -->
                             <div class="text-center d-flex align-items-center justify-content-center" style="padding: 20px; border-radius: 15px;">
 
-                                <div class="row justify-content-center";>
+                                <div class="row col-4 justify-content-center";>
 
-                                <?php
-                                    // Step 2: Fetch all data from tbl_feedback
-                                    $sql = "SELECT * FROM tbl_customer_info";
-                                    $stmt = $conn->prepare($sql);
-                                    $stmt->execute();
+                                    <?php
+                                        // Step 2: Fetch all data from tbl_feedback
+                                        $sql = "SELECT * FROM tbl_customer_info";
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute();
 
-                                    // Step 3: Create arrays to store the data
-                                    $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                        // Step 3: Create arrays to store the data
+                                        $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                                    $sql = "SELECT COUNT(customer_ID) AS customerCount
-                                            FROM tbl_customer_info";
-                                    $stmt = $conn->prepare($sql);
-                                    $stmt->execute();
+                                        $sql = "SELECT COUNT(customer_ID) AS customerCount
+                                                FROM tbl_customer_info";
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute();
 
-                                    // Fetch the count of feedback entries
-                                    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-                                    $customerCount = $result['customerCount'];
+                                        // Fetch the count of feedback entries
+                                        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                                        $customerCount = $result['customerCount'];
                                     ?>
 
                                     
@@ -814,6 +814,75 @@ try {
                                         </div>
                                     </div>
                                 </div>
+                                
+                                <div class="row col-3 justify-content-center";>
+                                </div>
+                                
+                                <?php
+                                // Step 1: Prepare the SQL query to fetch the top customer
+                                $sqlTopCustomer = "
+                                    SELECT c.customer_ID, c.firstName, c.middleName, c.lastName, c.image,
+                                        COALESCE(feedback_count, 0) AS feedback_count, COALESCE(audio_feedback_count, 0) AS audio_feedback_count,
+                                        (COALESCE(feedback_count, 0) + COALESCE(audio_feedback_count, 0)) AS total_feedbacks
+                                    FROM tbl_customer_info c
+                                    LEFT JOIN (
+                                        SELECT customer_ID, COUNT(*) AS feedback_count
+                                        FROM tbl_feedback
+                                        GROUP BY customer_ID
+                                    ) f ON c.customer_ID = f.customer_ID
+                                    LEFT JOIN (
+                                        SELECT customer_ID, COUNT(*) AS audio_feedback_count
+                                        FROM tbl_audio_feedback
+                                        GROUP BY customer_ID
+                                    ) a ON c.customer_ID = a.customer_ID
+                                    ORDER BY total_feedbacks DESC
+                                    LIMIT 1
+                                ";
+
+                                // Step 2: Execute the query
+                                $stmtTopCustomer = $conn->prepare($sqlTopCustomer);
+                                $stmtTopCustomer->execute();
+                                $topCustomer = $stmtTopCustomer->fetch(PDO::FETCH_ASSOC);
+
+                                // Step 3: Check if a top customer is found
+                                if ($topCustomer) {
+                                    $profilePicture = $topCustomer['image'];
+                                    $fullName = $topCustomer['firstName'] . ' ' . $topCustomer['middleName'] . ' ' . $topCustomer['lastName'];
+                                    $feedbackCount = $topCustomer['feedback_count'];
+                                    $audioFeedbackCount = $topCustomer['audio_feedback_count'];
+                                    $totalFeedbacks = $topCustomer['total_feedbacks'];
+                                } else {
+                                    $profilePicture = '';
+                                    $fullName = 'No customer';
+                                    $feedbackCount = 0;
+                                    $audioFeedbackCount = 0;
+                                }
+                                ?>
+
+                                <div class="row col-5">
+                                    <?php if ($topCustomer): ?>
+
+                                        <h1 style="position: absolute; width: 20px; margin-left: 165px; margin-top: -21px;">🏆</h1>
+                                        <h4 class="row text-danger" style="margin-left: 20px;">Top customer</h4>
+                                        
+
+                                        <div class="col-2">
+                                            <img src="images/<?php echo $profilePicture; ?>" alt="Profile Picture" style="width: 140px; height: 140px; border-radius: 50%;">
+                                        </div>
+
+                                        <div class="col-1">
+                                        </div>
+
+                                        <div class="col-9">
+                                            <h1 style="margin-left: 20px; margin-top: 20px;"><?php echo $fullName; ?></h1>
+                                            <h5 style="margin-left: 20px; color: gray;">This customer sent <?php echo $feedbackCount; ?> feedbacks and <?php echo $audioFeedbackCount; ?> audio feedbacks</h5>
+                                        </div>
+
+                                    <?php else: ?>
+                                        <h5>No top customer found</h5>
+                                    <?php endif; ?>
+                                </div>
+
 
                             </div>
                             <!-- END CUSTOMERS COUNT -->
