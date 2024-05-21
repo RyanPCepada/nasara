@@ -269,23 +269,6 @@ try {
                         <h3 style="margin-top: -39px; margin-left: 60px;">Notifications</h3>
                         <span id="notification-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                             <?php
-                            // // Fetch the count of new feedbacks for today
-                            // $sqlFeedback = "SELECT COUNT(feedback_ID) AS feedbackCount FROM tbl_feedback WHERE DATE(date) = CURDATE()"; 
-                            // $stmtFeedback = $conn->prepare($sqlFeedback);
-                            // $stmtFeedback->execute();
-                            // $feedbackCount = $stmtFeedback->fetchColumn();
-
-                            // // Fetch the count of new feedbacks for today
-                            // $sqlAudioFeedback = "SELECT COUNT(audio_ID) AS audioFeedbackCount FROM tbl_audio_feedback WHERE DATE(dateAdded) = CURDATE()"; 
-                            // $stmtAudioFeedback = $conn->prepare($sqlAudioFeedback);
-                            // $stmtAudioFeedback->execute();
-                            // $audioFeedbackCount = $stmtAudioFeedback->fetchColumn();
-
-                            // // Fetch the count of new customers for today
-                            // $sqlCustomers = "SELECT COUNT(customer_ID) AS customerCount FROM tbl_customer_info WHERE DATE(dateAdded) = CURDATE()"; 
-                            // $stmtCustomers = $conn->prepare($sqlCustomers);
-                            // $stmtCustomers->execute();
-                            // $customerCount = $stmtCustomers->fetchColumn();
 
                             // Fetch the count of activity logs for today
                             $sqlActivityLogs1 = "SELECT COUNT(*) AS activityLogCount1 FROM tbl_activity_logs WHERE activity='Registered an account' AND DATE(dateAdded) = CURDATE()"; 
