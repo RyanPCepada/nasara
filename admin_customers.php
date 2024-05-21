@@ -859,28 +859,27 @@ try {
                                 }
                                 ?>
 
-                                <div class="row col-5">
-                                    <?php if ($topCustomer): ?>
+                                <div class="row col-5" style="margin-top: -20px;">
 
-                                        <h1 style="position: absolute; width: 20px; margin-left: 165px; margin-top: -21px;">🏆</h1>
-                                        <h4 class="row text-danger" style="margin-left: 20px;">Top customer</h4>
+                                    <div class="row text-center">
+                                        <?php if ($topCustomer): ?>
+
+                                        <h1>🏆</h1>
+                                        <h4 class="text-danger" style="margin-top: -10px;">Top customer</h4>
+
+                                        <div>
+                                            <img src="images/<?php echo $profilePicture; ?>" alt="Profile Picture" style="margin-top: -10px; width: 100px; height: 100px; border-radius: 50%;">
+                                        </div>
+
+                                        <h3 style="margin-left: 0px; margin-top: -5px;"><?php echo $fullName; ?></h3>
+                                        <h7 style="margin-left: 0px; margin-bottom: 0px; margin-top: -5px; color: gray;">Sent <?php echo $feedbackCount; ?> feedbacks and <?php echo $audioFeedbackCount; ?> audio feedbacks</h5>
                                         
+                                        <?php else: ?>
+                                            <h5>No top customer found</h5>
+                                        <?php endif; ?>
 
-                                        <div class="col-2">
-                                            <img src="images/<?php echo $profilePicture; ?>" alt="Profile Picture" style="width: 140px; height: 140px; border-radius: 50%;">
-                                        </div>
+                                    </div>
 
-                                        <div class="col-1">
-                                        </div>
-
-                                        <div class="col-9">
-                                            <h1 style="margin-left: 20px; margin-top: 20px;"><?php echo $fullName; ?></h1>
-                                            <h5 style="margin-left: 20px; color: gray;">This customer sent <?php echo $feedbackCount; ?> feedbacks and <?php echo $audioFeedbackCount; ?> audio feedbacks</h5>
-                                        </div>
-
-                                    <?php else: ?>
-                                        <h5>No top customer found</h5>
-                                    <?php endif; ?>
                                 </div>
 
 
