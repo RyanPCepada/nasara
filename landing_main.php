@@ -1,3 +1,79 @@
+<?php
+session_start();  // Start the session to access session variables
+
+// Check if the user is logged in (you can adjust this based on your session variable)
+if (isset($_SESSION['adminID'])) {
+    // Replace these database connection details with your own
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "nasara";
+
+    try {
+        // Create a PDO connection to your database
+        $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+
+         // Get admin information based on adminID from the session
+         $adminID = $_SESSION['adminID'];
+         $adminQuery = $conn->prepare("SELECT userName, password, image FROM tbl_admin WHERE admin_ID = :adminID");
+         $adminQuery->bindParam(':adminID', $adminID, PDO::PARAM_INT);
+         $adminQuery->execute();
+ 
+         // Fetch the admin's information
+         $admin = $adminQuery->fetch(PDO::FETCH_ASSOC);
+ 
+         // Check if data was found in the database
+         if ($admin !== false) {
+             // Assign the username to $userName
+             $userName = $admin['userName'];
+             $adminimage = $admin['image'];
+             $password = $admin['password'];
+         } else {
+             $userName = '';
+             $adminimage = '';
+             $password = '';
+         }
+
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+
+    $conn = null;
+} else {
+    // Handle the case where the user is not logged in
+    echo "You must be logged in to view this page.";
+    exit();  // Exit the script
+}
+?>
+
+
+
+
+
+
+
+
+
+<?php
+// Step 1: Connect to the database (replace with your database credentials)
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "nasara";
+
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+    die();
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -154,8 +230,11 @@
         
 
             <img src="icons/BUBBLE.png" class="img-fluid" id="bubble" alt="">
+            
+            <div class="mid text-center d-flex align-items-center justify-content-center">
 
-            <div class="mid">
+                <img src="images_admin/<?php echo $adminimage; ?>" class="img-fluid zoomable-image rounded-square"
+                style="width: 230px; height: 230px; border: solid 10px lightblue; border-radius: 50%; margin-top: -1180px; margin-left: -400px;">
 
             </div>
 

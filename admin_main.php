@@ -244,8 +244,8 @@ try {
 
                 <div class="div-home text-center d-flex align-items-center justify-content-center" id="div_home" onclick="to_adminhome()" href="home_main.php">
                     <button class="btn btn-secondary" type="button" id="icon_home">
-                        <i class="fas fa-home"></i>
-                        <h3 style="margin-top: -39px; margin-left: 60px;">Home</h3>
+                        <i class="fas fa-chart-line"></i>
+                        <h3 style="margin-top: -39px; margin-left: 60px;">Dashboard</h3>
                     </button>
                 </div>
 

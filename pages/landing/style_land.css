@@ -143,7 +143,6 @@ body, html {
   } */
 
 #bubble{
-  position: absolute;
   margin-left: 230px;
   margin-top: -180px;
   width: 70%;
