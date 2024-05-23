@@ -653,7 +653,7 @@ try {
                                     JOIN 
                                         tbl_customer_info ci ON al.customer_id = ci.customer_id
                                     WHERE 
-                                        al.activity IN ('Sent feedback', 'Sent audio feedback', 'Registered an account', 'Updated the profile', 'Changed Profile Picture')
+                                        al.activity IN ( 'Registered an account', 'Sent feedback', 'Sent audio feedback')
                                     ORDER BY 
                                         al.dateAdded DESC";
 
