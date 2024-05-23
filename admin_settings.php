@@ -277,32 +277,32 @@ try {
                             $activityLogCount1 = $stmtActivityLogs1->fetchColumn();
 
                             // Fetch the count of activity logs for today
-                            $sqlActivityLogs2 = "SELECT COUNT(*) AS activityLogCount2 FROM tbl_activity_logs WHERE activity='Updated the profile' AND DATE(dateAdded) = CURDATE()"; 
+                            // $sqlActivityLogs2 = "SELECT COUNT(*) AS activityLogCount2 FROM tbl_activity_logs WHERE activity='Updated the profile' AND DATE(dateAdded) = CURDATE()"; 
+                            // $stmtActivityLogs2 = $conn->prepare($sqlActivityLogs2);
+                            // $stmtActivityLogs2->execute();
+                            // $activityLogCount2 = $stmtActivityLogs2->fetchColumn();
+
+
+                            // // Fetch the count of activity logs for today
+                            // $sqlActivityLogs3 = "SELECT COUNT(*) AS activityLogCount3 FROM tbl_activity_logs WHERE activity='Changed Profile Picture' AND DATE(dateAdded) = CURDATE()"; 
+                            // $stmtActivityLogs3 = $conn->prepare($sqlActivityLogs3);
+                            // $stmtActivityLogs3->execute();
+                            // $activityLogCount3 = $stmtActivityLogs3->fetchColumn();
+                            
+                            // Fetch the count of activity logs for today
+                            $sqlActivityLogs2 = "SELECT COUNT(*) AS activityLogCount2 FROM tbl_activity_logs WHERE activity='Sent feedback' AND DATE(dateAdded) = CURDATE()"; 
                             $stmtActivityLogs2 = $conn->prepare($sqlActivityLogs2);
                             $stmtActivityLogs2->execute();
                             $activityLogCount2 = $stmtActivityLogs2->fetchColumn();
-
-
+                            
                             // Fetch the count of activity logs for today
-                            $sqlActivityLogs3 = "SELECT COUNT(*) AS activityLogCount3 FROM tbl_activity_logs WHERE activity='Changed Profile Picture' AND DATE(dateAdded) = CURDATE()"; 
+                            $sqlActivityLogs3 = "SELECT COUNT(*) AS activityLogCount3 FROM tbl_activity_logs WHERE activity='Sent audio feedback' AND DATE(dateAdded) = CURDATE()"; 
                             $stmtActivityLogs3 = $conn->prepare($sqlActivityLogs3);
                             $stmtActivityLogs3->execute();
                             $activityLogCount3 = $stmtActivityLogs3->fetchColumn();
-                            
-                            // Fetch the count of activity logs for today
-                            $sqlActivityLogs4 = "SELECT COUNT(*) AS activityLogCount4 FROM tbl_activity_logs WHERE activity='Sent feedback' AND DATE(dateAdded) = CURDATE()"; 
-                            $stmtActivityLogs4 = $conn->prepare($sqlActivityLogs4);
-                            $stmtActivityLogs4->execute();
-                            $activityLogCount4 = $stmtActivityLogs4->fetchColumn();
-                            
-                            // Fetch the count of activity logs for today
-                            $sqlActivityLogs5 = "SELECT COUNT(*) AS activityLogCount5 FROM tbl_activity_logs WHERE activity='Sent audio feedback' AND DATE(dateAdded) = CURDATE()"; 
-                            $stmtActivityLogs5 = $conn->prepare($sqlActivityLogs5);
-                            $stmtActivityLogs5->execute();
-                            $activityLogCount5 = $stmtActivityLogs5->fetchColumn();
 
                             // Calculate and display the combined count of feedbacks, new customers, and activity logs
-                            $totalNotifications = $activityLogCount1 + $activityLogCount2 + $activityLogCount3 + $activityLogCount4 + $activityLogCount5;
+                            $totalNotifications = $activityLogCount1 + $activityLogCount2 + $activityLogCount3;
                             echo $totalNotifications;
                             ?>
                             <span class="visually-hidden">unread messages</span>

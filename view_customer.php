@@ -85,13 +85,10 @@ if (isset($_SESSION['adminID'])) {
     </nav>
 
 
-
-
-    <div style="margin-top: 20px; margin-left: 110px;">
-        <a href="#" onclick="window.history.back();" style="text-decoration: none; color: inherit;">
-            <i class="fas fa-arrow-left" style="font-size: 24px;"></i>
-        </a>
-    </div>
+    <button type="button" class="btn btn-secondary" style="width: 40px; height: 40px; margin-top: 20px; margin-left: 105px; border-radius: 50%;"
+        href="#" onclick="window.history.back();">
+        <i class="fas fa-arrow-left" style="font-size: 20px;"></i>
+    </button>
 
 
     <div class="container mt-5">
