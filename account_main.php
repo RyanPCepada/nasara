@@ -541,13 +541,13 @@ try {
                             <div class="row">
                                 <br>
                                 <h style="margin-top: 10px; margin-left: 83px;">Enter old password</h>
-                                <input type="password" class="oldpassword" name="oldpassword" id="cyp_row1" style="margin-top: 10px;"/>
+                                <input type="password" class="oldpassword" name="oldpassword" id="cyp_row1" style="margin-top: 10px;" required/>
                                 <br>
                                 <h style="margin-top: 10px; margin-left: 83px;">Enter new password</h>
-                                <input type="password" class="newpassword" name="newpassword" id="cyp_row2" style="margin-top: 10px;"/>
+                                <input type="password" class="newpassword" name="newpassword" id="cyp_row2" style="margin-top: 10px;" required/>
                                 <br>
                                 <h style="margin-top: 10px; margin-left: 83px;">Confirm new password</h>
-                                <input type="password" class="confirmnewpassword" name="confirmnewpassword" id="cyp_row3" style="margin-top: 10px;"/>
+                                <input type="password" class="confirmnewpassword" name="confirmnewpassword" id="cyp_row3" style="margin-top: 10px;" required/>
                             </div>
                         </div>
                         <button type="submit" class="submit" name="submit" id="sett_cyp_modalsave">Save</button>
@@ -1118,19 +1118,25 @@ try {
 
 
 
+
 <footer class="footer">
   <div class="container">
     <div class="row">
       <div class="col-md-4">
         <h5>About Us</h5>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra bibendum nulla, vitae dapibus felis tempor in.</p>
+        <ul class="list-unstyled">
+          <li>Owner: Hermenia Nasara</li>
+          <li>Location: Tankulan, Manolo Fortich, Bukidnon</li>
+          <li>Established: 2010</li>
+          <!-- <li>Address: Tankulan, Manolo Fortich, Bukidnon</li> -->
+        </ul>
       </div>
       <div class="col-md-4">
         <h5>Contact Us</h5>
         <ul class="list-unstyled">
           <li>Phone: +123456789</li>
-          <li>Email: info@example.com</li>
-          <li>Address: 123 Main Street, City, Country</li>
+          <li>Email: hermenianasara@gmail.com</li>
+          <!-- <li>Address: Tankulan, Manolo Fortich, Bukidnon</li> -->
         </ul>
       </div>
       <div class="col-md-4">
@@ -1145,7 +1151,7 @@ try {
     <hr>
     <div class="row">
       <div class="col-md-12 text-center">
-        <p>&copy; 2024 Your Company. All rights reserved.</p>
+        <p>&copy; 2010 Nasara Store. All rights reserved.</p>
       </div>
     </div>
   </div>

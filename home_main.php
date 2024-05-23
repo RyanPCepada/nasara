@@ -488,9 +488,11 @@ try {
 
     <div class="body3">
         <div class="container">
-            <div class="bg-transparent text-center d-flex align-items-center justify-content-center" style="height: 100vh;">
+            <h1 style="position: absolute; margin-top: 250px; color: white;">Wanna send an<br>audio feedback?</h1>
+
+            <div class="bg-transparent text-center d-flex align-items-center justify-content-center" style="height: 100vh; margin-left: 250px;">
                 <img src="icons/mic_wave.png" id="mic_wave" style="position: absolute; width: 33%; margin-top: -400px; filter: drop-shadow(0px 7px 15px rgba(20, 20, 20, 20));">
-                <img src="icons/mic_stroked.png" id="mic" style="width: 20%; margin-top: -100px; filter: drop-shadow(0px 7px 15px rgba(20, 20, 20, 20));">
+                <img src="icons/mic_stroked.png" id="mic" style="width: 25%; margin-top: -100px; filter: drop-shadow(0px 7px 15px rgba(20, 20, 20, 20));">
 
                 <button type="button" class="btn btn-primary" id="openVoiceFeedbackModalBtn" data-bs-toggle="modal" data-bs-target="#modal_voicefeedback"
                     style="position: absolute; width: 300px; height: 70px; margin-top: 370px; margin-left: 0px; border-radius: 20px; font-size: 25px;">
@@ -735,14 +737,19 @@ try {
     <div class="row">
       <div class="col-md-4">
         <h5>About Us</h5>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra bibendum nulla, vitae dapibus felis tempor in.</p>
+        <ul class="list-unstyled">
+          <li>Owner: Hermenia Nasara</li>
+          <li>Location: Tankulan, Manolo Fortich, Bukidnon</li>
+          <li>Established: 2010</li>
+          <!-- <li>Address: Tankulan, Manolo Fortich, Bukidnon</li> -->
+        </ul>
       </div>
       <div class="col-md-4">
         <h5>Contact Us</h5>
         <ul class="list-unstyled">
           <li>Phone: +123456789</li>
-          <li>Email: info@example.com</li>
-          <li>Address: 123 Main Street, City, Country</li>
+          <li>Email: hermenianasara@gmail.com</li>
+          <!-- <li>Address: Tankulan, Manolo Fortich, Bukidnon</li> -->
         </ul>
       </div>
       <div class="col-md-4">
@@ -757,7 +764,7 @@ try {
     <hr>
     <div class="row">
       <div class="col-md-12 text-center">
-        <p>&copy; 2024 Your Company. All rights reserved.</p>
+        <p>&copy; 2010 Nasara Store. All rights reserved.</p>
       </div>
     </div>
   </div>
@@ -820,21 +827,3 @@ $.post("login_main.php", {},function (data) {
     });
 }   
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
