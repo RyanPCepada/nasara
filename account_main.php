@@ -138,13 +138,14 @@ try {
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
 
         <img src="icons/NASARA_LOGO_WHITE_PNG.png" class="img-fluid" id="NASARA_LOGO" alt="">
+        <h1 style="margin-left: 360px; font-family: Cooper; color: white;">Dual Feedback System</h1>
 
-            <button class="btn btn-secondary" type="button" id="icon_home" onclick="to_home()" href="home_main.php">
-                <i class="fas fa-home"></i>
-            </button>
+        <button class="btn btn-secondary" type="button" id="icon_home" onclick="to_home()" href="home_main.php">
+            <i class="fas fa-home"></i>
+        </button>
 
-            <img src="images/<?php echo $image; ?>" id="icon_account" class="img-fluid zoomable-image rounded-square"
-            onclick="to_account()">
+        <img src="images/<?php echo $image; ?>" id="icon_account" class="img-fluid zoomable-image rounded-square"
+        onclick="to_account()">
 
     </nav>
 

@@ -1,3 +1,10 @@
+/* *{
+  margin: 0;
+  padding: 0;
+  font-family: Cooper;
+  box-sizing: border-box;
+} */
+
 .logo {
     width: 0;
     height: 0;
