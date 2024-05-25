@@ -776,7 +776,7 @@ try {
                                     // Calculate total feedback count
                                     $totalFeedbacks = $writtenFeedbacks + $audioFeedbacks;
                                     ?>
-                                    <div class="card border-0 fixed-width-element" id="count_card">
+                                    <div class="card border-0 fixed-width-element" id="count_card" style="cursor: pointer;">
                                         <div class="card-body" style="text-align: left;">
                                             <div class="card-body">
                                                 <h1 class="card-title" style="font-size: 120px; position: absolute; margin-top: -35px;"><?php echo $totalFeedbacks; ?></h1>
@@ -788,14 +788,14 @@ try {
                                 </div>
                             </div>
                             <div class="text-center d-flex align-items-center justify-content-center" style="margin-top: 0px;">
-                                <img src="icons/GIF_WRITTEN_WHITE_BG.gif" style="width: .8in; height: .80in; margin-left: 0px; margin-top: 0px;">
+                                <img src="icons/GIF_WRITTEN_WHITE_BG.gif" id="gif_written_white_bg" style="width: .8in; height: .80in; margin-left: 0px; margin-top: 0px; cursor: pointer;">
                                 <?php
-                                    echo "<h2>$writtenFeedbacks</h2>";
+                                    echo '<h2 id="count_written_fb" style="cursor: pointer;">' . $writtenFeedbacks . '</h2>';
                                 ?>
                                 <div style="margin: 20px;"></div>
-                                <img src="icons/GIF_MIC_WHITE_BG.gif" style="width: .8in; height: .80in; margin-left: 0px; margin-top: 0px;">
+                                <img src="icons/GIF_MIC_WHITE_BG.gif" id="gif_mic_white_bg" style="width: .8in; height: .80in; margin-left: 0px; margin-top: 0px; cursor: pointer;">
                                 <?php
-                                echo "<h2 text>$audioFeedbacks</h2>";
+                                    echo '<h2 id="count_audio_fb" style="cursor: pointer;">' . $audioFeedbacks . '</h2>';
                                 ?>
                             </div>
                             <!-- END FEEDBACKS COUNT -->
@@ -842,189 +842,189 @@ try {
 
                             <!-- CSS for Hover Effect -->
                             <style>
-    .table-hover tbody tr:hover {
-        background-color: rgba(0, 0, 0, 0.111) !important;
-    }
-
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden; /* Remove scrollbar */
-        background-color: rgba(0,0,0,0.4);
-        padding-top: 60px;
-    }
-
-    .modal-content {
-        background-color: #fefefe;
-        margin: 5% auto;
-        margin-top: 0px;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 30%;
-    }
-
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    .view-all-btn {
-        margin-top: 20px;
-        padding: 10px 20px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        text-align: center;
-    }
-
-    .view-all-btn:hover {
-        background-color: #45a049;
-    }
-</style>
-
-<div class="text-center d-flex align-items-center justify-content-center" style="margin-left: 0px; padding: 20px; border-radius: 15px;">
-    <div class="row">
-        <h3 style="margin-top: 10px; margin-bottom: 40px; margin-left: -405px; color: gray;">Written Feedbacks</h3>
-        <?php
-            // Step 2: Fetch data from tbl_customer_info
-            $sql = "SELECT
-                CONCAT('images/', ci.image) AS 'Profile picture',
-                ci.customer_ID AS 'Customer ID',
-                CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS 'Full Name',
-                fb.opinion AS 'Opinion',
-                fb.suggestion AS 'Suggestion',
-                fb.question AS 'Question',
-                fb.rating AS 'Rating',
-                fb.date AS 'Date'
-            FROM tbl_customer_info AS ci
-            JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID
-            ORDER BY fb.feedback_ID DESC";
-
-            $stmt = $conn->prepare($sql);
-            $stmt->execute();
-
-            // Step 3: Create arrays to store the data
-            $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        ?>
-
-        <div class="scrollable-content" id="table_written_fb">
-            <table class="table table-bordered table-hover class alternate-row-table" id="list_table">
-                <thead>
-                    <tr>
-                        <?php
-                        // Display column aliases as headers
-                        if (!empty($customerData)) {
-                            $aliasRow = $customerData[0]; // Assuming the first row contains aliases
-                            foreach ($aliasRow as $alias => $value) {
-                                echo "<th style='background-color: #c8e7c9; color: black;'>$alias</th>";
-                            }
-                        }
-                        ?>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if (empty($customerData)) {
-                        // Display the "No feedback yet for today" message in the table body
-                        echo '<tr><td colspan="8" style="text-align: center; background-color: transparent; color: black;">No feedbacks yet for today</td></tr>';
-                    } else {
-                        // Loop through the data and populate the table
-                        foreach ($customerData as $row) {
-                            echo "<tr data-customer='" . json_encode($row) . "'>";
-                            foreach ($row as $key => $value) {
-                                if ($key === 'Profile picture') {
-                                    echo "<td><img src='$value' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: white;'></td>";
-                                } else {
-                                    echo "<td>$value</td>";
+                                .table-hover tbody tr:hover {
+                                    background-color: rgba(0, 0, 0, 0.111) !important;
                                 }
-                            }
-                            echo "</tr>";
-                        }
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
 
-<!-- Modal -->
-<div id="customerModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <div id="modalBody"></div>
-        <button id="viewAllBtn" class="view-all-btn">View Customer's Information</button>
-    </div>
-</div>
+                                .modal {
+                                    display: none;
+                                    position: fixed;
+                                    z-index: 1;
+                                    left: 0;
+                                    top: 0;
+                                    width: 100%;
+                                    height: 100%;
+                                    overflow: hidden; /* Remove scrollbar */
+                                    background-color: rgba(0,0,0,0.4);
+                                    padding-top: 60px;
+                                }
 
-<!-- JavaScript for Modal Functionality -->
-<script>
-    // Get the modal
-    var modal = document.getElementById("customerModal");
+                                .modal-content {
+                                    background-color: #fefefe;
+                                    margin: 5% auto;
+                                    margin-top: 0px;
+                                    padding: 20px;
+                                    border: 1px solid #888;
+                                    width: 30%;
+                                }
 
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
+                                .close {
+                                    color: #aaa;
+                                    float: right;
+                                    font-size: 28px;
+                                    font-weight: bold;
+                                }
 
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
+                                .close:hover,
+                                .close:focus {
+                                    color: black;
+                                    text-decoration: none;
+                                    cursor: pointer;
+                                }
 
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
+                                .view-all-btn {
+                                    margin-top: 20px;
+                                    padding: 10px 20px;
+                                    background-color: #4CAF50;
+                                    color: white;
+                                    border: none;
+                                    border-radius: 5px;
+                                    cursor: pointer;
+                                    text-align: center;
+                                }
 
-    // Add click event listener to each table row
-    document.querySelectorAll('#list_table tbody tr').forEach(function(row) {
-        row.addEventListener('click', function() {
-            var customerData = JSON.parse(this.getAttribute('data-customer'));
-            var modalBody = document.getElementById("modalBody");
-            var viewAllBtn = document.getElementById("viewAllBtn");
+                                .view-all-btn:hover {
+                                    background-color: #45a049;
+                                }
+                            </style>
 
-            // Clear previous content
-            modalBody.innerHTML = '';
+                            <div class="text-center d-flex align-items-center justify-content-center" style="margin-left: 0px; padding: 20px; border-radius: 15px;">
+                                <div class="row" id="div_written_fb">
+                                    <h3 style="margin-top: 10px; margin-bottom: 40px; margin-left: -405px; color: gray;">Written Feedbacks</h3>
+                                    <?php
+                                        // Step 2: Fetch data from tbl_customer_info
+                                        $sql = "SELECT
+                                            CONCAT('images/', ci.image) AS 'Profile picture',
+                                            ci.customer_ID AS 'Customer ID',
+                                            CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS 'Full Name',
+                                            fb.opinion AS 'Opinion',
+                                            fb.suggestion AS 'Suggestion',
+                                            fb.question AS 'Question',
+                                            fb.rating AS 'Rating',
+                                            fb.date AS 'Date'
+                                        FROM tbl_customer_info AS ci
+                                        JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID
+                                        ORDER BY fb.feedback_ID DESC";
 
-            // Populate modal with customer data
-            for (var key in customerData) {
-                if (key === 'Profile picture') {
-                    modalBody.innerHTML += '<p><img src="' + customerData[key] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
-                } else {
-                    modalBody.innerHTML += '<p><strong>' + key + ':</strong> ' + customerData[key] + '</p>';
-                }
-            }
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute();
 
-            // Set the link for the view all button
-            viewAllBtn.onclick = function() {
-                // Extract the customer ID from customerData
-                var customerID = customerData['Customer ID'];
-                // Redirect to view_customer.php with customer ID parameter
-                window.location.href = 'view_customer.php?customer_ID=' + customerID;
-            };
+                                        // Step 3: Create arrays to store the data
+                                        $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                    ?>
 
-            // Display the modal
-            modal.style.display = "block";
-        });
-    });
-</script>
+                                    <div class="scrollable-content" id="table_written_fb">
+                                        <table class="table table-bordered table-hover class alternate-row-table" id="list_table">
+                                            <thead>
+                                                <tr>
+                                                    <?php
+                                                    // Display column aliases as headers
+                                                    if (!empty($customerData)) {
+                                                        $aliasRow = $customerData[0]; // Assuming the first row contains aliases
+                                                        foreach ($aliasRow as $alias => $value) {
+                                                            echo "<th style='background-color: #c8e7c9; color: black;'>$alias</th>";
+                                                        }
+                                                    }
+                                                    ?>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                if (empty($customerData)) {
+                                                    // Display the "No feedback yet for today" message in the table body
+                                                    echo '<tr><td colspan="8" style="text-align: center; background-color: transparent; color: black;">No feedbacks yet for today</td></tr>';
+                                                } else {
+                                                    // Loop through the data and populate the table
+                                                    foreach ($customerData as $row) {
+                                                        echo "<tr data-customer='" . json_encode($row) . "'>";
+                                                        foreach ($row as $key => $value) {
+                                                            if ($key === 'Profile picture') {
+                                                                echo "<td><img src='$value' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: white;'></td>";
+                                                            } else {
+                                                                echo "<td>$value</td>";
+                                                            }
+                                                        }
+                                                        echo "</tr>";
+                                                    }
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal -->
+                            <div id="customerModal" class="modal">
+                                <div class="modal-content">
+                                    <span class="close">&times;</span>
+                                    <div id="modalBody"></div>
+                                    <button id="viewAllBtn" class="view-all-btn">View Customer's Information</button>
+                                </div>
+                            </div>
+
+                            <!-- JavaScript for Modal Functionality -->
+                            <script>
+                                // Get the modal
+                                var modal = document.getElementById("customerModal");
+
+                                // Get the <span> element that closes the modal
+                                var span = document.getElementsByClassName("close")[0];
+
+                                // When the user clicks on <span> (x), close the modal
+                                span.onclick = function() {
+                                    modal.style.display = "none";
+                                }
+
+                                // When the user clicks anywhere outside of the modal, close it
+                                window.onclick = function(event) {
+                                    if (event.target == modal) {
+                                        modal.style.display = "none";
+                                    }
+                                }
+
+                                // Add click event listener to each table row
+                                document.querySelectorAll('#list_table tbody tr').forEach(function(row) {
+                                    row.addEventListener('click', function() {
+                                        var customerData = JSON.parse(this.getAttribute('data-customer'));
+                                        var modalBody = document.getElementById("modalBody");
+                                        var viewAllBtn = document.getElementById("viewAllBtn");
+
+                                        // Clear previous content
+                                        modalBody.innerHTML = '';
+
+                                        // Populate modal with customer data
+                                        for (var key in customerData) {
+                                            if (key === 'Profile picture') {
+                                                modalBody.innerHTML += '<p><img src="' + customerData[key] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
+                                            } else {
+                                                modalBody.innerHTML += '<p><strong>' + key + ':</strong> ' + customerData[key] + '</p>';
+                                            }
+                                        }
+
+                                        // Set the link for the view all button
+                                        viewAllBtn.onclick = function() {
+                                            // Extract the customer ID from customerData
+                                            var customerID = customerData['Customer ID'];
+                                            // Redirect to view_customer.php with customer ID parameter
+                                            window.location.href = 'view_customer.php?customer_ID=' + customerID;
+                                        };
+
+                                        // Display the modal
+                                        modal.style.display = "block";
+                                    });
+                                });
+                            </script>
 
 
                         </div>
@@ -1041,7 +1041,7 @@ try {
 
 
                             <!-- AUDIO FEEDBACKS TABLE -->
-                            <div class="card-body" id="" style="position: relative; justify-content: center; background: white; margin-top: 0px;">
+                            <div class="card-body" id="div_audio_fb" style="position: relative; justify-content: center; background: white; margin-top: 0px;">
 
                                 <h3 style="margin: 20px; color: gray;">Audio Feedbacks</h3>
 
@@ -1203,6 +1203,34 @@ try {
     </div>
     <!-- END ADMIN DASHBOARD -- FOR VIEWING ADMIN DASHBOARD -->
 
+    
+    <script>
+        document.getElementById("count_card").addEventListener("click", function() {
+            // Scroll to the audio feedbacks table first
+            document.getElementById("table_audio_fb").scrollIntoView({ behavior: "smooth" });
+            
+            // Delay scrolling to the written feedbacks table
+            setTimeout(function() {
+                document.getElementById("div_written_fb").scrollIntoView({ behavior: "smooth", block: "start" });
+            }, 800); // Adjust the delay time as needed
+        });
+
+        document.getElementById("gif_written_white_bg").addEventListener("click", function() {
+        document.getElementById("div_written_fb").scrollIntoView({ behavior: "smooth" });
+        });
+        
+        document.getElementById("count_written_fb").addEventListener("click", function() {
+        document.getElementById("div_written_fb").scrollIntoView({ behavior: "smooth" });
+        });
+
+        document.getElementById("gif_mic_white_bg").addEventListener("click", function() {
+        document.getElementById("div_audio_fb").scrollIntoView({ behavior: "smooth" });
+        });
+
+        document.getElementById("count_audio_fb").addEventListener("click", function() {
+        document.getElementById("div_audio_fb").scrollIntoView({ behavior: "smooth" });
+        });
+    </script>
 
 
 
