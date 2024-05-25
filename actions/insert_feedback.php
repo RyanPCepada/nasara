@@ -4,9 +4,9 @@ require_once '../connection.php';
 
 session_start();  // Start the session to access session variables
 
-$opinion = $_POST['opinion'];
-$suggestion = $_POST['suggestion'];
-$question = $_POST['question'];
+$products = $_POST['products'];
+$services = $_POST['services'];
+$convenience = $_POST['convenience'];
 $rating = $_POST['rating'];
 
 
@@ -24,8 +24,8 @@ try {
     }
 
     // First, you need to insert the feedback into tbl_feedback with the retrieved customer ID
-    $insertFeedback = $conn->prepare('INSERT INTO tbl_feedback (opinion, suggestion, question, rating, customer_ID) VALUES (?, ?, ?, ?, ?)');
-    $insertFeedback->execute([$opinion, $suggestion, $question, $rating, $customerID]);
+    $insertFeedback = $conn->prepare('INSERT INTO tbl_feedback (products, services, convenience, rating, customer_ID) VALUES (?, ?, ?, ?, ?)');
+    $insertFeedback->execute([$products, $services, $convenience, $rating, $customerID]);
 
     // Insert an activity log in tbl_activity_logs
     $insertActivity = $conn->prepare('INSERT INTO tbl_activity_logs (activity, customer_ID) VALUES (?, ?)');

@@ -144,9 +144,9 @@ if (isset($_SESSION['adminID'])) {
                         foreach ($feedbacks as $feedback) {
                             echo '<div class="row" style="background-color: ' . $color . '; margin-left: 0px; margin-right: 0px; padding: 15px; border-radius: 5px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); margin-bottom: 15px;">';
                             echo '<div class="col">';
-                            echo '<p class="card-text"><strong>Opinion:</strong> ' . htmlspecialchars($feedback['opinion']) . '</p>';
-                            echo '<p class="card-text"><strong>Suggestion:</strong> ' . htmlspecialchars($feedback['suggestion']) . '</p>';
-                            echo '<p class="card-text"><strong>Question:</strong> ' . htmlspecialchars($feedback['question']) . '</p>';
+                            echo '<p class="card-text"><strong>Opinion:</strong> ' . htmlspecialchars($feedback['products']) . '</p>';
+                            echo '<p class="card-text"><strong>Suggestion:</strong> ' . htmlspecialchars($feedback['services']) . '</p>';
+                            echo '<p class="card-text"><strong>Question:</strong> ' . htmlspecialchars($feedback['convenience']) . '</p>';
                             echo '<p class="card-text"><strong>Rating:</strong> ' . htmlspecialchars($feedback['rating']) . '</p>';
                             echo '<p class="card-text" style="color: blue; font-size: 15px; margin-top: 10px;">' . formatRelativeDate($feedback['date'], $heading) . '</p>';
                             echo '</div>';

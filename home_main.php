@@ -144,14 +144,14 @@ try {
             
             
             <div class="row">
-                <img src="icons/BUBBLE_FORMS_2.png" style="position: absolute; width: 75%; margin-left: -58px; margin-top: 30px;
+                <img src="icons/PRODUCTS_SERVICE_CONVENIENCE_1_PNG.png" style="position: absolute; width: 90%; margin-left: -58px; margin-top: 10px;
                     filter: drop-shadow(0px 20px 50px rgba(20, 20, 20, 20));">
 
-                <img src="icons/ICON_FEEDBACK.png" style="position: absolute; width: 10%; margin-left: 300px; margin-top: 30px;
+                <img src="icons/ICON_PRODUCTS.png" style="position: absolute; width: 10%; margin-left: 300px; margin-top: 30px;
                     filter: drop-shadow(0px 7px 15px rgba(20, 20, 20, 20));">
-                <img src="icons/ICON_QUESTION.png" style="position: absolute; width: 7%; height: 18%; margin-left: 980px; margin-top: 45px;
+                <img src="icons/ICON_CONVENIENCE.png" style="position: absolute; width: 9%; margin-left: 965px; margin-top: 50px;
                     filter: drop-shadow(0px 7px 15px rgba(20, 20, 20, 20)); transform: rotate(5deg);">
-                <img src="icons/ICON_SUGGESTION.png" style="position: absolute; width: 11%; margin-left: 650px; margin-top: 395px;
+                <img src="icons/ICON_SERVICES.png" style="position: absolute; width: 10%; margin-left: 650px; margin-top: 395px;
                     filter: drop-shadow(0px 7px 15px rgba(20, 20, 20, 20)); transform: rotate(0deg);">
 
                 <img src="icons/ICON_1STAR.png" name="rating" value="1" id="star1" onclick="setRating(1)">
@@ -186,9 +186,10 @@ try {
 
                 <form id="feedback_form" method="POST" action="actions/insert_feedback.php">
                     
-                    <textarea name="opinion" id="box1" placeholder="Type your opinion here"></textarea>
-                    <textarea name="suggestion" id="box2" placeholder="Type your suggestion here"></textarea>
-                    <textarea name="question" id="box3" placeholder="Type your question here"></textarea>
+                    <textarea name="products" id="box1" placeholder="What do you think about our products?"></textarea>
+                    <textarea name="services" id="box2" placeholder="How was your experience with our services?"></textarea>
+                    <textarea name="convenience" id="box3" placeholder="How convenient was your shopping experience?"></textarea>
+
                     <input name="rating" id="box4">
 
                     <button type="submit" class="btn btn-dark" id="submit_feeback" data-bs-toggle="modal" data-bs-target="#modal_submit_feedback"

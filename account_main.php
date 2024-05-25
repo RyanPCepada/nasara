@@ -678,7 +678,7 @@ try {
                     <div class="scrollable-content" style="height: 400px; overflow-y: auto;">
                         <b>Nasara Store Customer Feedback Management System</b>
                             <br><br>
-                            Effective Date: September 09, 2023
+                            Effective Date: September 09, 2010
                             <br><br>
                             Thank you for using our Customer Feedback Management System. Please read the following terms and policies carefully before using our platform. By accessing and using this system, you agree to these terms and policies.
                             <br><br>
@@ -731,7 +731,7 @@ try {
                             <br><br>
                             <b>Contact Information</b>
                             <br>
-                            If you have any questions or concerns about these terms and policies, please contact us at Octawiz_Devbugs2023@gmail.com.
+                            If you have any questions or concerns about these terms and policies, please contact us at NasaraStore2010@gmail.com.
                             <br>
                         <h style="margin-top: 5px; margin-left: 10px; font-size: 10px;">
                             <!-- Your terms and policy text here -->
@@ -876,7 +876,7 @@ try {
                             <?php
                             // Fetch feedbacks for the current customer
                             $sqlFeedbacks = "
-                            SELECT opinion, suggestion, question, rating, date
+                            SELECT products, services, convenience, rating, date
                             FROM tbl_feedback
                             WHERE customer_id = :customerID
                             ORDER BY date DESC";
@@ -918,9 +918,9 @@ try {
                                     foreach ($feedbacks as $feedback) {
                                         echo '<div class="row" style="background-color: #ecedff; border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);
                                             padding: 20px; border-radius: 5px; font-size: 20px; width: 95%; margin-left: 15px; margin-top: 10px;">';
-                                        echo '<p style="margin: 0px;"><strong>Opinion:</strong> ' . $feedback['opinion'] . '</p>';
-                                        echo '<p style="margin: 0px;"><strong>Suggestion:</strong> ' . $feedback['suggestion'] . '</p>';
-                                        echo '<p style="margin: 0px;"><strong>Question:</strong> ' . $feedback['question'] . '</p>';
+                                        echo '<p style="margin: 0px;"><strong>Opinion:</strong> ' . $feedback['products'] . '</p>';
+                                        echo '<p style="margin: 0px;"><strong>Suggestion:</strong> ' . $feedback['services'] . '</p>';
+                                        echo '<p style="margin: 0px;"><strong>Question:</strong> ' . $feedback['convenience'] . '</p>';
                                         echo '<p style="margin: 0px;"><strong>Rating:</strong> ' . $feedback['rating'] . '</p>';
                                         echo '<p style="color: blue; font-size: 15px; margin-top: 10px; margin-bottom: 0px;">' . formatRelativeDate($feedback['date'], $heading) . '</p>';
                                         echo '</div>'; //IF YOU COMMENT THIS, THE CARDS LOOK SO NICE SLANTED FROM BIG TO SMALL

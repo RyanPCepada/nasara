@@ -821,9 +821,9 @@ try {
                                         $sql = "SELECT
                                             CONCAT('images/', ci.image) AS 'Profpic',
                                             CONCAT(ci.firstName, ' ', ci.MiddleName, ' ', ci.lastName) AS 'Customer',
-                                            fb.opinion AS 'Opinion',
-                                            fb.suggestion AS 'Suggestion',
-                                            fb.question AS 'Question',
+                                            fb.products AS 'Products',
+                                            fb.services AS 'Services',
+                                            fb.convenience AS 'Convenience',
                                             fb.rating AS 'Rating',
                                             fb.date AS 'Date'
                                         FROM tbl_customer_info AS ci
@@ -949,9 +949,9 @@ try {
                                         $sql = "SELECT
                                                     CONCAT('images/', ci.image) AS 'Profpic',
                                                     CONCAT(ci.firstName, ' ', ci.MiddleName, ' ', ci.lastName) AS 'Customer',
-                                                    fb.opinion AS 'Opinion',
-                                                    fb.suggestion AS 'Suggestion',
-                                                    fb.question AS 'Question',
+                                                    fb.products AS 'Products',
+                                                    fb.services AS 'Services',
+                                                    fb.convenience AS 'Convenience',
                                                     fb.rating AS 'Rating',
                                                     fb.date AS 'Date'
                                                 FROM tbl_customer_info AS ci
