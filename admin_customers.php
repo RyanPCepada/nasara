@@ -887,81 +887,202 @@ try {
                             <!-- CUSTOMERS TABLE -->
                             <div class="text-center d-flex align-items-center justify-content-center" style="margin-left: 0px; padding: 20px; border-radius: 15px;">
 
-                                
-                                <div class="row">
-                                    <?php
-                                        // Step 2: Fetch all d``````ata from tbl_customer_info with column aliases
-                                        $sql = "SELECT CONCAT('images/', image) AS 'Profile picture',  -- Concatenate the image path with the 'image' column
-                                                customer_ID AS 'Customer ID',
-                                                firstName AS 'Firstname',
-                                                middleName AS 'Middlename',
-                                                lastName AS 'Lastname',
-                                                street AS 'Street',
-                                                barangay AS 'Barangay',
-                                                municipality AS 'Municipality',
-                                                province AS 'Province',
-                                                zipcode AS 'Zipcode',
-                                                phoneNumber AS 'Phone Number',
-                                                birthDate AS 'Birthdate',
-                                                gender AS 'Gender',
-                                                email AS 'Email',
-                                                password AS 'Password',
-                                                dateAdded AS 'Creation Date'
-                                        FROM tbl_customer_info
-                                        ORDER BY customer_ID DESC";
+                            <div class="row">
+                                <?php
+                                    // Step 2: Fetch all data from tbl_customer_info with column aliases
+                                    $sql = "SELECT CONCAT('images/', image) AS 'Profile picture',  -- Concatenate the image path with the 'image' column
+                                            customer_ID AS 'Customer ID',
+                                            firstName AS 'Firstname',
+                                            middleName AS 'Middlename',
+                                            lastName AS 'Lastname',
+                                            street AS 'Street',
+                                            barangay AS 'Barangay',
+                                            municipality AS 'Municipality',
+                                            province AS 'Province',
+                                            zipcode AS 'Zipcode',
+                                            phoneNumber AS 'Phone Number',
+                                            birthDate AS 'Birthdate',
+                                            gender AS 'Gender',
+                                            email AS 'Email',
+                                            password AS 'Password',
+                                            dateAdded AS 'Creation Date'
+                                    FROM tbl_customer_info
+                                    ORDER BY customer_ID DESC";
 
-                                        $stmt = $conn->prepare($sql);
-                                        $stmt->execute();
+                                    $stmt = $conn->prepare($sql);
+                                    $stmt->execute();
 
-                                        // Step 3: Create arrays to store the data
-                                        $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                    ?>
+                                    // Step 3: Create arrays to store the data
+                                    $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                ?>
 
-                                    <div class="scrollable-content" id="table1">
-                                        <table class="table table-bordered class alternate-row-table" id="list_table">
-                                            <thead>
-                                                <tr>
-                                                    <?php
-                                                    // Display column aliases as headers
-                                                    if (!empty($customerData)) {
-                                                        $aliasRow = $customerData[0]; // Assuming the first row contains aliases
-                                                        foreach ($aliasRow as $alias => $value) {
-                                                            echo "<th style='background-color: #cacbe8; color: black;'>$alias</th>";
-                                                        }
-                                                    }
-                                                    ?>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                <div class="scrollable-content" id="table1">
+                                    <table class="table table-bordered class alternate-row-table" id="list_table">
+                                        <thead>
+                                            <tr>
                                                 <?php
-                                                if (empty($customerData)) {
-                                                    // Display the "No feedback yet for today" message in the table body
-                                                    echo '<tr><td colspan="6" style="text-align: center; background-color: transparent; color: black;">No feedbacks yet for today</td></tr>';
-                                                } else {
-                                                    // Loop through the data and populate the table
-                                                    foreach ($customerData as $row) {
-                                                        echo "<tr>";
-                                                        foreach ($row as $key => $value) {
-                                                            if ($key === 'Profile picture') {
-                                                                echo "<td><img src='$value' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: white;'></td>";
-                                                            } else {
-                                                                echo "<td>$value</td>";
-                                                            }
-                                                        }
-                                                        echo "</tr>";
+                                                // Display column aliases as headers
+                                                if (!empty($customerData)) {
+                                                    $aliasRow = $customerData[0]; // Assuming the first row contains aliases
+                                                    foreach ($aliasRow as $alias => $value) {
+                                                        echo "<th style='background-color: #cacbe8; color: black;'>$alias</th>";
                                                     }
                                                 }
                                                 ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-
-
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            if (empty($customerData)) {
+                                                // Display the "No feedback yet for today" message in the table body
+                                                echo '<tr><td colspan="6" style="text-align: center; background-color: transparent; color: black;">No feedbacks yet for today</td></tr>';
+                                            } else {
+                                                // Loop through the data and populate the table
+                                                foreach ($customerData as $row) {
+                                                    echo "<tr class='customer-row' data-customer='" . json_encode($row) . "'>";
+                                                    foreach ($row as $key => $value) {
+                                                        if ($key === 'Profile picture') {
+                                                            echo "<td><img src='$value' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: white;'></td>";
+                                                        } else {
+                                                            echo "<td>$value</td>";
+                                                        }
+                                                    }
+                                                    echo "</tr>";
+                                                }
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
                                 </div>
+                            </div>
 
                             </div>
                             <!-- END CUSTOMERS TABLE -->
+
+                            <!-- Modal -->
+                            <div id="customerModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <div id="modalBody"></div>
+                                <!-- Add a button to view customer information -->
+                                <button id="viewAllBtn" class="view-all-btn">View Customer's Information</button>
+                            </div>
+                            </div>
+
+                            <script>
+                            // Get the modal
+                            var modal = document.getElementById("customerModal");
+
+                            // Get the <span> element that closes the modal
+                            var span = document.getElementsByClassName("close")[0];
+
+                            // When the user clicks on <span> (x), close the modal
+                            span.onclick = function() {
+                                modal.style.display = "none";
+                            }
+
+                            // When the user clicks anywhere outside of the modal, close it
+                            window.onclick = function(event) {
+                                if (event.target == modal) {
+                                    modal.style.display = "none";
+                                }
+                            }
+
+                            // Add click event listener to each table row
+                            document.querySelectorAll('.customer-row').forEach(function(row) {
+                                row.addEventListener('click', function() {
+                                    var customerData = JSON.parse(this.getAttribute('data-customer'));
+                                    var modalBody = document.getElementById("modalBody");
+                                    var viewAllBtn = document.getElementById("viewAllBtn");
+
+                                    // Clear previous content
+                                    modalBody.innerHTML = '';
+
+                                    // Populate modal with customer data
+                                    for (var key in customerData) {
+                                        if (key === 'Profile picture') {
+                                            modalBody.innerHTML += '<p><img src="' + customerData[key] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
+                                        } else {
+                                            modalBody.innerHTML += '<p><strong>' + key + ':</strong> ' + customerData[key] + '</p>';
+                                        }
+                                    }
+
+                                    // Set the link for the view all button
+                                    viewAllBtn.onclick = function() {
+                                        // Extract the customer ID from customerData
+                                        var customerID = customerData['Customer ID'];
+                                        // Redirect to view_customer.php with customer ID parameter
+                                        window.location.href = 'view_customer.php?customer_ID=' + customerID;
+                                    };
+
+                                    // Display the modal
+                                    modal.style.display = "block";
+                                });
+                            });
+                            </script>
+
+                            <style>
+                            /* CSS for Hover Effect */
+                            .customer-row:hover {
+                                background-color: rgba(135, 206, 235, 0.7) !important; /* A darker shade of light blue */
+                            }
+
+
+                            .modal {
+                                display: none;
+                                position: fixed;
+                                z-index: 1;
+                                left: 0;
+                                top: 0;
+                                width: 100%;
+                                height: 100%;
+                                overflow: hidden; /* Remove scrollbar */
+                                overflow-y: auto; /* Add scrollbar */
+                                background-color: rgba(0,0,0,0.4);
+                                padding-top: 60px;
+                            }
+
+                            .modal-content {
+                                background-color: #fefefe;
+                                margin: 5% auto;
+                                margin-top: 0px;
+                                padding: 20px;
+                                border: 1px solid #888;
+                                width: 30%;
+                            }
+
+                            .close {
+                                color: #aaa;
+                                float: right;
+                                font-size: 28px;
+                                font-weight: bold;
+                            }
+
+                            .close:hover,
+                            .close:focus {
+                                color: black;
+                                text-decoration: none;
+                                cursor: pointer;
+                            }
+
+                            .view-all-btn {
+                                margin-top: 20px;
+                                padding: 10px 20px;
+                                background-color: #4CAF50;
+                                color: white;
+                                border: none;
+                                border-radius: 5px;
+                                cursor: pointer;
+                                text-align: center;
+                            }
+
+                            .view-all-btn:hover {
+                                background-color: #45a049;
+                            }
+                            </style>
+
+
+
 
                             <script>
                                 document.getElementById("count_card").addEventListener("click", function() {
