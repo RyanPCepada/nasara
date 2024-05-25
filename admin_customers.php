@@ -760,7 +760,7 @@ try {
                             <!-- CUSTOMERS COUNT -->
                             <div class="text-center d-flex align-items-center justify-content-center" style="padding: 20px; border-radius: 15px;">
 
-                                <div class="row col-4 justify-content-center";>
+                                <div class="row col-4 justify-content-center" style="cursor: pointer;";>
 
                                     <?php
                                         // Step 2: Fetch all data from tbl_feedback
@@ -819,68 +819,61 @@ try {
                                 </div>
                                 
                                 <?php
-                                // Step 1: Prepare the SQL query to fetch the top customer
-                                $sqlTopCustomer = "
-                                    SELECT c.customer_ID, c.firstName, c.middleName, c.lastName, c.image,
-                                        COALESCE(feedback_count, 0) AS feedback_count, COALESCE(audio_feedback_count, 0) AS audio_feedback_count,
-                                        (COALESCE(feedback_count, 0) + COALESCE(audio_feedback_count, 0)) AS total_feedbacks
-                                    FROM tbl_customer_info c
-                                    LEFT JOIN (
-                                        SELECT customer_ID, COUNT(*) AS feedback_count
-                                        FROM tbl_feedback
-                                        GROUP BY customer_ID
-                                    ) f ON c.customer_ID = f.customer_ID
-                                    LEFT JOIN (
-                                        SELECT customer_ID, COUNT(*) AS audio_feedback_count
-                                        FROM tbl_audio_feedback
-                                        GROUP BY customer_ID
-                                    ) a ON c.customer_ID = a.customer_ID
-                                    ORDER BY total_feedbacks DESC
-                                    LIMIT 1
-                                ";
+                                // Assuming you have the connection to the database established in $conn
 
-                                // Step 2: Execute the query
-                                $stmtTopCustomer = $conn->prepare($sqlTopCustomer);
-                                $stmtTopCustomer->execute();
-                                $topCustomer = $stmtTopCustomer->fetch(PDO::FETCH_ASSOC);
+                                // Fetch customer data with their feedback and audio feedback counts
+                                $sqlCustomers = "
+                                SELECT 
+                                    ci.customer_ID, 
+                                    CONCAT('images/', ci.image) AS profilePicture, 
+                                    CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS fullName,
+                                    COUNT(DISTINCT fb.feedback_ID) AS feedbackCount,
+                                    COUNT(DISTINCT af.audio_ID) AS audioFeedbackCount
+                                FROM tbl_customer_info AS ci
+                                LEFT JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID
+                                LEFT JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
+                                GROUP BY ci.customer_ID
+                                ORDER BY (COUNT(DISTINCT fb.feedback_ID) + COUNT(DISTINCT af.audio_ID)) DESC
+                                LIMIT 1";
 
-                                // Step 3: Check if a top customer is found
+                                $stmtCustomers = $conn->prepare($sqlCustomers);
+                                $stmtCustomers->execute();
+                                $topCustomer = $stmtCustomers->fetch(PDO::FETCH_ASSOC);
+
                                 if ($topCustomer) {
-                                    $profilePicture = $topCustomer['image'];
-                                    $fullName = $topCustomer['firstName'] . ' ' . $topCustomer['middleName'] . ' ' . $topCustomer['lastName'];
-                                    $feedbackCount = $topCustomer['feedback_count'];
-                                    $audioFeedbackCount = $topCustomer['audio_feedback_count'];
-                                    $totalFeedbacks = $topCustomer['total_feedbacks'];
+                                    $customerID = $topCustomer['customer_ID'];
+                                    $profilePicture = $topCustomer['profilePicture'];
+                                    $fullName = $topCustomer['fullName'];
+                                    $feedbackCount = $topCustomer['feedbackCount'];
+                                    $audioFeedbackCount = $topCustomer['audioFeedbackCount'];
                                 } else {
-                                    $profilePicture = '';
-                                    $fullName = 'No customer';
-                                    $feedbackCount = 0;
-                                    $audioFeedbackCount = 0;
+                                    $topCustomer = null;
                                 }
                                 ?>
 
-                                <div class="row col-5" style="margin-top: -20px;">
 
+
+                                <div class="row col-5" style="margin-top: -20px;">
                                     <div class="row text-center">
                                         <?php if ($topCustomer): ?>
+                                            <a href="view_customer.php?customer_ID=<?php echo $customerID; ?>" class="customer-link" style="text-decoration: none; color: inherit; display: block;">
+                                                <h1>🏆</h1>
+                                                <h4 class="text-danger" style="margin-top: -10px;">Top customer</h4>
 
-                                        <h1>🏆</h1>
-                                        <h4 class="text-danger" style="margin-top: -10px;">Top customer</h4>
+                                                <div>
+                                                    <img src="<?php echo $profilePicture; ?>" alt="Profile Picture" style="margin-top: -10px; width: 100px; height: 100px; border-radius: 50%;">
+                                                </div>
 
-                                        <div>
-                                            <img src="images/<?php echo $profilePicture; ?>" alt="Profile Picture" style="margin-top: -10px; width: 100px; height: 100px; border-radius: 50%;">
-                                        </div>
-
-                                        <h3 style="margin-left: 0px; margin-top: -5px;"><?php echo $fullName; ?></h3>
-                                        <h7 style="margin-left: 0px; margin-bottom: 0px; margin-top: -5px; color: gray;">Sent <?php echo $feedbackCount; ?> feedbacks and <?php echo $audioFeedbackCount; ?> audio feedbacks</h5>
-                                        
+                                                <h3 style="margin-left: 0px; margin-top: -5px;"><?php echo $fullName; ?></h3>
+                                                <h7 style="margin-left: 0px; margin-bottom: 0px; margin-top: -5px; color: gray;">Sent <?php echo $feedbackCount; ?> feedbacks and <?php echo $audioFeedbackCount; ?> audio feedbacks</h7>
+                                            </a>
                                         <?php else: ?>
                                             <h5>No top customer found</h5>
                                         <?php endif; ?>
-
                                     </div>
-
                                 </div>
+
+
 
 
                             </div>
@@ -969,6 +962,12 @@ try {
 
                             </div>
                             <!-- END CUSTOMERS TABLE -->
+
+                            <script>
+                                document.getElementById("count_card").addEventListener("click", function() {
+                                    document.getElementById("table1").scrollIntoView({ behavior: "smooth" });
+                                });
+                            </script>
 
                             <hr>
 
