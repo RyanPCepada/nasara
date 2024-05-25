@@ -632,6 +632,48 @@ try {
 
                             <img src="pages/admin/GIF_NOTIFICATIONS.gif" style="width: 1.5in; height: .9in; margin-left: 445px; margin-top: 0px;" id="adminnotif_gif">
 
+                            <style>
+                                /* .notification-row:hover {
+                                    background-color: rgba(0, 0, 0, 0.111) !important; /* Light blue color *
+                                } */
+
+                                .modal {
+                                    display: none;
+                                    position: fixed;
+                                    z-index: 1;
+                                    left: 0;
+                                    top: 0;
+                                    width: 100%;
+                                    height: 100%;
+                                    overflow-y: auto;
+                                    background-color: rgba(0, 0, 0, 0.4);
+                                    padding-top: 60px;
+                                }
+
+                                .modal-content {
+                                    background-color: #fefefe;
+                                    margin: 5% auto;
+                                    padding: 20px;
+                                    border: 1px solid #888;
+                                    width: 30%;
+                                }
+
+                                .close {
+                                    color: #aaa;
+                                    float: right;
+                                    font-size: 28px;
+                                    font-weight: bold;
+                                }
+
+                                .close:hover,
+                                .close:focus {
+                                    color: black;
+                                    text-decoration: none;
+                                    cursor: pointer;
+                                }
+                            </style>
+                            
+                            
                             <!-- NOTIFICATIONS TABLE -->
                             <div class="scrollable-content" id="inputfields" style="height: 1000px; overflow-y: auto; color: black; background: white;">
                                 <div class="" style="position: relative;">
@@ -653,7 +695,7 @@ try {
                                     JOIN 
                                         tbl_customer_info ci ON al.customer_id = ci.customer_id
                                     WHERE 
-                                        al.activity IN ( 'Registered an account', 'Sent feedback', 'Sent audio feedback')
+                                        al.activity IN ('Registered an account', 'Sent feedback', 'Sent audio feedback')
                                     ORDER BY 
                                         al.dateAdded DESC";
 
@@ -688,7 +730,8 @@ try {
                                             echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">No notifications ' . strtolower($heading) . '.</p>';
                                         } else {
                                             foreach ($notifications as $notification) {
-                                                echo '<div class="row" style="background-color: ' . $backgroundColor . '; border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); 
+                                                $notificationData = htmlspecialchars(json_encode($notification), ENT_QUOTES, 'UTF-8');
+                                                echo '<div class="row notification-row" data-notification=\'' . $notificationData . '\' style="background-color: ' . $backgroundColor . '; border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); 
                                                     border-radius: 5px; font-size: 20px; width: 900px; margin-left: 15px; margin-top: 10px;">';
 
                                                 echo '<div class="col-auto">
@@ -698,7 +741,9 @@ try {
                                                         <p style="margin-top: 10px;"><strong>' . htmlspecialchars($notification['name']) . '</strong> ' . getActivityMessage($notification['type'], $notification['gender']) . '</p>
                                                         <p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($notification['date'], $heading) . '</p>
                                                     </div>';
-
+                                                echo '<div class="col-auto" style="margin-top: 10px;">
+                                                        <button class="btn btn-primary view-btn" style="margin-top: 10px;" data-notification=\'' . $notificationData . '\'>View</button>
+                                                    </div>';
                                                 echo '</div>';
                                             }
                                         }
@@ -746,26 +791,103 @@ try {
                                             }
                                         }
                                     }
+
+                                    // Display "Today" notifications with background color #ecffed
+                                    displayNotifications($todayNotifications, 'Today', '20px', '#ecffed');
+
+                                    // Display "Yesterday" notifications with background color #f1e9e9
+                                    displayNotifications($yesterdayNotifications, 'Yesterday', '20px', '#f1e9e9');
+
+                                    // Display "Older" notifications with background color #ecedff
+                                    displayNotifications($olderNotifications, 'Older', '20px', '#ecedff');
                                     ?>
-
-                                    <div class="scrollable-content" id="inputfields" style="height: 1000px; overflow-y: auto; color: black; background: white;">
-                                        <div class="" style="position: relative;">
-                                            <?php
-                                            // Display "Today" notifications with background color #ecffed
-                                            displayNotifications($todayNotifications, 'Today', '20px', '#ecffed');
-
-                                            // Display "Yesterday" notifications with background color #f1e9e9
-                                            displayNotifications($yesterdayNotifications, 'Yesterday', '20px', '#f1e9e9');
-
-                                            // Display "Older" notifications with background color #ecedff
-                                            displayNotifications($olderNotifications, 'Older', '20px', '#ecedff');
-                                            ?>
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
                             <!-- END NOTIFICATIONS TABLE -->
+
+
+<!-- Modal for Notifications -->
+<div id="notificationModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="modalBody"></div>
+    </div>
+</div>
+
+<script>
+// Get the notification modal
+var notificationModal = document.getElementById("notificationModal");
+
+// Get the <span> element that closes the notification modal
+var notificationModalClose = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the notification modal
+notificationModalClose.onclick = function() {
+    notificationModal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the notification modal, close it
+window.onclick = function(event) {
+    if (event.target == notificationModal) {
+        notificationModal.style.display = "none";
+    }
+}
+
+// Add click event listener to each notification row
+document.querySelectorAll('.view-btn').forEach(function(button) {
+    button.addEventListener('click', function() {
+        var notificationData = JSON.parse(this.getAttribute('data-notification'));
+        var modalBody = document.getElementById("modalBody");
+        modalBody.innerHTML = ''; // Clear previous content
+
+        // Populate modal with notification data
+        if (notificationData.image) {
+            modalBody.innerHTML += '<p><img src="' + notificationData.image + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
+        }
+        modalBody.innerHTML += '<p><strong>' + notificationData.name + '</strong></p>';
+
+        // Customize modal content based on notification type
+        switch (notificationData.type) {
+            case 'Registered an account':
+                modalBody.innerHTML += '<p><strong>Customer Information:</strong></p>';
+                modalBody.innerHTML += '<p>Name: ' + notificationData.name + '</p>';
+                modalBody.innerHTML += '<p>Gender: ' + notificationData.gender + '</p>';
+                break;
+            case 'Sent feedback':
+                modalBody.innerHTML += '<p><strong>Feedback:</strong></p>';
+                modalBody.innerHTML += '<p>Products: ' + notificationData.products + '</p>';
+                modalBody.innerHTML += '<p>Services: ' + notificationData.services + '</p>';
+                modalBody.innerHTML += '<p>Convenience: ' + notificationData.convenience + '</p>';
+                modalBody.innerHTML += '<p>Rating: ' + notificationData.rating + '</p>';
+                break;
+            case 'Sent audio feedback':
+                modalBody.innerHTML += '<p><strong>Audio Feedback:</strong></p>';
+                modalBody.innerHTML += '<audio controls><source src="' + notificationData.audio + '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                break;
+            default:
+                modalBody.innerHTML += '<p>No details available.</p>';
+                break;
+        }
+
+        // Add "View Customer Info" button
+        modalBody.innerHTML += '<button class="btn btn-primary view-customer-info">View Customer Info</button>';
+
+        // Display the notification modal
+        notificationModal.style.display = "block";
+
+        // Add click event listener to the "View Customer Info" button
+        document.querySelector('.view-customer-info').addEventListener('click', function() {
+            // Here you can define the behavior to view customer information
+            // For example, you can redirect to another page to view detailed customer information
+            // You can use notificationData.customer_id to identify the customer
+            // Replace the URL below with the appropriate URL to view customer information
+            window.location.href = 'view_customer.php?customer_ID=' + encodeURIComponent(notificationData.customer_id);
+        });
+    });
+});
+
+</script>
+
 
 
                             <hr>
@@ -775,9 +897,6 @@ try {
                     </div>
 
                     
-
-
-
 
                     <!-- </div> BODY END -->
                 </div>

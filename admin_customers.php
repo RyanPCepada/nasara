@@ -1024,7 +1024,7 @@ try {
                             <style>
                             /* CSS for Hover Effect */
                             .customer-row:hover {
-                                background-color: rgba(135, 206, 235, 0.7) !important; /* A darker shade of light blue */
+                                background-color: #cacbe8 !important; /* A darker shade of light blue */
                             }
 
 
@@ -1068,7 +1068,7 @@ try {
                             .view-all-btn {
                                 margin-top: 20px;
                                 padding: 10px 20px;
-                                background-color: #4CAF50;
+                                background-color: #007bff; /* Primary Color */
                                 color: white;
                                 border: none;
                                 border-radius: 5px;
@@ -1077,7 +1077,7 @@ try {
                             }
 
                             .view-all-btn:hover {
-                                background-color: #45a049;
+                                background-color: #0056b3; /* Darkened Primary Color */
                             }
                             </style>
 

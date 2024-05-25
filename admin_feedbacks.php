@@ -490,11 +490,10 @@ try {
 
                         <div class="card-body" id="cards_body3" style="justify-content: center; background: white;">
 
-
                             <!-- CSS for Hover Effect -->
                             <style>
                                 .table-hover tbody tr:hover {
-                                    background-color: rgba(0, 0, 0, 0.111) !important;
+                                    background-color: #c8e7c9 !important;
                                 }
 
                                 .modal {
@@ -533,10 +532,11 @@ try {
                                     cursor: pointer;
                                 }
 
+                                /* Primary Button Style */
                                 .view-all-btn {
                                     margin-top: 20px;
                                     padding: 10px 20px;
-                                    background-color: #4CAF50;
+                                    background-color: #007bff; /* Primary Color */
                                     color: white;
                                     border: none;
                                     border-radius: 5px;
@@ -544,10 +544,12 @@ try {
                                     text-align: center;
                                 }
 
+                                /* Primary Button Hover Effect */
                                 .view-all-btn:hover {
-                                    background-color: #45a049;
+                                    background-color: #0056b3; /* Darkened Primary Color */
                                 }
                             </style>
+
 
                             <div class="text-center d-flex align-items-center justify-content-center" style="margin-left: 0px; padding: 20px; border-radius: 15px;">
                                 <div class="row" id="div_written_fb">

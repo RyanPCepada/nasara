@@ -763,22 +763,27 @@ try {
                                 <div class="col-4 justify-content-center";>
 
                                     <?php
-                                        // Step 2: Fetch all data from tbl_feedback
-                                        $sql = "SELECT * FROM tbl_feedback";
-                                        $stmt = $conn->prepare($sql);
-                                        $stmt->execute();
-
-                                        // Step 3: Create arrays to store the data
-                                        $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                                        $sql = "SELECT COUNT(feedback_ID) AS feedbackCount
-                                                FROM tbl_feedback WHERE DATE(date) = CURDATE()";
-                                        $stmt = $conn->prepare($sql);
-                                        $stmt->execute();
-
-                                        // Fetch the count of feedback entries
-                                        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-                                        $feedbackCount = $result['feedbackCount'];
+                                        // Step 2: Fetch count of feedback entries for today
+                                        $sqlFeedbackCount = "SELECT COUNT(feedback_ID) AS feedbackCount FROM tbl_feedback WHERE DATE(date) = CURDATE()";
+                                        $stmtFeedbackCount = $conn->prepare($sqlFeedbackCount);
+                                        $stmtFeedbackCount->execute();
+                                        $resultFeedbackCount = $stmtFeedbackCount->fetch(PDO::FETCH_ASSOC);
+                                        $feedbackCount = $resultFeedbackCount['feedbackCount'];
+                                    
+                                        // Step 3: Fetch count of audio feedback entries for today
+                                        $sqlAudioFeedbackCount = "SELECT COUNT(audio_ID) AS audiofeedbackCount FROM tbl_audio_feedback WHERE DATE(dateAdded) = CURDATE()";
+                                        $stmtAudioFeedbackCount = $conn->prepare($sqlAudioFeedbackCount);
+                                        $stmtAudioFeedbackCount->execute();
+                                        $resultAudioFeedbackCount = $stmtAudioFeedbackCount->fetch(PDO::FETCH_ASSOC);
+                                        $audiofeedbackCount = $resultAudioFeedbackCount['audiofeedbackCount'];
+                                    
+                                        // Step 4: Fetch count of total customers
+                                        $sqlTotalCustomers = "SELECT COUNT(*) AS totalCustomers FROM tbl_customer_info";
+                                        $stmtTotalCustomers = $conn->prepare($sqlTotalCustomers);
+                                        $stmtTotalCustomers->execute();
+                                        $resultTotalCustomers = $stmtTotalCustomers->fetch(PDO::FETCH_ASSOC);
+                                        $totalCustomers = $resultTotalCustomers['totalCustomers'];
+                                    
                                     ?>
                                     
                                     <div class="card border-0 fixed-width-element" id="card1">
@@ -806,7 +811,8 @@ try {
                                                         $feedbackCountToday = $resultFeedbackToday['feedbackCount'];
 
                                                         // Display the result
-                                                        echo "$feedbackCountToday out of $totalCustomers customers sent us new feedbacks today.";
+                                                        echo "$feedbackCountToday out of $totalCustomers customers sent us new feedbacks today.
+                                                        $feedbackCount written and $audiofeedbackCount audio.";
                                                     ?>
                                                 </div>
                                             </div>
