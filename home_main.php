@@ -145,12 +145,12 @@ try {
             
             
             <div class="row">
-                <img src="icons/PRODUCTS_SERVICE_CONVENIENCE_1_PNG.png" style="position: absolute; width: 90%; margin-left: -58px; margin-top: 10px;
+                <img src="icons/PRODUCTS_SERVICE_CONVENIENCE_1_PNG.png" style="position: absolute; width: 78%; margin-left: -58px; margin-top: 30px;
                     filter: drop-shadow(0px 20px 50px rgba(20, 20, 20, 20));">
 
                 <img src="icons/ICON_PRODUCTS.png" style="position: absolute; width: 10%; margin-left: 300px; margin-top: 30px;
                     filter: drop-shadow(0px 7px 15px rgba(20, 20, 20, 20));">
-                <img src="icons/ICON_CONVENIENCE.png" style="position: absolute; width: 9%; margin-left: 965px; margin-top: 50px;
+                <img src="icons/ICON_CONVENIENCE.png" style="position: absolute; width: 9%; margin-left: 960px; margin-top: 55px;
                     filter: drop-shadow(0px 7px 15px rgba(20, 20, 20, 20)); transform: rotate(5deg);">
                 <img src="icons/ICON_SERVICES.png" style="position: absolute; width: 10%; margin-left: 650px; margin-top: 395px;
                     filter: drop-shadow(0px 7px 15px rgba(20, 20, 20, 20)); transform: rotate(0deg);">
