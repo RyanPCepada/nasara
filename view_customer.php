@@ -1,10 +1,8 @@
 <?php
 session_start();  // Start the session to access session variables
 
-// Check if the user is logged in (you can adjust this based on your session variable)
+// Check if the admin is logged in
 if (isset($_SESSION['adminID'])) {
-    // // Reload the page after 1 second
-    // echo "<script>setTimeout(function(){ window.location.reload(); }, 5000);</script>";
     // Replace these database connection details with your own
     $servername = "localhost";
     $username = "root";
@@ -46,12 +44,11 @@ if (isset($_SESSION['adminID'])) {
         exit();
     }
 } else {
-    // Handle the case where the user is not logged in
-    echo "You must be logged in to view this page.";
+    // Handle the case where the admin is not logged in
+    echo "You must be logged in as an admin to view this page.";
     exit();  // Exit the script
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -180,10 +177,6 @@ if (isset($_SESSION['adminID'])) {
         
         <div class="scrollable-content" style="margin-left: 113px;" id="table_audio_fb">
             <?php
-            // For demonstration, we'll hardcode it (make sure to replace this with the actual retrieval method)
-            $currentCustomerID = $_SESSION['customerID'];
-            // Set the customer ID session variable if it's not already set
-            $_SESSION['customerID'] = $customerID;
 
             // Fetch and display customer activities from tbl_activity_logs and audio records from tbl_audio_feedback
             $sqlAudios = "
@@ -195,12 +188,12 @@ if (isset($_SESSION['adminID'])) {
             af.dateAdded AS 'Date'
             FROM tbl_customer_info AS ci
             JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
-            WHERE ci.customer_ID = :currentCustomerID
+            WHERE ci.customer_ID = :CustomerID
             ORDER BY af.audio_ID DESC;
             ";
 
             $stmtAudios = $conn->prepare($sqlAudios);
-            $stmtAudios->bindParam(':currentCustomerID', $currentCustomerID, PDO::PARAM_INT);
+            $stmtAudios->bindParam(':CustomerID', $customerID, PDO::PARAM_INT);
             $stmtAudios->execute();
             $audios = $stmtAudios->fetchAll();
 
