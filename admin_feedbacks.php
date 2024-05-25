@@ -490,6 +490,7 @@ try {
 
                         <div class="card-body" id="cards_body3" style="justify-content: center; background: white;">
 
+
                             <!-- CSS for Hover Effect -->
                             <style>
                                 .table-hover tbody tr:hover {

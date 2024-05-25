@@ -870,7 +870,7 @@ document.querySelectorAll('.view-btn').forEach(function(button) {
         }
 
         // Add "View Customer Info" button
-        modalBody.innerHTML += '<button class="btn btn-primary view-customer-info">View Customer Info</button>';
+        modalBody.innerHTML += '<button class="btn btn-primary view-customer-info" style="width: 100%;">View Customer\'s Info</button>';
 
         // Display the notification modal
         notificationModal.style.display = "block";
