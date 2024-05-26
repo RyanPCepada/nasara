@@ -768,10 +768,10 @@ try {
                                         Change Your Password
                                     </button>
                                     <br>
-                                    <button type="button" class="btn btn-secondary" id="openHistoryModalBtn" data-bs-toggle="modal" data-bs-target="#modal_history"
+                                    <!-- <button type="button" class="btn btn-secondary" id="openHistoryModalBtn" data-bs-toggle="modal" data-bs-target="#modal_history"
                                         style="width: 250px; height: 50px; margin-top: 20px; margin-left: 105px;">
                                         History
-                                    </button>
+                                    </button> -->
                                     <!-- <button type="button" class="btn btn-secondary" id="openHistoryModalBtn" data-bs-toggle="modal" data-bs-target="#modal_history"
                                         style="width: 250px; height: 50px; margin-top: 20px; margin-left: 105px;">
                                         History
