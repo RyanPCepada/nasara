@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
     $insertActivity->execute(["Updated the feedback", $customerID]);
 
     if ($stmt->execute()) {
-        header("Location: account_main.php");
+        header("Location: account_main.php?id=$id&success=1");
         exit;
     } else {
         echo "Failed to update feedback.";
@@ -87,18 +87,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
             font-size: 16px;
         }
         .container input[type="submit"] {
-            background-color: #4CAF50;
+            background-color: #007bff; /*#4CAF50*/
             color: white;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-        }
+            width: 100%;        }
         .container input[type="submit"]:hover {
-            background-color: #45a049;
+            background-color: #0056b3; /*#45a049*/
         }
     </style>
+    <!-- <script>
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('success')) {
+                alert('Feedback updated successfully!');
+            }
+        }
+    </script> -->
 </head>
 <body>
     <div class="container">
@@ -115,6 +123,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
             <input type="number" name="rating" value="<?php echo htmlspecialchars($feedback['rating']); ?>" min="1" max="5"><br>
             <input type="submit" value="Update Feedback">
         </form>
+    <script>
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('success')) {
+                alert('Feedback updated successfully!');
+            }
+        }
+    </script>
     </div>
 </body>
+
 </html>

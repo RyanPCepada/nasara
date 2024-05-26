@@ -928,12 +928,12 @@ try {
                                     echo '<p style="margin: 0px;"><strong>Services:</strong> ' . $feedback['services'] . '</p>';
                                     echo '<p style="margin: 0px;"><strong>Convenience:</strong> ' . $feedback['convenience'] . '</p>';
                                     echo '<p style="margin: 0px;"><strong>Rating:</strong> ' . $feedback['rating'] . '</p>';
-                                    echo '<p style="color: blue; font-size: 15px; margin-top: 10px; margin-bottom: 0px;">' . formatRelativeDate($feedback['date'], $heading) . '</p>';
-                                    echo '<button onclick="editFeedback(' . $feedback['feedback_ID'] . ')" style="margin-right: 10px;">Edit</button>';
-                                    echo '<button onclick="deleteFeedback(' . $feedback['feedback_ID'] . ')" style="margin-right: 10px;">Delete</button>';
+                                    echo '<div class="col-10"><p style="color: blue; font-size: 15px; margin-top: 10px; margin-bottom: 0px;">' . formatRelativeDate($feedback['date'], $heading) . '</p></div>';
+                                    
+                                    echo '<div class="col-1"><span onclick="editFeedback(' . $feedback['feedback_ID'] . ')" style="cursor: pointer; margin-right: 10px;">&#9998;</span></div>';
+                                    echo '<div class="col-1"><span onclick="deleteFeedback(' . $feedback['feedback_ID'] . ')" style="cursor: pointer;">&#128465;</span></div>';
                                     echo '</div>';
                                 }
-
                                     echo '<hr>';
                                 }
                             }
@@ -962,7 +962,16 @@ try {
                                 window.location.href = 'delete_feedback.php?id=' + id;
                             }
                         }
-                        </script>
+                    </script>
+                    
+                    <script>
+                        window.onload = function() {
+                            const urlParams = new URLSearchParams(window.location.search);
+                            if (urlParams.has('success')) {
+                                alert('Feedback updated successfully!');
+                            }
+                        }
+                    </script>
 
                 </div>
 
