@@ -15,19 +15,21 @@ if (isset($_SESSION['adminID'])) {
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // Check if a feedback ID is provided
-        if (isset($_GET['feedback_id'])) {
-            // Sanitize and retrieve the feedback ID
-            $feedback_id = $_GET['feedback_id'];
+        if (isset($_GET['feedback_id']) && isset($_GET['customer_ID'])) {
+            // Sanitize and retrieve the feedback ID and customer ID
+            $feedback_id = intval($_GET['feedback_id']);
+            $customer_ID = intval($_GET['customer_ID']);
 
             // Perform the deletion from the database
             $query = $conn->prepare("DELETE FROM tbl_feedback WHERE feedback_ID = :feedback_id");
             $query->bindParam(':feedback_id', $feedback_id, PDO::PARAM_INT);
             $query->execute();
 
-            // Redirect back to the dashboard or show a success message
-            // Redirect or display success message
+            // Redirect back to view_customer.php after successful deletion
+            header("Location: view_customer.php?customer_ID=" . $customer_ID);
+            exit();
         } else {
-            echo "No feedback ID provided.";
+            echo "No feedback ID or customer ID provided.";
             exit();
         }
     } catch (PDOException $e) {

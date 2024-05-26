@@ -109,7 +109,6 @@ if (isset($_SESSION['adminID'])) {
                             <i class="fas fa-trash-alt" style="font-size: 25px; color: red;"></i> <!-- Font Awesome trash icon -->
                         </button>
                     </div>
-
                 </div>
             </div>
 
@@ -144,9 +143,7 @@ if (isset($_SESSION['adminID'])) {
 
                 // Function to display feedbacks
                 function displayFeedbacks($feedbacks, $heading, $color) {
-                    // Display feedbacks
                     if (!empty($feedbacks)) {
-                        // echo '<div style="background-color: ' . $color . ';">';
                         echo '<h4 style="margin-top: 20px; padding: 15px; margin-left: 12px; font-size: 20px; color: gray;">' . $heading . '</h4>';
                         foreach ($feedbacks as $feedback) {
                             echo '<div class="row" style="background-color: ' . $color . '; margin-left: 0px; margin-right: 0px; padding: 15px; border-radius: 5px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); margin-bottom: 15px; position: relative;">';
@@ -156,17 +153,13 @@ if (isset($_SESSION['adminID'])) {
                             echo '<p class="card-text"><strong>Question:</strong> ' . htmlspecialchars($feedback['convenience']) . '</p>';
                             echo '<p class="card-text"><strong>Rating:</strong> ' . htmlspecialchars($feedback['rating']) . '</p>';
                             echo '<p class="card-text" style="color: blue; font-size: 15px; margin-top: 10px;">' . formatRelativeDate($feedback['date'], $heading) . '</p>';
-                                                    
-                            // Delete button positioned in the lower right corner with size and color
-                            // echo '<button class="btn btn-transparent" onclick="deleteFeedback(' . $feedback['feedback_ID'] . ')" style="position: absolute; bottom: 20px; right: 20px; font-size: 25px; color: red;"><i class="fas fa-trash-alt"></i></button>';
-                                                
-                            // Delete button positioned in the lower right corner with size and color
-                            echo '<a href="admin_delete_feedback.php?feedback_id=' . $feedback['feedback_ID'] . '" style="position: absolute; bottom: 20px; right: 20px; font-size: 25px; color: red;"><i class="fas fa-trash-alt"></i></a>';
-
+                            
+                            // Delete button with confirmation dialog
+                            echo '<button class="btn btn-transparent" onclick="confirmDelete(' . $feedback['feedback_ID'] . ', ' . $customerID . ')" style="position: absolute; bottom: 20px; right: 20px; font-size: 25px; color: red;"><i class="fas fa-trash-alt"></i></button>';
+                            
                             echo '</div>';
                             echo '</div>';
-                        }                                             
-                        echo '</div>';
+                        }
                     } else {
                         echo '<div style="background-color: ' . $color . ';">';
                         echo '<h4 style="margin-top: 20px; padding: 15px; margin-left: 12px; font-size: 20px; color: gray;">' . $heading . '</h4>';
@@ -174,6 +167,7 @@ if (isset($_SESSION['adminID'])) {
                         echo '</div>';
                     }
                 }
+                
 
                 // Display feedbacks
                 displayFeedbacks($feedbackCategory['Today'], 'Today', '#ecffed');
@@ -184,6 +178,17 @@ if (isset($_SESSION['adminID'])) {
         <?php else: ?>
             <p>Customer not found.</p>
         <?php endif; ?>
+
+        <script>
+            function confirmDelete(feedbackID, customerID) {
+                if (confirm("Are you sure you want to delete this feedback?")) {
+                    // If the admin confirms, redirect to admin_delete_feedback.php with the feedback ID
+                    window.location.href = 'admin_delete_feedback.php?feedback_id=' + feedbackID + '&customer_ID=' + customerID;
+                }
+            }
+        </script>
+
+
     </div>
 
 
@@ -319,6 +324,8 @@ if (isset($_SESSION['adminID'])) {
     <!-- END AUDIO FEEDBACKS TABLE -->
 
 
+
+    
     <div class="row" style="margin: 50px;"></div>
 </body>
 </html>
