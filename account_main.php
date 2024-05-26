@@ -65,8 +65,11 @@ if (isset($_SESSION['customerID'])) {
         $image = $user['image'];
 
 
-
-
+        // Fetch all feedback records for the customer
+        $query = $conn->prepare("SELECT feedback_ID, products, services, convenience, rating, date FROM tbl_feedback WHERE customer_ID = :customerID");
+        $query->bindParam(':customerID', $customerID, PDO::PARAM_INT);
+        $query->execute();
+        $feedbackRecords = $query->fetchAll(PDO::FETCH_ASSOC);
         
 
         // Fetch all audio feedback files for the customer
@@ -862,6 +865,7 @@ try {
     <!-- 2ND ROW -->
     <div class="acc_bg_even bg-primary">
         <div class="col-12 container d-flex align-items-center justify-content-center" style="width: 100%; padding: 40px;">
+
             <div class="row col-6">
                 <div class="row" style="width: 100%; padding: 40px; background: #ddf7de; border-radius: 20px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166)">
                     <!-- <h5 style="margin-top: 5px; margin-left: 30px; margin-bottom: -10px;">All feedbacks</h5> -->
@@ -877,10 +881,11 @@ try {
                             <?php
                             // Fetch feedbacks for the current customer
                             $sqlFeedbacks = "
-                            SELECT products, services, convenience, rating, date
+                            SELECT feedback_ID, products, services, convenience, rating, date
                             FROM tbl_feedback
                             WHERE customer_id = :customerID
                             ORDER BY date DESC";
+
 
                             $stmtFeedbacks = $conn->prepare($sqlFeedbacks);
                             $stmtFeedbacks->bindParam(':customerID', $customerID, PDO::PARAM_INT);
@@ -917,15 +922,18 @@ try {
                                 } else {
                                     // Display feedbacks
                                     foreach ($feedbacks as $feedback) {
-                                        echo '<div class="row" style="background-color: #ecedff; border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);
-                                            padding: 20px; border-radius: 5px; font-size: 20px; width: 95%; margin-left: 15px; margin-top: 10px;">';
-                                        echo '<p style="margin: 0px;"><strong>Products:</strong> ' . $feedback['products'] . '</p>';
-                                        echo '<p style="margin: 0px;"><strong>Services:</strong> ' . $feedback['services'] . '</p>';
-                                        echo '<p style="margin: 0px;"><strong>Convenience:</strong> ' . $feedback['convenience'] . '</p>';
-                                        echo '<p style="margin: 0px;"><strong>Rating:</strong> ' . $feedback['rating'] . '</p>';
-                                        echo '<p style="color: blue; font-size: 15px; margin-top: 10px; margin-bottom: 0px;">' . formatRelativeDate($feedback['date'], $heading) . '</p>';
-                                        echo '</div>'; //IF YOU COMMENT THIS, THE CARDS LOOK SO NICE SLANTED FROM BIG TO SMALL
-                                    }
+                                    echo '<div class="row" style="background-color: #ecedff; border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);
+                                        padding: 20px; border-radius: 5px; font-size: 20px; width: 95%; margin-left: 15px; margin-top: 10px;">';
+                                    echo '<p style="margin: 0px;"><strong>Products:</strong> ' . $feedback['products'] . '</p>';
+                                    echo '<p style="margin: 0px;"><strong>Services:</strong> ' . $feedback['services'] . '</p>';
+                                    echo '<p style="margin: 0px;"><strong>Convenience:</strong> ' . $feedback['convenience'] . '</p>';
+                                    echo '<p style="margin: 0px;"><strong>Rating:</strong> ' . $feedback['rating'] . '</p>';
+                                    echo '<p style="color: blue; font-size: 15px; margin-top: 10px; margin-bottom: 0px;">' . formatRelativeDate($feedback['date'], $heading) . '</p>';
+                                    echo '<button onclick="editFeedback(' . $feedback['feedback_ID'] . ')" style="margin-right: 10px;">Edit</button>';
+                                    echo '<button onclick="deleteFeedback(' . $feedback['feedback_ID'] . ')" style="margin-right: 10px;">Delete</button>';
+                                    echo '</div>';
+                                }
+
                                     echo '<hr>';
                                 }
                             }
@@ -938,26 +946,24 @@ try {
 
                             // Display "Older" notifications with background color #f1e9e9
                             displayFeedbacks($olderFeedbacks, 'Older', '20px', '#ecedff');
-
-                            // Function to format relative date and time
-                            // function formatRelativeDate($date, $category)
-                            // {
-                            //     $formattedDate = new DateTime($date);
-
-                            //     if ($category === 'Today') {
-                            //         return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
-                            //     } elseif ($category === 'Yesterday') {
-                            //         return 'Yesterday @ ' . $formattedDate->format('h:i A');
-                            //     } else {
-                            //         $interval = (new DateTime())->diff($formattedDate);
-                            //         return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
-                            //     }
-                            // }
                             ?>
                         </div>
                     </div>
                     <!-- END MY FEEDBACKS TABLE -->
                     <hr>
+
+                    <script>
+                        function editFeedback(id) {
+                            window.location.href = 'edit_feedback.php?id=' + id;
+                        }
+
+                        function deleteFeedback(id) {
+                            if (confirm('Are you sure you want to delete this feedback?')) {
+                                window.location.href = 'delete_feedback.php?id=' + id;
+                            }
+                        }
+                        </script>
+
                 </div>
 
             </div>
