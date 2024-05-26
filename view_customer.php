@@ -60,6 +60,8 @@ if (isset($_SESSION['adminID'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!--FOR PIE CHART-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
     <title>Nasara - Admin</title>
 </head>
 <body>
@@ -92,18 +94,25 @@ if (isset($_SESSION['adminID'])) {
         <h2 style="margin-bottom: 20px; color: gray;">Customer Details</h2>
         <?php if ($customer): ?>
             <div class="card mb-3">
-            <div class="card-body">
-                <img src="images/<?php echo htmlspecialchars($customer['image']); ?>" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 75px;">
-                <h4 class="card-title"><?php echo htmlspecialchars($customer['firstName'] . ' ' . $customer['middleName'] . ' ' . $customer['lastName']); ?></h4>
-                <p><strong>Customer ID:</strong> <?php echo htmlspecialchars($customer['customer_ID']); ?></p> <!-- Add this line -->
-                <p><strong>Address:</strong> <?php echo htmlspecialchars($customer['street'] . ', ' . $customer['barangay'] . ', ' . $customer['municipality'] . ', ' . $customer['province'] . ', ' . $customer['zipcode']); ?></p>
-                <p><strong>Birth Date:</strong> <?php echo htmlspecialchars($customer['birthDate']); ?></p>
-                <p><strong>Gender:</strong> <?php echo htmlspecialchars($customer['gender']); ?></p>
-                <p><strong>Email:</strong> <?php echo htmlspecialchars($customer['email']); ?></p>
-                <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($customer['phoneNumber']); ?></p>
+                <div class="card-body" style="position: relative;">
+                    <img src="images/<?php echo htmlspecialchars($customer['image']); ?>" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 75px;">
+                    <h4 class="card-title"><?php echo htmlspecialchars($customer['firstName'] . ' ' . $customer['middleName'] . ' ' . $customer['lastName']); ?></h4>
+                    <p><strong>Customer ID:</strong> <?php echo htmlspecialchars($customer['customer_ID']); ?></p> <!-- Add this line -->
+                    <p><strong>Address:</strong> <?php echo htmlspecialchars($customer['street'] . ', ' . $customer['barangay'] . ', ' . $customer['municipality'] . ', ' . $customer['province'] . ', ' . $customer['zipcode']); ?></p>
+                    <p><strong>Birth Date:</strong> <?php echo htmlspecialchars($customer['birthDate']); ?></p>
+                    <p><strong>Gender:</strong> <?php echo htmlspecialchars($customer['gender']); ?></p>
+                    <p><strong>Email:</strong> <?php echo htmlspecialchars($customer['email']); ?></p>
+                    <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($customer['phoneNumber']); ?></p>
+
+                    <div style="position: absolute; bottom: 20px; right: 20px;">
+                        <button class="btn btn-transparent" onclick="deleteCustomer(<?php echo $customerID; ?>)">
+                            <i class="fas fa-trash-alt" style="font-size: 25px; color: red;"></i> <!-- Font Awesome trash icon -->
+                        </button>
+                    </div>
+
+                </div>
             </div>
 
-            </div>
 
             <h2 style="margin-top: 50px; color: gray;">Written Feedbacks</h2>
             <div class="scrollable-content">
@@ -140,16 +149,23 @@ if (isset($_SESSION['adminID'])) {
                         // echo '<div style="background-color: ' . $color . ';">';
                         echo '<h4 style="margin-top: 20px; padding: 15px; margin-left: 12px; font-size: 20px; color: gray;">' . $heading . '</h4>';
                         foreach ($feedbacks as $feedback) {
-                            echo '<div class="row" style="background-color: ' . $color . '; margin-left: 0px; margin-right: 0px; padding: 15px; border-radius: 5px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); margin-bottom: 15px;">';
+                            echo '<div class="row" style="background-color: ' . $color . '; margin-left: 0px; margin-right: 0px; padding: 15px; border-radius: 5px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); margin-bottom: 15px; position: relative;">';
                             echo '<div class="col">';
                             echo '<p class="card-text"><strong>Opinion:</strong> ' . htmlspecialchars($feedback['products']) . '</p>';
                             echo '<p class="card-text"><strong>Suggestion:</strong> ' . htmlspecialchars($feedback['services']) . '</p>';
                             echo '<p class="card-text"><strong>Question:</strong> ' . htmlspecialchars($feedback['convenience']) . '</p>';
                             echo '<p class="card-text"><strong>Rating:</strong> ' . htmlspecialchars($feedback['rating']) . '</p>';
                             echo '<p class="card-text" style="color: blue; font-size: 15px; margin-top: 10px;">' . formatRelativeDate($feedback['date'], $heading) . '</p>';
+                                                    
+                            // Delete button positioned in the lower right corner with size and color
+                            // echo '<button class="btn btn-transparent" onclick="deleteFeedback(' . $feedback['feedback_ID'] . ')" style="position: absolute; bottom: 20px; right: 20px; font-size: 25px; color: red;"><i class="fas fa-trash-alt"></i></button>';
+                                                
+                            // Delete button positioned in the lower right corner with size and color
+                            echo '<a href="admin_delete_feedback.php?feedback_id=' . $feedback['feedback_ID'] . '" style="position: absolute; bottom: 20px; right: 20px; font-size: 25px; color: red;"><i class="fas fa-trash-alt"></i></a>';
+
                             echo '</div>';
                             echo '</div>';
-                        }
+                        }                                             
                         echo '</div>';
                     } else {
                         echo '<div style="background-color: ' . $color . ';">';
@@ -186,7 +202,8 @@ if (isset($_SESSION['adminID'])) {
             ci.customer_ID AS 'Customer ID',
             CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS 'Full Name',
             af.audio AS 'Audio',
-            af.dateAdded AS 'Date'
+            af.dateAdded AS 'Date',
+            af.audio_ID AS 'Audio ID'
             FROM tbl_customer_info AS ci
             JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
             WHERE ci.customer_ID = :CustomerID
@@ -225,25 +242,31 @@ if (isset($_SESSION['adminID'])) {
                 } else {
                     foreach ($audios as $audio) {
                         echo '<div class="row" style="margin-left: 15px; margin-top: 10px; padding-bottom: 10px;">';
-
+                    
                         echo '<div class="col-auto">';
                         echo '<img src="' . htmlspecialchars($audio['Profile picture']) . '" alt="Profile picture" style="width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 50%; background-color: white;">';
                         echo '</div>';
-
+                    
                         echo '<div class="col">';
                         echo '<p style="margin-top: 10px; font-weight: bold;">' . htmlspecialchars($audio['Full Name']) . '</p>';
                         echo '<p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($audio['Date'], $heading) . '</p>';
                         echo '</div>';
-
+                    
                         echo '<div class="col-auto">';
                         echo '<audio controls style="width: 500px; margin-right: 50px; margin-top: 12px;">';
-                        echo '<source src="http://localhost/nasara/audios/' . htmlspecialchars($audio['Audio']) . '" type="audio/' . pathinfo($audio['Audio'], PATHINFO_EXTENSION) . '">';
+                        echo '<source src="http://localhost/nasara/audios/' . htmlspecialchars($audio['Audio ID']) . '" type="audio/' . pathinfo($audio['Audio'], PATHINFO_EXTENSION) . '">';
                         echo 'Your browser does not support the audio element.';
                         echo '</audio>';
                         echo '</div>';
+                    
+                        echo '<div class="col-auto" style="position: relative; bottom: -20px; right: 20px;">';
+                        echo '<button class="btn btn-transparent" onclick="deleteAudio(' . $audio['Audio ID'] . ')" style="font-size: 25px; color: red;"><i class="fas fa-trash-alt"></i></button>';
+                        echo '</div>';
 
+                    
                         echo '</div>';
                     }
+                    
                 }
             }
 
