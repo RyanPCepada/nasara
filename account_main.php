@@ -929,7 +929,6 @@ try {
                                     echo '<p style="margin: 0px;"><strong>Convenience:</strong> ' . $feedback['convenience'] . '</p>';
                                     echo '<p style="margin: 0px;"><strong>Rating:</strong> ' . $feedback['rating'] . '</p>';
                                     echo '<div class="col-10"><p style="color: blue; font-size: 15px; margin-top: 10px; margin-bottom: 0px;">' . formatRelativeDate($feedback['date'], $heading) . '</p></div>';
-                                    
                                     echo '<div class="col-1"><span onclick="editFeedback(' . $feedback['feedback_ID'] . ')" style="cursor: pointer; margin-right: 10px;">&#9998;</span></div>';
                                     echo '<div class="col-1"><span onclick="deleteFeedback(' . $feedback['feedback_ID'] . ')" style="cursor: pointer;">&#128465;</span></div>';
                                     echo '</div>';
@@ -995,16 +994,17 @@ try {
                                 
                                 // Fetch and display customer activities from tbl_activity_logs and audio records from tbl_audio_feedback
                                 $sqlAudios = "
-                                SELECT 
-                                CONCAT('images/', ci.image) AS 'Profile picture',
-                                ci.customer_ID AS 'Customer ID',
-                                CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS 'Full Name',
-                                af.audio AS 'Audio',
-                                af.dateAdded AS 'Date'
-                                FROM tbl_customer_info AS ci
-                                JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
-                                WHERE ci.customer_ID = :currentCustomerID
-                                ORDER BY af.audio_ID DESC;
+                                    SELECT 
+                                    CONCAT('images/', ci.image) AS 'Profile picture',
+                                    ci.customer_ID AS 'Customer ID',
+                                    CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS 'Full Name',
+                                    af.audio AS 'Audio',
+                                    af.dateAdded AS 'Date',
+                                    af.audio_ID AS 'Audio ID'
+                                    FROM tbl_customer_info AS ci
+                                    JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
+                                    WHERE ci.customer_ID = :currentCustomerID
+                                    ORDER BY af.audio_ID DESC;
                                 ";
 
                                 $stmtAudios = $conn->prepare($sqlAudios);
@@ -1038,26 +1038,34 @@ try {
                                         echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">No audio records ' . strtolower($heading) . '.</p>';
                                     } else {
                                         foreach ($audios as $audio) {
+                                            // Inside the foreach loop in the displayAudios function
                                             echo '<div class="row" style="margin-left: 15px; margin-top: 10px; padding-bottom: 10px;">';
-
+                                        
                                             echo '<div class="col-auto">';
                                             echo '<img src="' . htmlspecialchars($audio['Profile picture']) . '" alt="Profile picture" style="width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 50%; background-color: white;">';
                                             echo '</div>';
-
+                                        
                                             echo '<div class="col">';
                                             echo '<p style="margin-top: 10px; font-weight: bold;">' . htmlspecialchars($audio['Full Name']) . '</p>';
-                                            echo '<p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($audio['Date'], $heading) . '</p>';
+                                            echo '<div class="col-11">';
+                                            echo '<p style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($audio['Date'], $heading) . '</p>';
                                             echo '</div>';
-
+                                            echo '</div>'; // Close 'col' div
+                                        
+                                            echo '<div class="col-auto">';
+                                            echo '<span onclick="deleteFeedback(' . $audio['Audio ID'] . ')" style="cursor: pointer;">&#128465;</span>'; // Use the correct key 'audio_ID' for the unique identifier
+                                            echo '</div>';
+                                        
                                             echo '<div class="col-auto">';
                                             echo '<audio controls style="width: 500px; margin-right: 50px; margin-top: 12px;">';
                                             echo '<source src="http://localhost/nasara/audios/' . htmlspecialchars($audio['Audio']) . '" type="audio/' . pathinfo($audio['Audio'], PATHINFO_EXTENSION) . '">';
                                             echo 'Your browser does not support the audio element.';
                                             echo '</audio>';
                                             echo '</div>';
-
-                                            echo '</div>';
+                                        
+                                            echo '</div>'; // Close 'row' div
                                         }
+                                        
                                     }
                                 }
 
