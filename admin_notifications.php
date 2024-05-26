@@ -742,7 +742,7 @@ try {
                                                         <p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($notification['date'], $heading) . '</p>
                                                     </div>';
                                                 echo '<div class="col-auto" style="margin-top: 10px;">
-                                                        <button class="btn btn-primary view-btn" style="margin-top: 10px;" data-notification=\'' . $notificationData . '\'>View</button>
+                                                        <button class="btn btn-primary view-btn" style="margin-top: 10px;" onclick="onViewButtonClick(' . htmlspecialchars(json_encode($notification), ENT_QUOTES, 'UTF-8') . ')">View</button>
                                                     </div>';
                                                 echo '</div>';
                                             }
@@ -806,88 +806,54 @@ try {
                             <!-- END NOTIFICATIONS TABLE -->
 
 
-<!-- Modal for Notifications -->
-<div id="notificationModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <div id="modalBody"></div>
-    </div>
-</div>
+                            <!-- Modal -->
+                            <div id="notificationModal" class="modal">
+                                <div class="modal-content">
+                                    <span class="close">&times;</span>
+                                    <div id="notificationDetails"></div>
+                                </div>
+                            </div>
 
-<script>
-// Get the notification modal
-var notificationModal = document.getElementById("notificationModal");
 
-// Get the <span> element that closes the notification modal
-var notificationModalClose = document.getElementsByClassName("close")[0];
 
-// When the user clicks on <span> (x), close the notification modal
-notificationModalClose.onclick = function() {
-    notificationModal.style.display = "none";
-}
+                            <script>
+                            // Get the modal
+                            var modal = document.getElementById("notificationModal");
 
-// When the user clicks anywhere outside of the notification modal, close it
-window.onclick = function(event) {
-    if (event.target == notificationModal) {
-        notificationModal.style.display = "none";
-    }
-}
+                            // Get the <span> element that closes the modal
+                            var span = document.getElementsByClassName("close")[0];
 
-// Add click event listener to each notification row
-document.querySelectorAll('.view-btn').forEach(function(button) {
-    button.addEventListener('click', function() {
-        var notificationData = JSON.parse(this.getAttribute('data-notification'));
-        var modalBody = document.getElementById("modalBody");
-        modalBody.innerHTML = ''; // Clear previous content
+                            // When the user clicks on <span> (x), close the modal
+                            span.onclick = function() {
+                            modal.style.display = "none";
+                            }
 
-        // Populate modal with notification data
-        if (notificationData.image) {
-            modalBody.innerHTML += '<p><img src="' + notificationData.image + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
-        }
-        modalBody.innerHTML += '<p><strong>' + notificationData.name + '</strong></p>';
+                            // When the user clicks anywhere outside of the modal, close it
+                            window.onclick = function(event) {
+                            if (event.target == modal) {
+                                modal.style.display = "none";
+                            }
+                            }
 
-        // Customize modal content based on notification type
-        switch (notificationData.type) {
-            case 'Registered an account':
-                modalBody.innerHTML += '<p><strong>Customer Information:</strong></p>';
-                modalBody.innerHTML += '<p>Name: ' + notificationData.name + '</p>';
-                modalBody.innerHTML += '<p>Gender: ' + notificationData.gender + '</p>';
-                break;
-            case 'Sent feedback':
-                modalBody.innerHTML += '<p><strong>Feedback:</strong></p>';
-                modalBody.innerHTML += '<p>Products: ' + notificationData.products + '</p>';
-                modalBody.innerHTML += '<p>Services: ' + notificationData.services + '</p>';
-                modalBody.innerHTML += '<p>Convenience: ' + notificationData.convenience + '</p>';
-                modalBody.innerHTML += '<p>Rating: ' + notificationData.rating + '</p>';
-                break;
-            case 'Sent audio feedback':
-                modalBody.innerHTML += '<p><strong>Audio Feedback:</strong></p>';
-                modalBody.innerHTML += '<audio controls><source src="' + notificationData.audio + '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
-                break;
-            default:
-                modalBody.innerHTML += '<p>No details available.</p>';
-                break;
-        }
-
-        // Add "View Customer Info" button
-        modalBody.innerHTML += '<button class="btn btn-primary view-customer-info" style="width: 100%;">View Customer\'s Info</button>';
-
-        // Display the notification modal
-        notificationModal.style.display = "block";
-
-        // Add click event listener to the "View Customer Info" button
-        document.querySelector('.view-customer-info').addEventListener('click', function() {
-            // Here you can define the behavior to view customer information
-            // For example, you can redirect to another page to view detailed customer information
-            // You can use notificationData.customer_id to identify the customer
-            // Replace the URL below with the appropriate URL to view customer information
-            window.location.href = 'view_customer.php?customer_ID=' + encodeURIComponent(notificationData.customer_id);
-        });
-    });
-});
-
-</script>
-
+                            // Function to handle "View" button clicks
+                            function onViewButtonClick(notificationData) {
+                            // Display the modal
+                            modal.style.display = "block";
+                            
+                            // Send AJAX request to fetch notification details
+                            // You need to implement the server-side code to handle this request
+                            // Here, I'm assuming you have a PHP script called "get_notification_details.php"
+                            var xhr = new XMLHttpRequest();
+                            xhr.onreadystatechange = function() {
+                                if (this.readyState == 4 && this.status == 200) {
+                                // Display the notification details in the modal
+                                document.getElementById("notificationDetails").innerHTML = this.responseText;
+                                }
+                            };
+                            xhr.open("GET", "get_notification_details.php?notificationData=" + encodeURIComponent(JSON.stringify(notificationData)), true);
+                            xhr.send();
+                            }
+                            </script>
 
 
                             <hr>

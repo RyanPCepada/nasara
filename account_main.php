@@ -865,8 +865,8 @@ try {
             <div class="row col-6">
                 <div class="row" style="width: 100%; padding: 40px; background: #ddf7de; border-radius: 20px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166)">
                     <!-- <h5 style="margin-top: 5px; margin-left: 30px; margin-bottom: -10px;">All feedbacks</h5> -->
-                    <h5 style="position: relative; margin-top: 0px; margin-bottom: 10px; margin-left: 0px; font-size: 70px; color: gray;"
-                    >Feedbacks</h5>
+                    <h1 style="position: relative; margin-top: 0px; margin-bottom: 10px; margin-left: 0px; color: gray;"
+                    >Written Feedbacks</h1>
                     <!-- <h5 class="text-muted" style="margin-top: 0px; margin-left: 0px; margin-bottom: 5px;">Your Written Feedbacks</h5> -->
                     <hr>
                     <!-- <img src="icons/GIF_NEWFB.gif" style="width: 1.5in; height: .9in; margin-left: 445px; margin-top: 0px;" id="adminnotif_gif"> -->
@@ -919,9 +919,9 @@ try {
                                     foreach ($feedbacks as $feedback) {
                                         echo '<div class="row" style="background-color: #ecedff; border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);
                                             padding: 20px; border-radius: 5px; font-size: 20px; width: 95%; margin-left: 15px; margin-top: 10px;">';
-                                        echo '<p style="margin: 0px;"><strong>Opinion:</strong> ' . $feedback['products'] . '</p>';
-                                        echo '<p style="margin: 0px;"><strong>Suggestion:</strong> ' . $feedback['services'] . '</p>';
-                                        echo '<p style="margin: 0px;"><strong>Question:</strong> ' . $feedback['convenience'] . '</p>';
+                                        echo '<p style="margin: 0px;"><strong>Products:</strong> ' . $feedback['products'] . '</p>';
+                                        echo '<p style="margin: 0px;"><strong>Services:</strong> ' . $feedback['services'] . '</p>';
+                                        echo '<p style="margin: 0px;"><strong>Convenience:</strong> ' . $feedback['convenience'] . '</p>';
                                         echo '<p style="margin: 0px;"><strong>Rating:</strong> ' . $feedback['rating'] . '</p>';
                                         echo '<p style="color: blue; font-size: 15px; margin-top: 10px; margin-bottom: 0px;">' . formatRelativeDate($feedback['date'], $heading) . '</p>';
                                         echo '</div>'; //IF YOU COMMENT THIS, THE CARDS LOOK SO NICE SLANTED FROM BIG TO SMALL
@@ -966,11 +966,6 @@ try {
 
                 <div class="card-body" id="cards_body2" style="justify-content: center; background: #ecedff; border-radius: 20px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166)">
                     
-                    <h5 style="margin-top: 5px; margin-left: 30px; margin-bottom: -10px;">Your Audio Feedbacks</h5>
-                    
-
-                    <hr>
-
                     <!-- <img src="pages/admin/GIF_NOTIFICATIONS.gif" style="width: 1.5in; height: .9in; margin-left: 445px; margin-top: 0px;" id="adminnotif_gif"> -->
 
                     <!-- AUDIO FEEDBACKS TABLE -->

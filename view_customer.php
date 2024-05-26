@@ -99,6 +99,7 @@ if (isset($_SESSION['adminID'])) {
                 <p><strong>Address:</strong> <?php echo htmlspecialchars($customer['street'] . ', ' . $customer['barangay'] . ', ' . $customer['municipality'] . ', ' . $customer['province'] . ', ' . $customer['zipcode']); ?></p>
                 <p><strong>Birth Date:</strong> <?php echo htmlspecialchars($customer['birthDate']); ?></p>
                 <p><strong>Gender:</strong> <?php echo htmlspecialchars($customer['gender']); ?></p>
+                <p><strong>Email:</strong> <?php echo htmlspecialchars($customer['email']); ?></p>
                 <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($customer['phoneNumber']); ?></p>
             </div>
 

@@ -764,18 +764,11 @@ try {
 
                                     <?php
                                         // Step 2: Fetch count of feedback entries for today
-                                        $sqlFeedbackCount = "SELECT COUNT(feedback_ID) AS feedbackCount FROM tbl_feedback WHERE DATE(date) = CURDATE()";
-                                        $stmtFeedbackCount = $conn->prepare($sqlFeedbackCount);
-                                        $stmtFeedbackCount->execute();
-                                        $resultFeedbackCount = $stmtFeedbackCount->fetch(PDO::FETCH_ASSOC);
-                                        $feedbackCount = $resultFeedbackCount['feedbackCount'];
-                                    
-                                        // Step 3: Fetch count of audio feedback entries for today
-                                        $sqlAudioFeedbackCount = "SELECT COUNT(audio_ID) AS audiofeedbackCount FROM tbl_audio_feedback WHERE DATE(dateAdded) = CURDATE()";
-                                        $stmtAudioFeedbackCount = $conn->prepare($sqlAudioFeedbackCount);
-                                        $stmtAudioFeedbackCount->execute();
-                                        $resultAudioFeedbackCount = $stmtAudioFeedbackCount->fetch(PDO::FETCH_ASSOC);
-                                        $audiofeedbackCount = $resultAudioFeedbackCount['audiofeedbackCount'];
+                                        $sqlWrittenFeedbackCount = "SELECT COUNT(feedback_ID) AS feedbackCount FROM tbl_feedback WHERE DATE(date) = CURDATE()";
+                                        $stmtWrittenFeedbackCount = $conn->prepare($sqlWrittenFeedbackCount);
+                                        $stmtWrittenFeedbackCount->execute();
+                                        $resultWrittenFeedbackCount = $stmtWrittenFeedbackCount->fetch(PDO::FETCH_ASSOC);
+                                        $writtenfeedbackCount = $resultWrittenFeedbackCount['feedbackCount'];
                                     
                                         // Step 4: Fetch count of total customers
                                         $sqlTotalCustomers = "SELECT COUNT(*) AS totalCustomers FROM tbl_customer_info";
@@ -783,15 +776,14 @@ try {
                                         $stmtTotalCustomers->execute();
                                         $resultTotalCustomers = $stmtTotalCustomers->fetch(PDO::FETCH_ASSOC);
                                         $totalCustomers = $resultTotalCustomers['totalCustomers'];
-                                    
                                     ?>
                                     
                                     <div class="card border-0 fixed-width-element" id="card1">
                                         <div class="card-body" style="text-align: left;">
                                             <div class="card-body">
-                                                <h1 class="card-title"style="font-size: 90px; position: absolute; margin-top: -25px;"><?php echo $feedbackCount; ?></h1>
+                                                <h1 class="card-title"style="font-size: 90px; position: absolute; margin-top: -25px;"><?php echo $writtenfeedbackCount; ?></h1>
                                                 <h6 class="card-subtitle mb-2 text-muted" style="font-size: 30px; position: absolute; margin-top: 75px;"
-                                                >New Feedbacks</h6>
+                                                >Written Feedbacks</h6>
                                                 <img src="icons/GIF_NEWFB.gif" style="width: 1.4in; height: .80in; margin-left: 142px; margin-top: -27px;" id="newfb_gif">
 
                                                 <div style="position: absolute; margin-left: 1px; margin-top: 67px; width: 280px; line-height: 1.1;">
@@ -811,8 +803,7 @@ try {
                                                         $feedbackCountToday = $resultFeedbackToday['feedbackCount'];
 
                                                         // Display the result
-                                                        echo "$feedbackCountToday out of $totalCustomers customers sent us new feedbacks today.
-                                                        $feedbackCount written and $audiofeedbackCount audio.";
+                                                        echo "$feedbackCountToday out of $totalCustomers customers sent us new written feedbacks today."
                                                     ?>
                                                 </div>
                                             </div>
@@ -882,7 +873,131 @@ try {
                                         </table>
                                     </div>
                                 </div>
+                                
+                            </div>
+                            <!-- END ROW 1 -->
 
+                            <hr>
+
+
+                            <!-- ROW 1 -->
+                            <div class="" style="padding: 20px; border-radius: 15px;">
+
+                                <div class="col-4 justify-content-center";>
+
+                                    <?php
+                                        // Step 3: Fetch count of audio feedback entries for today
+                                        $sqlAudioFeedbackCount = "SELECT COUNT(audio_ID) AS audiofeedbackCount FROM tbl_audio_feedback WHERE DATE(dateAdded) = CURDATE()";
+                                        $stmtAudioFeedbackCount = $conn->prepare($sqlAudioFeedbackCount);
+                                        $stmtAudioFeedbackCount->execute();
+                                        $resultAudioFeedbackCount = $stmtAudioFeedbackCount->fetch(PDO::FETCH_ASSOC);
+                                        $audiofeedbackCount = $resultAudioFeedbackCount['audiofeedbackCount'];
+                                    
+                                        // Step 4: Fetch count of total customers
+                                        $sqlTotalCustomers = "SELECT COUNT(*) AS totalCustomers FROM tbl_customer_info";
+                                        $stmtTotalCustomers = $conn->prepare($sqlTotalCustomers);
+                                        $stmtTotalCustomers->execute();
+                                        $resultTotalCustomers = $stmtTotalCustomers->fetch(PDO::FETCH_ASSOC);
+                                        $totalCustomers = $resultTotalCustomers['totalCustomers'];
+                                    ?>
+                                    
+                                    <div class="card border-0 fixed-width-element" id="card1">
+                                        <div class="card-body" style="text-align: left;">
+                                            <div class="card-body">
+                                                <h1 class="card-title"style="font-size: 90px; position: absolute; margin-top: -25px;"><?php echo $audiofeedbackCount; ?></h1>
+                                                <h6 class="card-subtitle mb-2 text-muted" style="font-size: 30px; position: absolute; margin-top: 75px;"
+                                                >Audio Feedbacks</h6>
+                                                <img src="icons/GIF_MIC_D'WHITE_BG.gif" style="width: 1in; height: .80in; margin-left: 165px; margin-top: -27px;" id="newfb_gif">
+                                                
+                                                <div style="position: absolute; margin-left: 1px; margin-top: 67px; width: 280px; line-height: 1.1;">
+                                                    <?php
+                                                        // Step 1: Get the count of total customers from tbl_customer_info
+                                                        $sqlTotalCustomers = "SELECT COUNT(*) AS totalCustomers FROM tbl_customer_info";
+                                                        $stmtTotalCustomers = $conn->prepare($sqlTotalCustomers);
+                                                        $stmtTotalCustomers->execute();
+                                                        $resultTotalCustomers = $stmtTotalCustomers->fetch(PDO::FETCH_ASSOC);
+                                                        $totalCustomers = $resultTotalCustomers['totalCustomers'];
+
+                                                        // Step 2: Get the count of feedback entries for today from tbl_feedback
+                                                        $sqlFeedbackToday = "SELECT COUNT(DISTINCT customer_ID) AS feedbackCount FROM tbl_feedback WHERE DATE(date) = CURDATE()";
+                                                        $stmtFeedbackToday = $conn->prepare($sqlFeedbackToday);
+                                                        $stmtFeedbackToday->execute();
+                                                        $resultFeedbackToday = $stmtFeedbackToday->fetch(PDO::FETCH_ASSOC);
+                                                        $feedbackCountToday = $resultFeedbackToday['feedbackCount'];
+
+                                                        // Display the result
+                                                        echo "$feedbackCountToday out of $totalCustomers customers sent us new audio feedbacks today."
+                                                    ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    
+                                </div>
+
+                                <div class="col-8" style="position: absolute; margin-left: 330px; margin-top: -200px;">
+                                    <?php
+                                        // Fetch audio feedback for today
+                                        $sql = "
+                                            SELECT
+                                                CONCAT('images/', ci.image) AS 'Profpic',
+                                                CONCAT(ci.firstName, ' ', ci.MiddleName, ' ', ci.lastName) AS 'Customer',
+                                                af.audio AS 'Audio',
+                                                af.dateAdded AS 'Date'
+                                            FROM tbl_customer_info AS ci
+                                            JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
+                                            WHERE DATE(af.dateAdded) = CURDATE()
+                                            ORDER BY af.dateAdded DESC
+                                        ";
+
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute();
+
+                                        $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                    ?>
+
+                                    <div class="scrollable-content" id="table1">
+                                        <table class="table table-bordered class alternate-row-table" id="card1_table">
+                                            <thead>
+                                                <tr>
+                                                    <?php
+                                                    // Display column aliases as headers
+                                                    if (!empty($customerData)) {
+                                                        $aliasRow = $customerData[0]; // Assuming the first row contains aliases
+                                                        foreach ($aliasRow as $alias => $value) {
+                                                            echo "<th style='background-color: #c8e7c9; color: black;'>$alias</th>";
+                                                        }
+                                                    }
+                                                    ?>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                if (empty($customerData)) {
+                                                    // Display the "No feedback yet for today" message in the table body
+                                                    echo '<tr><td colspan="4" style="text-align: center; background-color: transparent; color: black;">No feedbacks yet for today</td></tr>';
+                                                } else {
+                                                    // Loop through the data and populate the table
+                                                    foreach ($customerData as $row) {
+                                                        echo "<tr>";
+                                                        foreach ($row as $key => $value) {
+                                                            if ($key === 'Profpic') {
+                                                                echo "<td><img src='$value' style='width: 60px; height: 60px; border-radius: 50%; background-color: white;'></td>";
+                                                            } elseif ($key === 'Audio') {
+                                                                echo "<td><audio controls><source src='audios/$value' type='audio/mpeg'>Your browser does not support the audio element.</audio></td>";
+                                                            } else {
+                                                                echo "<td>$value</td>";
+                                                            }
+                                                        }
+                                                        echo "</tr>";
+                                                    }
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
 
                                 
                             </div>

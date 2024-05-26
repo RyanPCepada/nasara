@@ -498,14 +498,14 @@ thead th {
   position: absolute;
   margin-top: 10px;
   background: rgb(235, 235, 235);
-  height: 2720px;
+  height: 3020px;
   width: 1530px;
 }
 
 #cards_body1{
   position: absolute;
   width: 300px; /*+70*/
-  height: 2720px;
+  height: 3020px;
   background: midnightblue;
 }
 
@@ -524,7 +524,7 @@ thead th {
   position: absolute;
   width: 1150px;
   margin-left: 160px;
-  margin-top: 1630px;
+  margin-top: 1910px;
   margin-bottom: 20px;
   background: white;
   border-radius: 15px;
@@ -535,7 +535,7 @@ thead th {
   position: absolute;
   width: 1150px;
   margin-left: 160px;
-  margin-top: 2103px;
+  margin-top: 2388px;
   margin-bottom: 20px;
   background: white;
   border-radius: 15px;
