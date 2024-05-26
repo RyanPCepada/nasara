@@ -1033,41 +1033,40 @@ try {
 
                                 function displayAudios($audios, $heading, $marginTop) {
                                     echo '<h4 style="margin-top: ' . $marginTop . '; padding: 15px; margin-left: 12px; font-size: 20px; color: gray;">' . $heading . '</h4>';
-
+                                
                                     if (empty($audios)) {
                                         echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">No audio records ' . strtolower($heading) . '.</p>';
                                     } else {
                                         foreach ($audios as $audio) {
-                                            // Inside the foreach loop in the displayAudios function
                                             echo '<div class="row" style="margin-left: 15px; margin-top: 10px; padding-bottom: 10px;">';
-                                        
+                                
                                             echo '<div class="col-auto">';
                                             echo '<img src="' . htmlspecialchars($audio['Profile picture']) . '" alt="Profile picture" style="width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 50%; background-color: white;">';
                                             echo '</div>';
-                                        
+                                
                                             echo '<div class="col">';
                                             echo '<p style="margin-top: 10px; font-weight: bold;">' . htmlspecialchars($audio['Full Name']) . '</p>';
                                             echo '<div class="col-11">';
                                             echo '<p style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($audio['Date'], $heading) . '</p>';
                                             echo '</div>';
                                             echo '</div>'; // Close 'col' div
-                                        
+                                
                                             echo '<div class="col-auto">';
-                                            echo '<span onclick="deleteFeedback(' . $audio['Audio ID'] . ')" style="cursor: pointer;">&#128465;</span>'; // Use the correct key 'audio_ID' for the unique identifier
+                                            echo '<span onclick="deleteFeedback(' . $audio['Audio ID'] . ')" style="position: absolute; cursor: pointer; margin-left: -50px; margin-top: 35px;">&#128465;</span>'; // Delete button
                                             echo '</div>';
-                                        
+                                
                                             echo '<div class="col-auto">';
                                             echo '<audio controls style="width: 500px; margin-right: 50px; margin-top: 12px;">';
                                             echo '<source src="http://localhost/nasara/audios/' . htmlspecialchars($audio['Audio']) . '" type="audio/' . pathinfo($audio['Audio'], PATHINFO_EXTENSION) . '">';
                                             echo 'Your browser does not support the audio element.';
                                             echo '</audio>';
                                             echo '</div>';
-                                        
+                                
                                             echo '</div>'; // Close 'row' div
                                         }
-                                        
                                     }
                                 }
+                                
 
                                 // Function to format relative date and time
                                 function formatRelativeDate($date, $category) {
