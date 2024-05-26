@@ -961,65 +961,67 @@ try {
 
                             <!-- Modal -->
                             <div id="customerModal" class="modal">
-                            <div class="modal-content">
-                                <span class="close">&times;</span>
-                                <div id="modalBody"></div>
-                                <!-- Add a button to view customer information -->
-                                <button id="viewAllBtn" class="view-all-btn">View Customer's Information</button>
-                            </div>
+                                <div class="modal-content">
+                                    <span class="close">&times;</span>
+                                    <div id="modalBody"></div>
+                                    <!-- Add a button to view customer information -->
+                                    <button id="viewAllBtn" class="view-all-btn">View Customer's Information</button>
+                                </div>
                             </div>
 
                             <script>
-                            // Get the modal
-                            var modal = document.getElementById("customerModal");
+                                // Get the modal
+                                var modal = document.getElementById("customerModal");
 
-                            // Get the <span> element that closes the modal
-                            var span = document.getElementsByClassName("close")[0];
+                                // Get the <span> element that closes the modal
+                                var span = document.getElementsByClassName("close")[0];
 
-                            // When the user clicks on <span> (x), close the modal
-                            span.onclick = function() {
-                                modal.style.display = "none";
-                            }
-
-                            // When the user clicks anywhere outside of the modal, close it
-                            window.onclick = function(event) {
-                                if (event.target == modal) {
+                                // When the user clicks on <span> (x), close the modal
+                                span.onclick = function() {
                                     modal.style.display = "none";
                                 }
-                            }
 
-                            // Add click event listener to each table row
-                            document.querySelectorAll('.customer-row').forEach(function(row) {
-                                row.addEventListener('click', function() {
-                                    var customerData = JSON.parse(this.getAttribute('data-customer'));
-                                    var modalBody = document.getElementById("modalBody");
-                                    var viewAllBtn = document.getElementById("viewAllBtn");
-
-                                    // Clear previous content
-                                    modalBody.innerHTML = '';
-
-                                    // Populate modal with customer data
-                                    for (var key in customerData) {
-                                        if (key === 'Profile picture') {
-                                            modalBody.innerHTML += '<p><img src="' + customerData[key] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
-                                        } else {
-                                            modalBody.innerHTML += '<p><strong>' + key + ':</strong> ' + customerData[key] + '</p>';
-                                        }
+                                // When the user clicks anywhere outside of the modal, close it
+                                window.onclick = function(event) {
+                                    if (event.target == modal) {
+                                        modal.style.display = "none";
                                     }
+                                }
 
-                                    // Set the link for the view all button
-                                    viewAllBtn.onclick = function() {
-                                        // Extract the customer ID from customerData
-                                        var customerID = customerData['Customer ID'];
-                                        // Redirect to view_customer.php with customer ID parameter
-                                        window.location.href = 'view_customer.php?customer_ID=' + customerID;
-                                    };
+                                // Add click event listener to each table row
+                                document.querySelectorAll('.customer-row').forEach(function(row) {
+                                    row.addEventListener('click', function() {
+                                        var customerData = JSON.parse(this.getAttribute('data-customer'));
+                                        var modalBody = document.getElementById("modalBody");
+                                        var viewAllBtn = document.getElementById("viewAllBtn");
 
-                                    // Display the modal
-                                    modal.style.display = "block";
+                                        // Clear previous content
+                                        modalBody.innerHTML = '';
+
+                                        // Populate modal with specific customer data
+                                        modalBody.innerHTML += '<p><img src="' + customerData['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
+                                        modalBody.innerHTML += '<p><strong>Full Name:</strong> ' + customerData['Firstname'] + ' ' + customerData['Middlename'] + ' ' + customerData['Lastname'] + '</p>';
+                                        modalBody.innerHTML += '<p><strong>Address:</strong> ' + customerData['Street'] + ', ' + customerData['Barangay'] + ', ' + customerData['Municipality'] + ', ' + customerData['Province'] + ', ' + customerData['Zipcode'] + '</p>';
+                                        modalBody.innerHTML += '<p><strong>Birth Date:</strong> ' + customerData['Birthdate'] + '</p>';
+                                        modalBody.innerHTML += '<p><strong>Gender:</strong> ' + customerData['Gender'] + '</p>';
+                                        modalBody.innerHTML += '<p><strong>Email:</strong> ' + customerData['Email'] + '</p>';
+                                        modalBody.innerHTML += '<p><strong>Phone Number:</strong> ' + customerData['Phone Number'] + '</p>';
+
+                                        // Set the link for the view all button
+                                        viewAllBtn.onclick = function() {
+                                            // Extract the customer ID from customerData
+                                            var customerID = customerData['Customer ID'];
+                                            // Redirect to view_customer.php with customer ID parameter
+                                            window.location.href = 'view_customer.php?customer_ID=' + customerID;
+                                        };
+
+                                        // Display the modal
+                                        modal.style.display = "block";
+                                    });
                                 });
-                            });
                             </script>
+
+
 
                             <style>
                             /* CSS for Hover Effect */
