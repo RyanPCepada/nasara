@@ -853,7 +853,7 @@ try {
                                                 <?php
                                                 if (empty($customerData)) {
                                                     // Display the "No feedback yet for today" message in the table body
-                                                    echo '<tr><td colspan="7" style="text-align: center; background-color: transparent; color: black;">No feedbacks yet for today</td></tr>';
+                                                    echo '<tr><td colspan="7" style="text-align: center; background-color: transparent; color: black;">No written feedbacks yet for today</td></tr>';
                                                 } else {
                                                     // Loop through the data and populate the table
                                                     foreach ($customerData as $row) {
@@ -976,7 +976,7 @@ try {
                                                 <?php
                                                 if (empty($customerData)) {
                                                     // Display the "No feedback yet for today" message in the table body
-                                                    echo '<tr><td colspan="4" style="text-align: center; background-color: transparent; color: black;">No feedbacks yet for today</td></tr>';
+                                                    echo '<tr><td colspan="4" style="text-align: center; background-color: transparent; color: black;">No audio feedbacks yet for today</td></tr>';
                                                 } else {
                                                     // Loop through the data and populate the table
                                                     foreach ($customerData as $row) {

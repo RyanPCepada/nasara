@@ -80,7 +80,7 @@
     <div class="container">
         <header>
             <!-- <a class="back-button" href="landing_main.php">&#8592;</a> -->
-            <img class="logo" src="pages/privacy_details/ICON_PRIVACY_DETAILS.png" alt="">
+            <img class="logo" src="icons/NASARA_LOGO_COLORED_PNG.png" alt="">
             <h1>Privacy Details for Nasara Store<br>Customer Feedback Management System</h1>
         </header>
 
@@ -129,7 +129,7 @@
 
         <section>
             <h2>9. Contact Information:</h2>
-            <p>If you have any questions or concerns regarding your privacy, please contact us at OctawizDevbugs2023@gmail.com.</p>
+            <p>If you have any questions or concerns regarding your privacy, please contact us at NasaraStore@gmail.com.</p>
         </section>
 
         <br>

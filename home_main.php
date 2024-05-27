@@ -750,7 +750,7 @@ try {
         <h5>Contact Us</h5>
         <ul class="list-unstyled">
           <li>Phone: +123456789</li>
-          <li>Email: hermenianasara@gmail.com</li>
+          <li>Email: NasaraStore@gmail.com</li>
           <!-- <li>Address: Tankulan, Manolo Fortich, Bukidnon</li> -->
         </ul>
       </div>

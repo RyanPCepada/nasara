@@ -236,6 +236,14 @@ try {
                 <img src="images_admin/<?php echo $adminimage; ?>" class="img-fluid zoomable-image rounded-square"
                 style="width: 230px; height: 230px; border: solid 10px lightblue; border-radius: 50%; margin-top: -1180px; margin-left: -400px;">
 
+                <h1 style="position: absolute; font-size: 50px; color: white; width: 777px; margin-top: -420px; z-index: 999;">Your Voice, Our Excellence!</h1>
+                <!-- <h1 style="position: absolute; color: white; width: 500px; margin-top: 350px; z-index: 999;">Our Excellence!</h1> -->
+                <img src="icons/2PERSONS_GIF.gif" class="img-fluid" style="position: absolute; width: 500px; margin-top: 50px;" alt="">
+                <img src="icons/3PERSONS_PNG.png" class="img-fluid" style="position: absolute; width: 400px; margin-top: -150px; margin-left: 1000px; filter: drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.5));" alt="">
+
+                <img src="icons/WEWANTYOURFEEDBACK_PNG.png" class="img-fluid" style="position: absolute; width: 400px; margin-top: -150px; margin-left: -1000px; filter: drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.5));" alt="">
+
+
             </div>
 
         </div>
@@ -243,12 +251,12 @@ try {
         
 
 
-        <footer class="bg-transparent text-light text-center bg-dark p-3" style="height: 10px; margin-top: -55px;">
-            <p>&copy; 2024 NasaraStore. All rights reserved.</p>
-        </footer>
-
     </body>
 
+
+    <footer class="bg-transparent text-light text-center bg-dark p-3" style="height: 10px; margin-top: -55px;">
+            <p>&copy; 2024 NasaraStore. All rights reserved.</p>
+        </footer>
 
 </html>
 
