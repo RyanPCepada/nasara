@@ -28,7 +28,7 @@
         <!-- <a id="back" href="http://localhost/nasara/landing_main.php">Back</a> -->
 
         <div class="container">
-            <label class="login">Login</label>
+            <label class="login">Sign in</label>
             <div class="login-container">
                 <!-- <form action="pages/home/home_main.php" method="POST" id="login_form"> -->
                 <form action="nasara/home_main.php" method="POST" id="login_form">
@@ -47,7 +47,7 @@
                         <span id="rm">Remember me</span>
                         <a onclick="to_forgotpassword_main()" id="fp">Forgot password?</a>
                     </div>
-                    <button type="submit" id="login_button">Login</button>
+                    <button type="submit" id="login_button">Sign in</button>
 
                     <script>
                     // Initially hide the show-password icon
@@ -117,7 +117,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <!-- <img src="pages/landing/GIF_REGISTER.gif" style="width: 1.6in; height: .9in; margin-right: -10px;" id="register_gif"> -->
-                        <h5 class="modal-title" id="staticBackdropLabel" style="color: lightgray;">Customer Registration</h5>
+                        <h5 class="modal-title" id="staticBackdropLabel" style="color: lightgray;">Sign up</h5>
                     </div>
                     <div class="modal-body">
 

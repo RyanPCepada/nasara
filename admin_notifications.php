@@ -888,60 +888,60 @@ try {
 
             // Add click event listener to each notification row
             document.querySelectorAll('.notification-row').forEach(function(row) {
-    row.addEventListener('click', function() {
-        var notificationData = JSON.parse(this.getAttribute('data-notification'));
-        var modalBody = document.getElementById("notificationModalBody");
-        var viewNotificationBtn = document.getElementById("viewNotificationBtn");
+                row.addEventListener('click', function() {
+                    var notificationData = JSON.parse(this.getAttribute('data-notification'));
+                    var modalBody = document.getElementById("notificationModalBody");
+                    var viewNotificationBtn = document.getElementById("viewNotificationBtn");
 
-        // Send an AJAX request to fetch modal data
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "fetch_modal_data.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                var response = JSON.parse(xhr.responseText);
+                    // Send an AJAX request to fetch modal data
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "fetch_modal_data.php", true);
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
 
-                // Clear previous content
-                modalBody.innerHTML = '';
+                            // Clear previous content
+                            modalBody.innerHTML = '';
 
-                // Populate modal with response data based on the type of notification
-                if (notificationData['type'] === 'Sent feedback') {
-                    modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
-                    modalBody.innerHTML += '<p><strong>Name:</strong> ' + response['Full Name'] + '</p>';
-                    modalBody.innerHTML += '<p><strong>Products:</strong> ' + response['Products'] + '</p>';
-                    modalBody.innerHTML += '<p><strong>Services:</strong> ' + response['Services'] + '</p>';
-                    modalBody.innerHTML += '<p><strong>Convenience:</strong> ' + response['Convenience'] + '</p>';
-                    modalBody.innerHTML += '<p><strong>Rating:</strong> ' + response['Rating'] + '</p>';
-                    modalBody.innerHTML += '<p><strong>Date:</strong> ' + response['Date'] + '</p>';
-                } else if (notificationData['type'] === 'Sent audio feedback') {
-                    modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
-                    modalBody.innerHTML += '<p><strong>Name:</strong> ' + response['Full Name'] + '</p>';
-                    modalBody.innerHTML += '<p><strong>Audio:</strong> <audio controls><source src="' + response['Audio'] + '" type="audio/mpeg">Your browser does not support the audio element.</audio></p>';
-                    modalBody.innerHTML += '<p><strong>Date:</strong> ' + response['Date'] + '</p>';
-                } else if (notificationData['type'] === 'Registered an account') {
-                    modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
-                    modalBody.innerHTML += '<p><strong>Name:</strong> ' + response['Firstname'] + ' ' + response['Middlename'] + ' ' + response['Lastname'] + '</p>';
-                    modalBody.innerHTML += '<p><strong>Address:</strong> ' + response['Street'] + ', ' + response['Barangay'] + ', ' + response['Municipality'] + ', ' + response['Province'] + ' - ' + response['Zipcode'] + '</p>';
-                    modalBody.innerHTML += '<p><strong>Phone Number:</strong> ' + response['Phone Number'] + '</p>';
-                    modalBody.innerHTML += '<p><strong>Birthdate:</strong> ' + response['Birthdate'] + '</p>';
-                    modalBody.innerHTML += '<p><strong>Gender:</strong> ' + response['Gender'] + '</p>';
-                    modalBody.innerHTML += '<p><strong>Email:</strong> ' + response['Email'] + '</p>';
-                    modalBody.innerHTML += '<p><strong>Creation Date:</strong> ' + response['Creation Date'] + '</p>';
-                }
+                            // Populate modal with response data based on the type of notification
+                            if (notificationData['type'] === 'Sent feedback') {
+                                modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
+                                modalBody.innerHTML += '<h4><strong></strong> ' + response['Full Name'] + '</h4>';
+                                modalBody.innerHTML += '<p><strong>Products:</strong> ' + response['Products'] + '</p>';
+                                modalBody.innerHTML += '<p><strong>Services:</strong> ' + response['Services'] + '</p>';
+                                modalBody.innerHTML += '<p><strong>Convenience:</strong> ' + response['Convenience'] + '</p>';
+                                modalBody.innerHTML += '<p><strong>Rating:</strong> ' + response['Rating'] + '</p>';
+                                modalBody.innerHTML += '<p><strong>Date:</strong> ' + response['Date'] + '</p>';
+                            } else if (notificationData['type'] === 'Sent audio feedback') {
+                                modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
+                                modalBody.innerHTML += '<h4><strong></strong> ' + response['Full Name'] + '</h4>';
+                                modalBody.innerHTML += '<p><strong></strong><audio controls><source src="http://localhost/nasara/audios/' + response['Audio'] + '" type="audio/mpeg">Your browser does not support the audio element.</audio></p>';
+                                modalBody.innerHTML += '<p><strong>Date:</strong> ' + response['Date'] + '</p>';
+                            } else if (notificationData['type'] === 'Registered an account') {
+                                modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
+                                modalBody.innerHTML += '<h4><strong>Name:</strong> ' + response['Firstname'] + ' ' + response['Middlename'] + ' ' + response['Lastname'] + '</h4>';
+                                modalBody.innerHTML += '<p><strong>Address:</strong> ' + response['Street'] + ', ' + response['Barangay'] + ', ' + response['Municipality'] + ', ' + response['Province'] + ' - ' + response['Zipcode'] + '</p>';
+                                modalBody.innerHTML += '<p><strong>Phone Number:</strong> ' + response['Phone Number'] + '</p>';
+                                modalBody.innerHTML += '<p><strong>Birthdate:</strong> ' + response['Birthdate'] + '</p>';
+                                modalBody.innerHTML += '<p><strong>Gender:</strong> ' + response['Gender'] + '</p>';
+                                modalBody.innerHTML += '<p><strong>Email:</strong> ' + response['Email'] + '</p>';
+                                modalBody.innerHTML += '<p><strong>Creation Date:</strong> ' + response['Creation Date'] + '</p>';
+                            }
 
-                // Set the link for the view all button
-                viewNotificationBtn.onclick = function() {
-                    // Redirect to view_customer.php with customer ID parameter
-                    window.location.href = 'view_customer.php?customer_ID=' + response['Customer ID'];
-                };
+                            // Set the link for the view all button
+                            viewNotificationBtn.onclick = function() {
+                                // Redirect to view_customer.php with customer ID parameter
+                                window.location.href = 'view_customer.php?customer_ID=' + response['Customer ID'];
+                            };
 
-                // Display the modal
-                modal.style.display = "block";
-            }
-        };
-        xhr.send("customer_id=" + notificationData['customer_id'] + "&type=" + notificationData['type']);
-    });
-});
+                            // Display the modal
+                            modal.style.display = "block";
+                        }
+                    };
+                    xhr.send("customer_id=" + notificationData['customer_id'] + "&type=" + notificationData['type']);
+                });
+            });
 
 
 

@@ -41,11 +41,12 @@ if (isset($_SESSION['adminID'])) {
     }
 
     $conn = null;
-} else {
-    // Handle the case where the user is not logged in
-    echo "You must be logged in to view this page.";
-    exit();  // Exit the script
 }
+//  else {
+//     // Handle the case where the user is not logged in
+//     echo "You must be logged in to view this page.";
+//     exit();  // Exit the script
+// }
 ?>
 
 
@@ -144,7 +145,7 @@ try {
                 <div class="modal-content">
                     <div class="modal-header">
                         <!-- <img src="icons/GIF_REGISTER.gif" style="width: 1.6in; height: .9in; margin-right: -10px;" id="register_gif"> -->
-                        <h5 class="modal-title" id="staticBackdropLabel" style="color: lightgray;">Customer Registration</h5>
+                        <h5 class="modal-title" id="staticBackdropLabel" style="color: lightgray;">Sign up</h5>
                     </div>
                     <div class="modal-body">
 
@@ -233,7 +234,7 @@ try {
             
             <div class="mid text-center d-flex align-items-center justify-content-center">
 
-                <img src="images_admin/<?php echo $adminimage; ?>" class="img-fluid zoomable-image rounded-square"
+                <img src="images_admin/HERMENIA_NASARA.png" class="img-fluid zoomable-image rounded-square"
                 style="width: 230px; height: 230px; border: solid 10px lightblue; border-radius: 50%; margin-top: -1180px; margin-left: -400px;">
 
                 <h1 style="position: absolute; font-size: 50px; color: white; width: 777px; margin-top: -420px; z-index: 999;">Your Voice, Our Excellence!</h1>
