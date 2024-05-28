@@ -8,7 +8,7 @@ $pword = $_POST['password'];
 $confirmpword = $_POST['confirmpassword'];
 
 // Default profile picture path
-$defaultProfilePicture = "profpic.png";
+$defaultProfilePicture = "PROF_PIC.png";
 
 if ($pword == $confirmpword) {
 
