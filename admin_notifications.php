@@ -708,7 +708,7 @@ try {
                 padding: 20px;
                 border: 1px solid #888;
                 width: 30%;
-                max-height: 70%; /* Set a maximum height for the modal */
+                max-height: 100%; /* Set a maximum height for the modal */
                 overflow-y: auto; /* Add vertical scrollbar when content overflows */
             }
 
