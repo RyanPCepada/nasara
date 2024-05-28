@@ -813,7 +813,6 @@ try {
                                         </div>
                                     </div>
                                 </div>
-                                <!-- END AUDIO RECORDS TABLE -->
 
                             </div>
                             <!-- END AUDIO FEEDBACKS TABLE -->

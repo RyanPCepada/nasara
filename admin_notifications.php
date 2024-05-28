@@ -643,6 +643,7 @@ try {
                 width: 900px;
                 margin-left: 15px;
                 margin-top: 10px;
+                cursor: pointer; /* Add cursor pointer for better UX */
             }
 
             .notification-row.today {
@@ -668,147 +669,286 @@ try {
             .notification-row.older:hover {
                 background-color: #d3d4f5;
             }
+
+            /* Primary Button Style */
+            .view-all-btn {
+                margin-top: 20px;
+                padding: 10px 20px;
+                background-color: #007bff; /* Primary Color */
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                text-align: center;
+            }
+
+            /* Primary Button Hover Effect */
+            .view-all-btn:hover {
+                background-color: #0056b3; /* Darkened Primary Color */
+            }
+
+            /* Modal CSS */
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden; /* Remove scrollbar */
+                background-color: rgba(0,0,0,0.4);
+                padding-top: 60px;
+            }
+
+            .modal-content {
+                background-color: #fefefe;
+                margin: 5% auto;
+                margin-top: 0px;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 30%;
+                max-height: 70%; /* Set a maximum height for the modal */
+                overflow-y: auto; /* Add vertical scrollbar when content overflows */
+            }
+
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
         </style>
 
         <!-- NOTIFICATIONS TABLE -->
         <div class="scrollable-content" id="inputfields">
             <div style="position: relative;">
-            <?php
-// Database connection
-// Assuming you have already established a connection to the database using $conn
+                <?php
+                // Database connection
+                // Assuming you have already established a connection to the database using $conn
 
-// Fetch and display customer activities from tbl_activity_logs
-$sqlNotifications = "
-SELECT 
-    ci.customer_id,
-    CONCAT('images/', ci.image) AS image,
-    CONCAT(ci.firstName, ' ', ci.middlename, ' ', ci.lastName) AS name,
-    ci.gender,
-    al.dateAdded AS date,
-    al.activity AS type
-FROM 
-    tbl_activity_logs al
-JOIN 
-    tbl_customer_info ci ON al.customer_id = ci.customer_id
-WHERE 
-    al.activity IN ('Registered an account', 'Sent feedback', 'Sent audio feedback')
-    AND (
-        al.activity = 'Registered an account' 
-        OR (al.activity = 'Sent feedback' AND EXISTS (
-            SELECT 1 FROM tbl_feedback fb WHERE fb.customer_ID = al.customer_id))
-        OR (al.activity = 'Sent audio feedback' AND EXISTS (
-            SELECT 1 FROM tbl_audio_feedback af WHERE af.customer_ID = al.customer_id))
-    )
-ORDER BY 
-    al.dateAdded DESC";
+                // Fetch and display customer activities from tbl_activity_logs
+                $sqlNotifications = "
+                SELECT 
+                    ci.customer_id,
+                    CONCAT('images/', ci.image) AS image,
+                    CONCAT(ci.firstName, ' ', ci.middlename, ' ', ci.lastName) AS name,
+                    ci.gender,
+                    al.dateAdded AS date,
+                    al.activity AS type
+                FROM 
+                    tbl_activity_logs al
+                JOIN 
+                    tbl_customer_info ci ON al.customer_id = ci.customer_id
+                WHERE 
+                    al.activity IN ('Registered an account', 'Sent feedback', 'Sent audio feedback')
+                ORDER BY 
+                    al.dateAdded DESC";
 
-$stmtNotifications = $conn->prepare($sqlNotifications);
-$stmtNotifications->execute();
-$notifications = $stmtNotifications->fetchAll();
+                $stmtNotifications = $conn->prepare($sqlNotifications);
+                $stmtNotifications->execute();
+                $notifications = $stmtNotifications->fetchAll();
 
-$todayNotifications = [];
-$yesterdayNotifications = [];
-$olderNotifications = [];
+                $todayNotifications = [];
+                $yesterdayNotifications = [];
+                $olderNotifications = [];
 
-$now = new DateTime();
-$yesterday = (clone $now)->modify('-1 day');
+                $now = new DateTime();
+                $yesterday = (clone $now)->modify('-1 day');
 
-foreach ($notifications as $notification) {
-    $notificationDate = new DateTime($notification['date']);
+                foreach ($notifications as $notification) {
+                    $notificationDate = new DateTime($notification['date']);
 
-    if ($notificationDate->format('Y-m-d') == $now->format('Y-m-d')) {
-        $todayNotifications[] = $notification;
-    } elseif ($notificationDate->format('Y-m-d') == $yesterday->format('Y-m-d')) {
-        $yesterdayNotifications[] = $notification;
-    } else {
-        $olderNotifications[] = $notification;
-    }
-}
+                    if ($notificationDate->format('Y-m-d') == $now->format('Y-m-d')) {
+                        $todayNotifications[] = $notification;
+                    } elseif ($notificationDate->format('Y-m-d') == $yesterday->format('Y-m-d')) {
+                        $yesterdayNotifications[] = $notification;
+                    } else {
+                        $olderNotifications[] = $notification;
+                    }
+                }
 
-// Function to display notifications
-function displayNotifications($notifications, $heading, $class) {
-    echo '<h4 style="margin-top: 20px; margin-left: 15px; font-size: 20px; color: gray;">' . $heading . '</h4>';
+                // Function to display notifications
+                function displayNotifications($notifications, $heading, $class) {
+                    echo '<h4 style="margin-top: 20px; margin-left: 15px; font-size: 20px; color: gray;">' . $heading . '</h4>';
 
-    if (empty($notifications)) {
-        echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">No notifications ' . strtolower($heading) . '.</p>';
-    } else {
-        foreach ($notifications as $notification) {
-            $notificationData = htmlspecialchars(json_encode($notification), ENT_QUOTES, 'UTF-8');
-            echo '<div class="row notification-row ' . $class . '" data-notification=\'' . $notificationData . '\' style="border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); 
-                border-radius: 5px; font-size: 20px; width: 900px; margin-left: 15px; margin-top: 10px;">';
+                    if (empty($notifications)) {
+                        echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">No notifications ' . strtolower($heading) . '.</p>';
+                    } else {
+                        foreach ($notifications as $notification) {
+                            $notificationData = htmlspecialchars(json_encode($notification), ENT_QUOTES, 'UTF-8');
+                            echo '<div class="row notification-row ' . $class . '" data-notification=\'' . $notificationData . '\' style="border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); 
+                                border-radius: 5px; font-size: 20px; width: 900px; margin-left: 15px; margin-top: 10px;">';
 
-            echo '<div class="col-auto">
-                    <img src="' . htmlspecialchars($notification['image']) . '" style="width: 60px; height: 60px; border-radius: 30px; background-color: white; margin-top: 12px;">
-                </div>';
-            echo '<div class="col">
-                    <p style="margin-top: 10px;"><strong>' . htmlspecialchars($notification['name']) . '</strong> ' . getActivityMessage($notification['type'], $notification['gender']) . '</p>
-                    <p style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($notification['date'], $heading) . '</p>
-                </div>';
-            echo '</div>';
-        }
-    }
-}
+                            echo '<div class="col-auto">
+                                    <img src="' . htmlspecialchars($notification['image']) . '" style="width: 60px; height: 60px; border-radius: 30px; background-color: white; margin-top: 12px;">
+                                </div>';
+                            echo '<div class="col">
+                                    <p style="margin-top: 10px;"><strong>' . htmlspecialchars($notification['name']) . '</strong> ' . getActivityMessage($notification['type'], $notification['gender']) . '</p>
+                                    <p style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($notification['date'], $heading) . '</p>
+                                </div>';
+                            echo '</div>';
+                        }
+                    }
+                }
 
-// Function to return activity message based on the type and gender
-function getActivityMessage($type, $gender) {
-    $pronoun = ($gender == 'Male') ? 'his' : (($gender == 'Female') ? 'her' : 'his/her');
+                // Function to return activity message based on the type and gender
+                function getActivityMessage($type, $gender) {
+                    $pronoun = ($gender == 'Male') ? 'his' : (($gender == 'Female') ? 'her' : 'his/her');
 
-    switch ($type) {
-        case 'Registered an account':
-            return 'has registered an account.';
-        case 'Sent feedback':
-            return 'has submitted feedback.';
-        case 'Updated the profile':
-            return 'has updated ' . $pronoun . ' profile.';
-        case 'Changed Profile Picture':
-            return 'has changed ' . $pronoun . ' profile picture.';
-        case 'Sent audio feedback':
-            return 'has submitted an audio feedback.';
-        default:
-            return '';
-    }
-}
+                    switch ($type) {
+                        case 'Registered an account':
+                            return 'has registered an account.';
+                        case 'Sent feedback':
+                            return 'has submitted feedback.';
+                        case 'Updated the profile':
+                            return 'has updated ' . $pronoun . ' profile.';
+                        case 'Changed Profile Picture':
+                            return 'has changed ' . $pronoun . ' profile picture.';
+                        case 'Sent audio feedback':
+                            return 'has submitted an audio feedback.';
+                        default:
+                            return '';
+                    }
+                }
 
-// Function to format relative date and time
-function formatRelativeDate($date, $category) {
-    $formattedDate = new DateTime($date);
-    $now = new DateTime();
-    $interval = $now->diff($formattedDate);
+                // Function to format relative date and time
+                function formatRelativeDate($date, $category) {
+                    $formattedDate = new DateTime($date);
+                    $now = new DateTime();
+                    $interval = $now->diff($formattedDate);
 
-    if ($category === 'Today') {
-        return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
-    } elseif ($category === 'Yesterday') {
-        return 'Yesterday @ ' . $formattedDate->format('h:i A');
-    } else {
-        if ($interval->days == 1) {
-            return '1 day ago @ ' . $formattedDate->format('h:i A');
-        } elseif ($interval->days == 7) {
-            return '1 week ago @ ' . $formattedDate->format('h:i A');
-        } elseif ($interval->days > 7) {
-            return $formattedDate->format('F j, Y @ h:i A');
-        } else {
-            return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
-        }
-    }
-}
+                    if ($category === 'Today') {
+                        return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
+                    } elseif ($category === 'Yesterday') {
+                        return 'Yesterday @ ' . $formattedDate->format('h:i A');
+                    } else {
+                        if ($interval->days == 1) {
+                            return '1 day ago @ ' . $formattedDate->format('h:i A');
+                        } elseif ($interval->days == 7) {
+                            return '1 week ago @ ' . $formattedDate->format('h:i A');
+                        } elseif ($interval->days > 7) {
+                            return $formattedDate->format('F j, Y @ h:i A');
+                        } else {
+                            return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
+                        }
+                    }
+                }
 
-// Display "Today" notifications
-displayNotifications($todayNotifications, 'Today', 'today');
+                // Display "Today" notifications
+                displayNotifications($todayNotifications, 'Today', 'today');
 
-// Display "Yesterday" notifications
-displayNotifications($yesterdayNotifications, 'Yesterday', 'yesterday');
+                // Display "Yesterday" notifications
+                displayNotifications($yesterdayNotifications, 'Yesterday', 'yesterday');
 
-// Display "Older" notifications
-displayNotifications($olderNotifications, 'Older', 'older');
-?>
-
+                // Display "Older" notifications
+                displayNotifications($olderNotifications, 'Older', 'older');
+                ?>
             </div>
         </div>
         <!-- END NOTIFICATIONS TABLE -->
 
         <hr>
+
+        <!-- Modal -->
+        <div id="notificationModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="notificationModalBody"></div>
+                <button id="viewNotificationBtn" class="view-all-btn">View Customer's Information</button>
+            </div>
+        </div>
+
+        <!-- JavaScript for Modal Functionality -->
+        <script>
+            // Get the modal
+            var modal = document.getElementById("notificationModal");
+
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+            // Add click event listener to each notification row
+            document.querySelectorAll('.notification-row').forEach(function(row) {
+    row.addEventListener('click', function() {
+        var notificationData = JSON.parse(this.getAttribute('data-notification'));
+        var modalBody = document.getElementById("notificationModalBody");
+        var viewNotificationBtn = document.getElementById("viewNotificationBtn");
+
+        // Send an AJAX request to fetch modal data
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "fetch_modal_data.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+
+                // Clear previous content
+                modalBody.innerHTML = '';
+
+                // Populate modal with response data based on the type of notification
+                if (notificationData['type'] === 'Sent feedback') {
+                    modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
+                    modalBody.innerHTML += '<p><strong>Name:</strong> ' + response['Full Name'] + '</p>';
+                    modalBody.innerHTML += '<p><strong>Products:</strong> ' + response['Products'] + '</p>';
+                    modalBody.innerHTML += '<p><strong>Services:</strong> ' + response['Services'] + '</p>';
+                    modalBody.innerHTML += '<p><strong>Convenience:</strong> ' + response['Convenience'] + '</p>';
+                    modalBody.innerHTML += '<p><strong>Rating:</strong> ' + response['Rating'] + '</p>';
+                    modalBody.innerHTML += '<p><strong>Date:</strong> ' + response['Date'] + '</p>';
+                } else if (notificationData['type'] === 'Sent audio feedback') {
+                    modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
+                    modalBody.innerHTML += '<p><strong>Name:</strong> ' + response['Full Name'] + '</p>';
+                    modalBody.innerHTML += '<p><strong>Audio:</strong> <audio controls><source src="' + response['Audio'] + '" type="audio/mpeg">Your browser does not support the audio element.</audio></p>';
+                    modalBody.innerHTML += '<p><strong>Date:</strong> ' + response['Date'] + '</p>';
+                } else if (notificationData['type'] === 'Registered an account') {
+                    modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
+                    modalBody.innerHTML += '<p><strong>Name:</strong> ' + response['Firstname'] + ' ' + response['Middlename'] + ' ' + response['Lastname'] + '</p>';
+                    modalBody.innerHTML += '<p><strong>Address:</strong> ' + response['Street'] + ', ' + response['Barangay'] + ', ' + response['Municipality'] + ', ' + response['Province'] + ' - ' + response['Zipcode'] + '</p>';
+                    modalBody.innerHTML += '<p><strong>Phone Number:</strong> ' + response['Phone Number'] + '</p>';
+                    modalBody.innerHTML += '<p><strong>Birthdate:</strong> ' + response['Birthdate'] + '</p>';
+                    modalBody.innerHTML += '<p><strong>Gender:</strong> ' + response['Gender'] + '</p>';
+                    modalBody.innerHTML += '<p><strong>Email:</strong> ' + response['Email'] + '</p>';
+                    modalBody.innerHTML += '<p><strong>Creation Date:</strong> ' + response['Creation Date'] + '</p>';
+                }
+
+                // Set the link for the view all button
+                viewNotificationBtn.onclick = function() {
+                    // Redirect to view_customer.php with customer ID parameter
+                    window.location.href = 'view_customer.php?customer_ID=' + response['Customer ID'];
+                };
+
+                // Display the modal
+                modal.style.display = "block";
+            }
+        };
+        xhr.send("customer_id=" + notificationData['customer_id'] + "&type=" + notificationData['type']);
+    });
+});
+
+
+
+        </script>
     </div>
 </div>
+
 
 
 
