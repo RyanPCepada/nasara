@@ -43,9 +43,12 @@ if (isset($_SESSION['customerID'])) {
                 $insertAudio->bindParam(':customerID', $customerID);
                 $insertAudio->execute();
 
+                // Get the last inserted feedback ID
+                $audioID = $conn->lastInsertId();
+
                 // Insert an activity log in tbl_activity_logs
-                $insertActivity = $conn->prepare('INSERT INTO tbl_activity_logs (activity, customer_ID) VALUES (?, ?)');
-                $insertActivity->execute(["Sent audio feedback", $customerID]);
+                $insertActivity = $conn->prepare('INSERT INTO tbl_activity_logs (activity, customer_ID, audio_ID) VALUES (?, ?, ?)');
+                $insertActivity->execute(["Sent audio feedback", $customerID, $audioID]);
 
                 // Redirect to the user's profile page
                 echo '<script>window.location.href = "http://localhost/nasara/account_main.php";</script>';

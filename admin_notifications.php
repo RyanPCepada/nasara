@@ -621,248 +621,196 @@ try {
 
 
                     <div class="row">
+    <div class="card-body" id="cards_body2" style="justify-content: center; background: white;">
+        <h5 style="margin-top: 5px; margin-left: 30px; margin-bottom: -10px;">All notifications</h5>
+        <h6 style="position: absolute; margin-top: -12px; margin-left: 912px; color: grey">Newest data appears first</h6>
+        <hr>
+        <img src="pages/admin/GIF_NOTIFICATIONS.gif" style="width: 1.5in; height: .9in; margin-left: 445px; margin-top: 0px;" id="adminnotif_gif">
+        
+        <style>
+            .scrollable-content {
+                height: 1000px;
+                overflow-y: auto;
+                color: black;
+                background: white;
+            }
 
-                        <div class="card-body" id="cards_body2" style="justify-content: center; background: white;">
-                        
-                            <h5 style="margin-top: 5px; margin-left: 30px; margin-bottom: -10px;">All notifications</h5>
-                            
-                            <h6 style="position: absolute; margin-top: -12px; margin-left: 912px; color: grey">Newest data appears first</h6>
+            .notification-row {
+                border: solid 1px lightblue;
+                box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);
+                border-radius: 5px;
+                font-size: 20px;
+                width: 900px;
+                margin-left: 15px;
+                margin-top: 10px;
+            }
 
-                            <hr>
+            .notification-row.today {
+                background-color: #ecffed;
+            }
 
-                            <img src="pages/admin/GIF_NOTIFICATIONS.gif" style="width: 1.5in; height: .9in; margin-left: 445px; margin-top: 0px;" id="adminnotif_gif">
+            .notification-row.today:hover {
+                background-color: #d4f5d8;
+            }
 
-                            <style>
-                                /* .notification-row:hover {
-                                    background-color: rgba(0, 0, 0, 0.111) !important; /* Light blue color *
-                                } */
+            .notification-row.yesterday {
+                background-color: #f1e9e9;
+            }
 
-                                .modal {
-                                    display: none;
-                                    position: fixed;
-                                    z-index: 1;
-                                    left: 0;
-                                    top: 0;
-                                    width: 100%;
-                                    height: 100%;
-                                    overflow-y: auto;
-                                    background-color: rgba(0, 0, 0, 0.4);
-                                    padding-top: 60px;
-                                }
+            .notification-row.yesterday:hover {
+                background-color: #e0d3d3;
+            }
 
-                                .modal-content {
-                                    background-color: #fefefe;
-                                    margin: 5% auto;
-                                    padding: 20px;
-                                    border: 1px solid #888;
-                                    width: 30%;
-                                }
+            .notification-row.older {
+                background-color: #ecedff;
+            }
 
-                                .close {
-                                    color: #aaa;
-                                    float: right;
-                                    font-size: 28px;
-                                    font-weight: bold;
-                                }
+            .notification-row.older:hover {
+                background-color: #d3d4f5;
+            }
+        </style>
 
-                                .close:hover,
-                                .close:focus {
-                                    color: black;
-                                    text-decoration: none;
-                                    cursor: pointer;
-                                }
-                            </style>
-                            
-                            
-                            <!-- NOTIFICATIONS TABLE -->
-                            <div class="scrollable-content" id="inputfields" style="height: 1000px; overflow-y: auto; color: black; background: white;">
-                                <div class="" style="position: relative;">
-                                    <?php
-                                    // Database connection
-                                    // Assuming you have already established a connection to the database using $conn
+        <!-- NOTIFICATIONS TABLE -->
+        <div class="scrollable-content" id="inputfields">
+            <div style="position: relative;">
+            <?php
+// Database connection
+// Assuming you have already established a connection to the database using $conn
 
-                                    // Fetch and display customer activities from tbl_activity_logs
-                                    $sqlNotifications = "
-                                    SELECT 
-                                        ci.customer_id,
-                                        CONCAT('images/', ci.image) AS image,
-                                        CONCAT(ci.firstName, ' ', ci.middlename, ' ', ci.lastName) AS name,
-                                        ci.gender,
-                                        al.dateAdded AS date,
-                                        al.activity AS type
-                                    FROM 
-                                        tbl_activity_logs al
-                                    JOIN 
-                                        tbl_customer_info ci ON al.customer_id = ci.customer_id
-                                    WHERE 
-                                        al.activity IN ('Registered an account', 'Sent feedback', 'Sent audio feedback')
-                                    ORDER BY 
-                                        al.dateAdded DESC";
+// Fetch and display customer activities from tbl_activity_logs
+$sqlNotifications = "
+SELECT 
+    ci.customer_id,
+    CONCAT('images/', ci.image) AS image,
+    CONCAT(ci.firstName, ' ', ci.middlename, ' ', ci.lastName) AS name,
+    ci.gender,
+    al.dateAdded AS date,
+    al.activity AS type
+FROM 
+    tbl_activity_logs al
+JOIN 
+    tbl_customer_info ci ON al.customer_id = ci.customer_id
+WHERE 
+    al.activity IN ('Registered an account', 'Sent feedback', 'Sent audio feedback')
+    AND (
+        al.activity = 'Registered an account' 
+        OR (al.activity = 'Sent feedback' AND EXISTS (
+            SELECT 1 FROM tbl_feedback fb WHERE fb.customer_ID = al.customer_id))
+        OR (al.activity = 'Sent audio feedback' AND EXISTS (
+            SELECT 1 FROM tbl_audio_feedback af WHERE af.customer_ID = al.customer_id))
+    )
+ORDER BY 
+    al.dateAdded DESC";
 
-                                    $stmtNotifications = $conn->prepare($sqlNotifications);
-                                    $stmtNotifications->execute();
-                                    $notifications = $stmtNotifications->fetchAll();
+$stmtNotifications = $conn->prepare($sqlNotifications);
+$stmtNotifications->execute();
+$notifications = $stmtNotifications->fetchAll();
 
-                                    $todayNotifications = [];
-                                    $yesterdayNotifications = [];
-                                    $olderNotifications = [];
+$todayNotifications = [];
+$yesterdayNotifications = [];
+$olderNotifications = [];
 
-                                    $now = new DateTime();
-                                    $yesterday = (clone $now)->modify('-1 day');
+$now = new DateTime();
+$yesterday = (clone $now)->modify('-1 day');
 
-                                    foreach ($notifications as $notification) {
-                                        $notificationDate = new DateTime($notification['date']);
+foreach ($notifications as $notification) {
+    $notificationDate = new DateTime($notification['date']);
 
-                                        if ($notificationDate->format('Y-m-d') == $now->format('Y-m-d')) {
-                                            $todayNotifications[] = $notification;
-                                        } elseif ($notificationDate->format('Y-m-d') == $yesterday->format('Y-m-d')) {
-                                            $yesterdayNotifications[] = $notification;
-                                        } else {
-                                            $olderNotifications[] = $notification;
-                                        }
-                                    }
+    if ($notificationDate->format('Y-m-d') == $now->format('Y-m-d')) {
+        $todayNotifications[] = $notification;
+    } elseif ($notificationDate->format('Y-m-d') == $yesterday->format('Y-m-d')) {
+        $yesterdayNotifications[] = $notification;
+    } else {
+        $olderNotifications[] = $notification;
+    }
+}
 
-                                    // Function to display notifications
-                                    function displayNotifications($notifications, $heading, $marginTop, $backgroundColor) {
-                                        echo '<h4 style="margin-top: ' . $marginTop . '; margin-left: 15px; font-size: 20px; color: gray;">' . $heading . '</h4>';
+// Function to display notifications
+function displayNotifications($notifications, $heading, $class) {
+    echo '<h4 style="margin-top: 20px; margin-left: 15px; font-size: 20px; color: gray;">' . $heading . '</h4>';
 
-                                        if (empty($notifications)) {
-                                            echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">No notifications ' . strtolower($heading) . '.</p>';
-                                        } else {
-                                            foreach ($notifications as $notification) {
-                                                $notificationData = htmlspecialchars(json_encode($notification), ENT_QUOTES, 'UTF-8');
-                                                echo '<div class="row notification-row" data-notification=\'' . $notificationData . '\' style="background-color: ' . $backgroundColor . '; border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); 
-                                                    border-radius: 5px; font-size: 20px; width: 900px; margin-left: 15px; margin-top: 10px;">';
+    if (empty($notifications)) {
+        echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">No notifications ' . strtolower($heading) . '.</p>';
+    } else {
+        foreach ($notifications as $notification) {
+            $notificationData = htmlspecialchars(json_encode($notification), ENT_QUOTES, 'UTF-8');
+            echo '<div class="row notification-row ' . $class . '" data-notification=\'' . $notificationData . '\' style="border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); 
+                border-radius: 5px; font-size: 20px; width: 900px; margin-left: 15px; margin-top: 10px;">';
 
-                                                echo '<div class="col-auto">
-                                                        <img src="' . htmlspecialchars($notification['image']) . '" style="width: 60px; height: 60px; border-radius: 30px; background-color: white; margin-top: 12px;">
-                                                    </div>';
-                                                echo '<div class="col">
-                                                        <p style="margin-top: 10px;"><strong>' . htmlspecialchars($notification['name']) . '</strong> ' . getActivityMessage($notification['type'], $notification['gender']) . '</p>
-                                                        <p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($notification['date'], $heading) . '</p>
-                                                    </div>';
-                                                echo '<div class="col-auto" style="margin-top: 10px;">
-                                                        <button class="btn btn-primary view-btn" style="margin-top: 10px;" onclick="onViewButtonClick(' . htmlspecialchars(json_encode($notification), ENT_QUOTES, 'UTF-8') . ')">View</button>
-                                                    </div>';
-                                                echo '</div>';
-                                            }
-                                        }
-                                    }
+            echo '<div class="col-auto">
+                    <img src="' . htmlspecialchars($notification['image']) . '" style="width: 60px; height: 60px; border-radius: 30px; background-color: white; margin-top: 12px;">
+                </div>';
+            echo '<div class="col">
+                    <p style="margin-top: 10px;"><strong>' . htmlspecialchars($notification['name']) . '</strong> ' . getActivityMessage($notification['type'], $notification['gender']) . '</p>
+                    <p style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($notification['date'], $heading) . '</p>
+                </div>';
+            echo '</div>';
+        }
+    }
+}
 
-                                    // Function to return activity message based on the type and gender
-                                    function getActivityMessage($type, $gender) {
-                                        $pronoun = ($gender == 'Male') ? 'his' : (($gender == 'Female') ? 'her' : 'his/her');
+// Function to return activity message based on the type and gender
+function getActivityMessage($type, $gender) {
+    $pronoun = ($gender == 'Male') ? 'his' : (($gender == 'Female') ? 'her' : 'his/her');
 
-                                        switch ($type) {
-                                            case 'Registered an account':
-                                                return 'has registered an account.';
-                                            case 'Sent feedback':
-                                                return 'has submitted feedback.';
-                                            case 'Updated the profile':
-                                                return 'has updated ' . $pronoun . ' profile.';
-                                            case 'Changed Profile Picture':
-                                                return 'has changed ' . $pronoun . ' profile picture.';
-                                            case 'Sent audio feedback':
-                                                return 'has submitted an audio feedback.';
-                                            default:
-                                                return '';
-                                        }
-                                    }
+    switch ($type) {
+        case 'Registered an account':
+            return 'has registered an account.';
+        case 'Sent feedback':
+            return 'has submitted feedback.';
+        case 'Updated the profile':
+            return 'has updated ' . $pronoun . ' profile.';
+        case 'Changed Profile Picture':
+            return 'has changed ' . $pronoun . ' profile picture.';
+        case 'Sent audio feedback':
+            return 'has submitted an audio feedback.';
+        default:
+            return '';
+    }
+}
 
-                                    // Function to format relative date and time
-                                    function formatRelativeDate($date, $category) {
-                                        $formattedDate = new DateTime($date);
-                                        $now = new DateTime();
-                                        $interval = $now->diff($formattedDate);
+// Function to format relative date and time
+function formatRelativeDate($date, $category) {
+    $formattedDate = new DateTime($date);
+    $now = new DateTime();
+    $interval = $now->diff($formattedDate);
 
-                                        if ($category === 'Today') {
-                                            return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
-                                        } elseif ($category === 'Yesterday') {
-                                            return 'Yesterday @ ' . $formattedDate->format('h:i A');
-                                        } else {
-                                            if ($interval->days == 1) {
-                                                return '1 day ago @ ' . $formattedDate->format('h:i A');
-                                            } elseif ($interval->days == 7) {
-                                                return '1 week ago @ ' . $formattedDate->format('h:i A');
-                                            } elseif ($interval->days > 7) {
-                                                return $formattedDate->format('F j, Y @ h:i A');
-                                            } else {
-                                                return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
-                                            }
-                                        }
-                                    }
+    if ($category === 'Today') {
+        return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
+    } elseif ($category === 'Yesterday') {
+        return 'Yesterday @ ' . $formattedDate->format('h:i A');
+    } else {
+        if ($interval->days == 1) {
+            return '1 day ago @ ' . $formattedDate->format('h:i A');
+        } elseif ($interval->days == 7) {
+            return '1 week ago @ ' . $formattedDate->format('h:i A');
+        } elseif ($interval->days > 7) {
+            return $formattedDate->format('F j, Y @ h:i A');
+        } else {
+            return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
+        }
+    }
+}
 
-                                    // Display "Today" notifications with background color #ecffed
-                                    displayNotifications($todayNotifications, 'Today', '20px', '#ecffed');
+// Display "Today" notifications
+displayNotifications($todayNotifications, 'Today', 'today');
 
-                                    // Display "Yesterday" notifications with background color #f1e9e9
-                                    displayNotifications($yesterdayNotifications, 'Yesterday', '20px', '#f1e9e9');
+// Display "Yesterday" notifications
+displayNotifications($yesterdayNotifications, 'Yesterday', 'yesterday');
 
-                                    // Display "Older" notifications with background color #ecedff
-                                    displayNotifications($olderNotifications, 'Older', '20px', '#ecedff');
-                                    ?>
-                                </div>
-                            </div>
-                            <!-- END NOTIFICATIONS TABLE -->
+// Display "Older" notifications
+displayNotifications($olderNotifications, 'Older', 'older');
+?>
 
+            </div>
+        </div>
+        <!-- END NOTIFICATIONS TABLE -->
 
-                            <!-- Modal -->
-                            <div id="notificationModal" class="modal">
-                                <div class="modal-content">
-                                    <span class="close">&times;</span>
-                                    <div id="notificationDetails"></div>
-                                </div>
-                            </div>
+        <hr>
+    </div>
+</div>
 
 
-
-                            <script>
-                            // Get the modal
-                            var modal = document.getElementById("notificationModal");
-
-                            // Get the <span> element that closes the modal
-                            var span = document.getElementsByClassName("close")[0];
-
-                            // When the user clicks on <span> (x), close the modal
-                            span.onclick = function() {
-                            modal.style.display = "none";
-                            }
-
-                            // When the user clicks anywhere outside of the modal, close it
-                            window.onclick = function(event) {
-                            if (event.target == modal) {
-                                modal.style.display = "none";
-                            }
-                            }
-
-                            // Function to handle "View" button clicks
-                            function onViewButtonClick(notificationData) {
-                            // Display the modal
-                            modal.style.display = "block";
-                            
-                            // Send AJAX request to fetch notification details
-                            // You need to implement the server-side code to handle this request
-                            // Here, I'm assuming you have a PHP script called "get_notification_details.php"
-                            var xhr = new XMLHttpRequest();
-                            xhr.onreadystatechange = function() {
-                                if (this.readyState == 4 && this.status == 200) {
-                                // Display the notification details in the modal
-                                document.getElementById("notificationDetails").innerHTML = this.responseText;
-                                }
-                            };
-                            xhr.open("GET", "get_notification_details.php?notificationData=" + encodeURIComponent(JSON.stringify(notificationData)), true);
-                            xhr.send();
-                            }
-                            </script>
-
-
-                            <hr>
-
-                        </div>
-
-                    </div>
-
-                    
 
                     <!-- </div> BODY END -->
                 </div>

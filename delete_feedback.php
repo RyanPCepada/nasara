@@ -27,6 +27,12 @@ if (isset($_GET['id'])) {
         $stmtDeleteWrittenFeedback->bindParam(':id', $id, PDO::PARAM_INT);
         
         if ($stmtDeleteWrittenFeedback->execute()) {
+            // Delete associated activity log entry
+            $sqlDeleteActivityLog = "DELETE FROM tbl_activity_logs WHERE feedback_ID = :id";
+            $stmtDeleteActivityLog = $conn->prepare($sqlDeleteActivityLog);
+            $stmtDeleteActivityLog->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmtDeleteActivityLog->execute();
+            
             header("Location: account_main.php");
             exit;
         } else {
@@ -39,6 +45,12 @@ if (isset($_GET['id'])) {
         $stmtDeleteAudioFeedback->bindParam(':id', $id, PDO::PARAM_INT);
         
         if ($stmtDeleteAudioFeedback->execute()) {
+            // Delete associated activity log entry
+            $sqlDeleteActivityLog = "DELETE FROM tbl_activity_logs WHERE audio_ID = :id";
+            $stmtDeleteActivityLog = $conn->prepare($sqlDeleteActivityLog);
+            $stmtDeleteActivityLog->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmtDeleteActivityLog->execute();
+            
             header("Location: account_main.php");
             exit;
         } else {

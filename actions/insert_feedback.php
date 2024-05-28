@@ -1,4 +1,3 @@
-
 <?php
 require_once '../connection.php';
 
@@ -9,11 +8,8 @@ $services = $_POST['services'];
 $convenience = $_POST['convenience'];
 $rating = $_POST['rating'];
 
-
-
 try {
     $conn->beginTransaction();
-
 
     if (isset($_SESSION['customerID'])) {
         $customerID = $_SESSION['customerID']; // Retrieve the customerID from the session
@@ -27,9 +23,12 @@ try {
     $insertFeedback = $conn->prepare('INSERT INTO tbl_feedback (products, services, convenience, rating, customer_ID) VALUES (?, ?, ?, ?, ?)');
     $insertFeedback->execute([$products, $services, $convenience, $rating, $customerID]);
 
+    // Get the last inserted feedback ID
+    $feedbackID = $conn->lastInsertId();
+
     // Insert an activity log in tbl_activity_logs
-    $insertActivity = $conn->prepare('INSERT INTO tbl_activity_logs (activity, customer_ID) VALUES (?, ?)');
-    $insertActivity->execute(["Sent feedback", $customerID]);
+    $insertActivity = $conn->prepare('INSERT INTO tbl_activity_logs (activity, customer_ID, feedback_ID) VALUES (?, ?, ?)');
+    $insertActivity->execute(["Sent feedback", $customerID, $feedbackID]);
 
     $conn->commit();
     echo '<script>alert("Feedback Submitted!");';
@@ -40,19 +39,3 @@ try {
     $conn->rollBack();
 }
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

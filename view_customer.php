@@ -154,8 +154,8 @@ if (isset($_SESSION['adminID'])) {
                             echo '<p class="card-text"><strong>Rating:</strong> ' . htmlspecialchars($feedback['rating']) . '</p>';
                             echo '<p class="card-text" style="color: blue; font-size: 15px; margin-top: 10px;">' . formatRelativeDate($feedback['date'], $heading) . '</p>';
                             
-                            // Delete button with confirmation dialog
-                            echo '<button class="btn btn-transparent" onclick="confirmDelete(' . $feedback['feedback_ID'] . ', ' . $customerID . ')" style="position: absolute; bottom: 20px; right: 20px; font-size: 25px; color: red;"><i class="fas fa-trash-alt"></i></button>';
+                            // Delete button with confirmation dialog - REMOVED
+                            // echo '<button class="btn btn-transparent" onclick="confirmDelete(' . $feedback['feedback_ID'] . ', ' . $customerID . ')" style="position: absolute; bottom: 20px; right: 20px; font-size: 25px; color: red;"><i class="fas fa-trash-alt"></i></button>';
                             
                             echo '</div>';
                             echo '</div>';
@@ -175,9 +175,10 @@ if (isset($_SESSION['adminID'])) {
                 displayFeedbacks($feedbackCategory['Older'], 'Older', '#ecedff');
                 ?>
             </div>
-        <?php else: ?>
-            <p>Customer not found.</p>
-        <?php endif; ?>
+            <?php else: ?>
+                <p>Customer not found.</p>
+            <?php endif; ?>
+
 
         <script>
             function confirmDelete(feedbackID, customerID) {
@@ -207,8 +208,7 @@ if (isset($_SESSION['adminID'])) {
             ci.customer_ID AS 'Customer ID',
             CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS 'Full Name',
             af.audio AS 'Audio',
-            af.dateAdded AS 'Date',
-            af.audio_ID AS 'Audio ID'
+            af.dateAdded AS 'Date'
             FROM tbl_customer_info AS ci
             JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
             WHERE ci.customer_ID = :CustomerID
@@ -247,31 +247,25 @@ if (isset($_SESSION['adminID'])) {
                 } else {
                     foreach ($audios as $audio) {
                         echo '<div class="row" style="margin-left: 15px; margin-top: 10px; padding-bottom: 10px;">';
-                    
+
                         echo '<div class="col-auto">';
                         echo '<img src="' . htmlspecialchars($audio['Profile picture']) . '" alt="Profile picture" style="width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 50%; background-color: white;">';
                         echo '</div>';
-                    
+
                         echo '<div class="col">';
                         echo '<p style="margin-top: 10px; font-weight: bold;">' . htmlspecialchars($audio['Full Name']) . '</p>';
                         echo '<p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($audio['Date'], $heading) . '</p>';
                         echo '</div>';
-                    
+
                         echo '<div class="col-auto">';
                         echo '<audio controls style="width: 500px; margin-right: 50px; margin-top: 12px;">';
-                        echo '<source src="http://localhost/nasara/audios/' . htmlspecialchars($audio['Audio ID']) . '" type="audio/' . pathinfo($audio['Audio'], PATHINFO_EXTENSION) . '">';
+                        echo '<source src="http://localhost/nasara/audios/' . htmlspecialchars($audio['Audio']) . '" type="audio/' . pathinfo($audio['Audio'], PATHINFO_EXTENSION) . '">';
                         echo 'Your browser does not support the audio element.';
                         echo '</audio>';
                         echo '</div>';
-                    
-                        echo '<div class="col-auto" style="position: relative; bottom: -20px; right: 20px;">';
-                        echo '<button class="btn btn-transparent" onclick="deleteAudio(' . $audio['Audio ID'] . ')" style="font-size: 25px; color: red;"><i class="fas fa-trash-alt"></i></button>';
-                        echo '</div>';
 
-                    
                         echo '</div>';
                     }
-                    
                 }
             }
 
