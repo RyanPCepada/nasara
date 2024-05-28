@@ -217,9 +217,9 @@ try {
                                 </button>
                             </div>
                             <div class="col-2">
-                                <button class="btn btn-success" type="button" id="icon_blank" data-bs-toggle="modal" data-bs-target="#modal_profile">
+                                <!-- <button class="btn btn-success" type="button" id="icon_blank" data-bs-toggle="modal" data-bs-target="#modal_profile">
                                     <i class=""></i>
-                                </button>
+                                </button> -->
                             </div>
                             <div class="col-2">
                                 <form action="actions/logoutAction.php" method="post">
