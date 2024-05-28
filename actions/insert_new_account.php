@@ -7,6 +7,8 @@ $email = $_POST['email'];
 $pword = $_POST['password'];
 $confirmpword = $_POST['confirmpassword'];
 
+// Default profile picture path
+$defaultProfilePicture = "profpic.png";
 
 if ($pword == $confirmpword) {
 
@@ -16,29 +18,17 @@ if ($pword == $confirmpword) {
         if (isset($_SESSION['customerID'])) {
             $customerID = $_SESSION['customerID']; // Retrieve the customerID from the session
         } 
-
-        // //tbl_user_type_access
-        // $insertUserType = $conn->prepare('INSERT INTO tbl_user_type_access (accessType) VALUES (?)');
-        // $insertUserType->execute(["User"]);
-
-        // $accesstypeID = $conn->lastInsertId(); 
         
-        //tbl_customer_info
+        // Insert into tbl_customer_info
         $insertNewAccount = $conn->prepare('INSERT INTO tbl_customer_info (firstName, lastName, email, password, image) 
         VALUES (?, ?, ?, ?, ?)');
-        $insertNewAccount->execute([$fname, $lname, $email, $pword, "2_2024.05.05_04.48.56pm"]); // Assumes auto-generated ID
+        $insertNewAccount->execute([$fname, $lname, $email, $pword, $defaultProfilePicture]); // Insert default profile picture
 
         $customerID = $conn->lastInsertId(); 
 
-        //tbl_activity_logs
+        // Insert into tbl_activity_logs
         $insertActivity = $conn->prepare('INSERT INTO tbl_activity_logs (activity, customer_ID) VALUES (?, ?)');
         $insertActivity->execute(["Registered an account", $customerID]);
-
-        //tbl_background_info
-        // $insertAccount = $conn->prepare('INSERT INTO tbl_background_info 
-        // (bio, hobby1, hobby2, hobby3, hobby4, favorite1, favorite2, favorite3, favorite4, dateModified, customer_ID) 
-        // VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-        // $insertAccount->execute(["", "", "", "", "", "", "", "", "", $dateModified, $customerID]);
 
         $conn->commit();
         echo '<script>alert("Registered Successfully!");';
@@ -49,8 +39,8 @@ if ($pword == $confirmpword) {
         $conn->rollBack();
     }
 
-}else{
-    
+} else {
+    echo '<script>alert("Passwords do not match!");';
+    echo 'window.location.href = "http://localhost/nasara/register.php";</script>';
 }
-
 ?>
