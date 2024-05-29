@@ -104,11 +104,11 @@ if (isset($_SESSION['adminID'])) {
                     <p><strong>Email:</strong> <?php echo htmlspecialchars($customer['email']); ?></p>
                     <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($customer['phoneNumber']); ?></p>
 
-                    <div style="position: absolute; bottom: 20px; right: 20px;">
+                    <!-- <div style="position: absolute; bottom: 20px; right: 20px;">
                         <button class="btn btn-transparent" onclick="deleteCustomer(<?php echo $customerID; ?>)">
-                            <i class="fas fa-trash-alt" style="font-size: 25px; color: red;"></i> <!-- Font Awesome trash icon -->
+                            <i class="fas fa-trash-alt" style="font-size: 25px; color: red;"></i> <!-- Font Awesome trash icon --
                         </button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 

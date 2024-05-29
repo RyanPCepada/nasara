@@ -262,33 +262,46 @@ try {
                         <h3 style="margin-top: -39px; margin-left: 60px;">Notifications</h3>
                         <span id="notification-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                             <?php
-                            // Fetch the count of new feedbacks for today
-                            $sqlFeedback = "SELECT COUNT(feedback_ID) AS feedbackCount FROM tbl_feedback WHERE DATE(date) = CURDATE()"; 
-                            $stmtFeedback = $conn->prepare($sqlFeedback);
-                            $stmtFeedback->execute();
-                            $feedbackCount = $stmtFeedback->fetchColumn();
-
-                            // Fetch the count of new customers for today
-                            $sqlCustomers = "SELECT COUNT(customer_ID) AS customerCount FROM tbl_customer_info WHERE DATE(dateAdded) = CURDATE()"; 
-                            $stmtCustomers = $conn->prepare($sqlCustomers);
-                            $stmtCustomers->execute();
-                            $customerCount = $stmtCustomers->fetchColumn();
 
                             // Fetch the count of activity logs for today
-                            $sqlActivityLogs = "SELECT COUNT(*) AS activityLogCount FROM tbl_activity_logs WHERE activity='Updated the profile' AND DATE(dateAdded) = CURDATE()"; 
-                            $stmtActivityLogs = $conn->prepare($sqlActivityLogs);
-                            $stmtActivityLogs->execute();
-                            $activityLogCount = $stmtActivityLogs->fetchColumn();
+                            $sqlActivityLogs1 = "SELECT COUNT(*) AS activityLogCount1 FROM tbl_activity_logs WHERE activity='Registered an account' AND DATE(dateAdded) = CURDATE()"; 
+                            $stmtActivityLogs1 = $conn->prepare($sqlActivityLogs1);
+                            $stmtActivityLogs1->execute();
+                            $activityLogCount1 = $stmtActivityLogs1->fetchColumn();
+
+                            // Fetch the count of activity logs for today
+                            // $sqlActivityLogs2 = "SELECT COUNT(*) AS activityLogCount2 FROM tbl_activity_logs WHERE activity='Updated the profile' AND DATE(dateAdded) = CURDATE()"; 
+                            // $stmtActivityLogs2 = $conn->prepare($sqlActivityLogs2);
+                            // $stmtActivityLogs2->execute();
+                            // $activityLogCount2 = $stmtActivityLogs2->fetchColumn();
+
+
+                            // // Fetch the count of activity logs for today
+                            // $sqlActivityLogs3 = "SELECT COUNT(*) AS activityLogCount3 FROM tbl_activity_logs WHERE activity='Changed Profile Picture' AND DATE(dateAdded) = CURDATE()"; 
+                            // $stmtActivityLogs3 = $conn->prepare($sqlActivityLogs3);
+                            // $stmtActivityLogs3->execute();
+                            // $activityLogCount3 = $stmtActivityLogs3->fetchColumn();
+                            
+                            // Fetch the count of activity logs for today
+                            $sqlActivityLogs2 = "SELECT COUNT(*) AS activityLogCount2 FROM tbl_activity_logs WHERE activity='Sent feedback' AND DATE(dateAdded) = CURDATE()"; 
+                            $stmtActivityLogs2 = $conn->prepare($sqlActivityLogs2);
+                            $stmtActivityLogs2->execute();
+                            $activityLogCount2 = $stmtActivityLogs2->fetchColumn();
+                            
+                            // Fetch the count of activity logs for today
+                            $sqlActivityLogs3 = "SELECT COUNT(*) AS activityLogCount3 FROM tbl_activity_logs WHERE activity='Sent audio feedback' AND DATE(dateAdded) = CURDATE()"; 
+                            $stmtActivityLogs3 = $conn->prepare($sqlActivityLogs3);
+                            $stmtActivityLogs3->execute();
+                            $activityLogCount3 = $stmtActivityLogs3->fetchColumn();
 
                             // Calculate and display the combined count of feedbacks, new customers, and activity logs
-                            $totalNotifications = $feedbackCount + $customerCount + $activityLogCount;
+                            $totalNotifications = $activityLogCount1 + $activityLogCount2 + $activityLogCount3;
                             echo $totalNotifications;
                             ?>
                             <span class="visually-hidden">unread messages</span>
                         </span>
                     </button>
                 </div>
-
                 
                 <div class="div-history text-center d-flex align-items-center justify-content-center" id="div_history" onclick="to_adminhistory()" href="admin_history.php">
                     <button class="btn btn-secondary" type="button" id="icon_history">
@@ -310,7 +323,6 @@ try {
                         <h3 style="margin-top: -39px; margin-left: 60px;">Logout</h3>
                     </button>
                 </div>
-
                 
                 <div class="modal fade" id="modal_logout" tabindex="-1" role="dialog" aria-labelledby="modal_logoutLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
