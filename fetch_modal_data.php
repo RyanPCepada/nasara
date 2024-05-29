@@ -7,11 +7,13 @@ $notificationType = $_POST['type'];
 $response = [];
 
 if ($notificationType == 'Sent feedback') {
+    $feedbackID = $_POST['feedback_ID']; // Fetch feedback_ID parameter
     $sql = "
         SELECT
             CONCAT('images/', ci.image) AS 'Profile picture',
             ci.customer_ID AS 'Customer ID',
             CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS 'Full Name',
+            fb.feedback_ID,
             fb.products AS 'Products',
             fb.services AS 'Services',
             fb.convenience AS 'Convenience',
@@ -19,14 +21,14 @@ if ($notificationType == 'Sent feedback') {
             fb.date AS 'Date'
         FROM tbl_customer_info AS ci
         JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID
-        WHERE ci.customer_ID = :customerID
-        ORDER BY fb.feedback_ID DESC
+        WHERE fb.feedback_ID = :feedbackID
     ";
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':customerID', $customerID, PDO::PARAM_INT);
+    $stmt->bindParam(':feedbackID', $feedbackID, PDO::PARAM_INT); // Bind feedback_ID parameter
     $stmt->execute();
     $response = $stmt->fetch(PDO::FETCH_ASSOC);
 } elseif ($notificationType == 'Sent audio feedback') {
+    $audioID = $_POST['audio_ID']; // Fetch audio_ID parameter
     $sqlAudios = "
         SELECT 
             CONCAT('images/', ci.image) AS 'Profile picture',
@@ -36,11 +38,10 @@ if ($notificationType == 'Sent feedback') {
             af.dateAdded AS 'Date'
         FROM tbl_customer_info AS ci
         JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
-        WHERE ci.customer_ID = :customerID
-        ORDER BY af.audio_ID DESC
+        WHERE af.audio_ID = :audioID
     ";
     $stmtAudios = $conn->prepare($sqlAudios);
-    $stmtAudios->bindParam(':customerID', $customerID, PDO::PARAM_INT);
+    $stmtAudios->bindParam(':audioID', $audioID, PDO::PARAM_INT);
     $stmtAudios->execute();
     $response = $stmtAudios->fetch(PDO::FETCH_ASSOC);
 } elseif ($notificationType == 'Registered an account') {
@@ -64,7 +65,7 @@ if ($notificationType == 'Sent feedback') {
             dateAdded AS 'Creation Date'
         FROM tbl_customer_info
         WHERE customer_ID = :customerID
-        ORDER BY customer_ID DESC
+        
     ";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':customerID', $customerID, PDO::PARAM_INT);

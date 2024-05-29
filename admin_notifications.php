@@ -736,21 +736,26 @@ try {
 
                 // Fetch and display customer activities from tbl_activity_logs
                 $sqlNotifications = "
-                SELECT 
-                    ci.customer_id,
-                    CONCAT('images/', ci.image) AS image,
-                    CONCAT(ci.firstName, ' ', ci.middlename, ' ', ci.lastName) AS name,
-                    ci.gender,
-                    al.dateAdded AS date,
-                    al.activity AS type
-                FROM 
-                    tbl_activity_logs al
-                JOIN 
-                    tbl_customer_info ci ON al.customer_id = ci.customer_id
-                WHERE 
-                    al.activity IN ('Registered an account', 'Sent feedback', 'Sent audio feedback')
-                ORDER BY 
-                    al.dateAdded DESC";
+SELECT 
+    al.activity_ID,
+    al.feedback_ID,  -- Add feedback_ID to the SELECT statement
+    al.audio_ID,     -- Add audio_ID to the SELECT statement
+    ci.customer_id,
+    CONCAT('images/', ci.image) AS image,
+    CONCAT(ci.firstName, ' ', ci.middlename, ' ', ci.lastName) AS name,
+    ci.gender,
+    al.dateAdded AS date,
+    al.activity AS type
+FROM 
+    tbl_activity_logs al
+JOIN 
+    tbl_customer_info ci ON al.customer_id = ci.customer_id
+WHERE 
+    al.activity IN ('Registered an account', 'Sent feedback', 'Sent audio feedback')
+ORDER BY 
+    al.dateAdded DESC";
+
+
 
                 $stmtNotifications = $conn->prepare($sqlNotifications);
                 $stmtNotifications->execute();
@@ -778,7 +783,7 @@ try {
                 // Function to display notifications
                 function displayNotifications($notifications, $heading, $class) {
                     echo '<h4 style="margin-top: 20px; margin-left: 15px; font-size: 20px; color: gray;">' . $heading . '</h4>';
-
+                
                     if (empty($notifications)) {
                         echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">No notifications ' . strtolower($heading) . '.</p>';
                     } else {
@@ -786,7 +791,7 @@ try {
                             $notificationData = htmlspecialchars(json_encode($notification), ENT_QUOTES, 'UTF-8');
                             echo '<div class="row notification-row ' . $class . '" data-notification=\'' . $notificationData . '\' style="border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); 
                                 border-radius: 5px; font-size: 20px; width: 900px; margin-left: 15px; margin-top: 10px;">';
-
+                
                             echo '<div class="col-auto">
                                     <img src="' . htmlspecialchars($notification['image']) . '" style="width: 60px; height: 60px; border-radius: 30px; background-color: white; margin-top: 12px;">
                                 </div>';
@@ -798,6 +803,7 @@ try {
                         }
                     }
                 }
+                
 
                 // Function to return activity message based on the type and gender
                 function getActivityMessage($type, $gender) {
@@ -868,32 +874,26 @@ try {
 
         <!-- JavaScript for Modal Functionality -->
         <script>
-            // Get the notifmodal
+            // JavaScript for Modal Functionality
             var notifmodal = document.getElementById("notificationModal");
-
-            // Get the <span> element that closes the notifmodal
             var span = document.getElementsByClassName("close")[0];
 
-            // When the user clicks on <span> (x), close the notifmodal
             span.onclick = function() {
                 notifmodal.style.display = "none";
             }
 
-            // When the user clicks anywhere outside of the notifmodal, close it
             window.onclick = function(event) {
                 if (event.target == notifmodal) {
                     notifmodal.style.display = "none";
                 }
             }
 
-            // Add click event listener to each notification row
             document.querySelectorAll('.notification-row').forEach(function(row) {
                 row.addEventListener('click', function() {
                     var notificationData = JSON.parse(this.getAttribute('data-notification'));
                     var modalBody = document.getElementById("notificationModalBody");
                     var viewNotificationBtn = document.getElementById("viewNotificationBtn");
 
-                    // Send an AJAX request to fetch notifmodal data
                     var xhr = new XMLHttpRequest();
                     xhr.open("POST", "fetch_modal_data.php", true);
                     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -901,11 +901,13 @@ try {
                         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                             var response = JSON.parse(xhr.responseText);
 
-                            // Clear previous content
                             modalBody.innerHTML = '';
+                            // modalBody.innerHTML += '<p><strong>Activity ID:</strong> ' + notificationData.activity_ID + '</p>';
+                            // modalBody.innerHTML += '<p><strong>Feedback ID:</strong> ' + notificationData.feedback_ID + '</p>'; // Display Feedback ID
+                            // modalBody.innerHTML += '<p><strong>Audio ID:</strong> ' + notificationData.audio_ID + '</p>'; // Display Audio ID
 
-                            // Populate notifmodal with response data based on the type of notification
                             if (notificationData['type'] === 'Sent feedback') {
+                                // Display feedback details
                                 modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
                                 modalBody.innerHTML += '<h4><strong></strong> ' + response['Full Name'] + '</h4>';
                                 modalBody.innerHTML += '<p><strong>Products:</strong> ' + response['Products'] + '</p>';
@@ -914,11 +916,13 @@ try {
                                 modalBody.innerHTML += '<p><strong>Rating:</strong> ' + response['Rating'] + '</p>';
                                 modalBody.innerHTML += '<p><strong>Date:</strong> ' + response['Date'] + '</p>';
                             } else if (notificationData['type'] === 'Sent audio feedback') {
+                                // Display audio feedback details
                                 modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
                                 modalBody.innerHTML += '<h4><strong></strong> ' + response['Full Name'] + '</h4>';
                                 modalBody.innerHTML += '<p><strong></strong><audio controls><source src="http://localhost/nasara/audios/' + response['Audio'] + '" type="audio/mpeg">Your browser does not support the audio element.</audio></p>';
                                 modalBody.innerHTML += '<p><strong>Date:</strong> ' + response['Date'] + '</p>';
                             } else if (notificationData['type'] === 'Registered an account') {
+                                // Display account registration details
                                 modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
                                 modalBody.innerHTML += '<h4><strong>Name:</strong> ' + response['Firstname'] + ' ' + response['Middlename'] + ' ' + response['Lastname'] + '</h4>';
                                 modalBody.innerHTML += '<p><strong>Address:</strong> ' + response['Street'] + ', ' + response['Barangay'] + ', ' + response['Municipality'] + ', ' + response['Province'] + ' - ' + response['Zipcode'] + '</p>';
@@ -929,23 +933,24 @@ try {
                                 modalBody.innerHTML += '<p><strong>Creation Date:</strong> ' + response['Creation Date'] + '</p>';
                             }
 
-                            // Set the link for the view all button
                             viewNotificationBtn.onclick = function() {
-                                // Redirect to view_customer.php with customer ID parameter
                                 window.location.href = 'view_customer.php?customer_ID=' + response['Customer ID'];
                             };
 
-                            // Display the notifmodal
                             notifmodal.style.display = "block";
+
                         }
                     };
-                    xhr.send("customer_id=" + notificationData['customer_id'] + "&type=" + notificationData['type']);
+                    xhr.send("customer_id=" + notificationData['customer_id'] + "&type=" + notificationData['type'] + "&feedback_ID=" + notificationData['feedback_ID'] + "&audio_ID=" + notificationData['audio_ID']);
+
                 });
             });
 
-
-
         </script>
+
+
+
+
     </div>
 </div>
 
