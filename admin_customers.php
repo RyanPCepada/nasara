@@ -960,8 +960,8 @@ try {
                             <!-- END CUSTOMERS TABLE -->
 
                             <!-- Modal -->
-                            <div id="customerModal" class="modal">
-                                <div class="modal-content">
+                            <div id="customerModal" class="custmodal">
+                                <div class="custmodal-content">
                                     <span class="close">&times;</span>
                                     <div id="modalBody"></div>
                                     <!-- Add a button to view customer information -->
@@ -970,21 +970,21 @@ try {
                             </div>
 
                             <script>
-                                // Get the modal
-                                var modal = document.getElementById("customerModal");
+                                // Get the custmodal
+                                var custmodal = document.getElementById("customerModal");
 
-                                // Get the <span> element that closes the modal
+                                // Get the <span> element that closes the custmodal
                                 var span = document.getElementsByClassName("close")[0];
 
-                                // When the user clicks on <span> (x), close the modal
+                                // When the user clicks on <span> (x), close the custmodal
                                 span.onclick = function() {
-                                    modal.style.display = "none";
+                                    custmodal.style.display = "none";
                                 }
 
-                                // When the user clicks anywhere outside of the modal, close it
+                                // When the user clicks anywhere outside of the custmodal, close it
                                 window.onclick = function(event) {
-                                    if (event.target == modal) {
-                                        modal.style.display = "none";
+                                    if (event.target == custmodal) {
+                                        custmodal.style.display = "none";
                                     }
                                 }
 
@@ -998,7 +998,7 @@ try {
                                         // Clear previous content
                                         modalBody.innerHTML = '';
 
-                                        // Populate modal with specific customer data
+                                        // Populate custmodal with specific customer data
                                         modalBody.innerHTML += '<p><img src="' + customerData['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
                                         modalBody.innerHTML += '<p><strong>Full Name:</strong> ' + customerData['Firstname'] + ' ' + customerData['Middlename'] + ' ' + customerData['Lastname'] + '</p>';
                                         modalBody.innerHTML += '<p><strong>Address:</strong> ' + customerData['Street'] + ', ' + customerData['Barangay'] + ', ' + customerData['Municipality'] + ', ' + customerData['Province'] + ', ' + customerData['Zipcode'] + '</p>';
@@ -1015,8 +1015,8 @@ try {
                                             window.location.href = 'view_customer.php?customer_ID=' + customerID;
                                         };
 
-                                        // Display the modal
-                                        modal.style.display = "block";
+                                        // Display the custmodal
+                                        custmodal.style.display = "block";
                                     });
                                 });
                             </script>
@@ -1030,7 +1030,7 @@ try {
                             }
 
 
-                            .modal {
+                            .custmodal {
                                 display: none;
                                 position: fixed;
                                 z-index: 1;
@@ -1044,7 +1044,7 @@ try {
                                 padding-top: 60px;
                             }
 
-                            .modal-content {
+                            .custmodal-content {
                                 background-color: #fefefe;
                                 margin: 5% auto;
                                 margin-top: 0px;
