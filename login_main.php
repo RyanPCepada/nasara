@@ -130,15 +130,12 @@
                                 <input type="text" placeholder="Confirm Password" class="confirmpassword" name="confirmpassword" id="row4" required/> 
                                 <!-- <p id="message" style="background: white;"></p> -->
                             </div>
-                            <!-- <hr style="color: white; border: solid 1px white;"> -->
-                            <div class="boxandlink">
+
+                            <!-- <div class="boxandlink">
                                 <input type="checkbox" id="privacy-checkbox" name="privacy-checkbox" required>
                                 <label for="privacy-checkbox" id="privacy-link" style="color: #f5f5f5;">I already read and understand the <a href="privacy_details_main.php"
                                 style="color: white;"><b>privacy details</b></a>.</label>
-                            </div>
-                            <!-- <button type="submit" class="submit" name="submit" id="modalsubmit">Create account</button> ORIGINAL-->
-                            
-                            <!-- <button type="button" onclick="checkPassword()">SUBMIT</button> NEW-->
+                            </div> -->
                             
                             <button type="submit" class="btn" name="submit" id="modalsubmit" onclick="checkPassword(event)">Create</button>
                             <button type="button" class="btn btn-secondary" id="closeModalBtn" data-bs-dismiss="modal">Close</button>

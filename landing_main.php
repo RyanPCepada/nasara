@@ -158,15 +158,12 @@ try {
                                 <input type="text" placeholder="Confirm Password" class="confirmpassword" name="confirmpassword" id="row4" required/> 
                                 <!-- <p id="message" style="background: white;"></p> -->
                             </div>
-                            <!-- <hr style="color: white; border: solid 1px white;"> -->
-                            <div class="boxandlink">
+
+                            <!-- <div class="boxandlink">
                                 <input type="checkbox" id="privacy-checkbox" name="privacy-checkbox" required>
                                 <label for="privacy-checkbox" id="privacy-link" style="color: #f5f5f5;">I already read and understand the <a href="privacy_details_main.php"
                                 style="color: white;"><b>privacy details</b></a>.</label>
-                            </div>
-                            <!-- <button type="submit" class="submit" name="submit" id="modalsubmit">Create account</button> ORIGINAL-->
-                            
-                            <!-- <button type="button" onclick="checkPassword()">SUBMIT</button> NEW-->
+                            </div> -->
                             
                             <button type="submit" class="btn" name="submit" id="modalsubmit" onclick="checkPassword(event)">Create</button>
                             <button type="button" class="btn btn-secondary" id="closeModalBtn" data-bs-dismiss="modal">Close</button>
@@ -239,10 +236,9 @@ try {
 
                 <h1 style="position: absolute; font-size: 50px; color: white; width: 777px; margin-top: -420px; z-index: 999;">Your Voice, Our Excellence!</h1>
                 <!-- <h1 style="position: absolute; color: white; width: 500px; margin-top: 350px; z-index: 999;">Our Excellence!</h1> -->
+                <img src="icons/WEWANTYOURFEEDBACK_PNG.png" class="img-fluid" style="position: absolute; width: 400px; margin-top: -150px; margin-left: -1000px; filter: drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.5));" alt="">
                 <img src="icons/2PERSONS_GIF.gif" class="img-fluid" style="position: absolute; width: 500px; margin-top: 50px;" alt="">
                 <img src="icons/3PERSONS_PNG.png" class="img-fluid" style="position: absolute; width: 400px; margin-top: -150px; margin-left: 1000px; filter: drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.5));" alt="">
-
-                <img src="icons/WEWANTYOURFEEDBACK_PNG.png" class="img-fluid" style="position: absolute; width: 400px; margin-top: -150px; margin-left: -1000px; filter: drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.5));" alt="">
 
 
             </div>
@@ -255,7 +251,7 @@ try {
     </body>
 
 
-    <footer class="bg-transparent text-light text-center bg-dark p-3" style="height: 10px; margin-top: -55px;">
+    <footer class="bg-transparent text-light text-center bg-primary p-3" style="height: 10px; margin-top: -55px;">
             <p>&copy; 2024 NasaraStore. All rights reserved.</p>
         </footer>
 
