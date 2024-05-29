@@ -688,7 +688,7 @@ try {
             }
 
             /* Modal CSS */
-            .modal {
+            .notifmodal {
                 display: none;
                 position: fixed;
                 z-index: 1;
@@ -701,14 +701,14 @@ try {
                 padding-top: 60px;
             }
 
-            .modal-content {
+            .notifmodal-content {
                 background-color: #fefefe;
                 margin: 5% auto;
                 margin-top: 0px;
                 padding: 20px;
                 border: 1px solid #888;
                 width: 30%;
-                max-height: 100%; /* Set a maximum height for the modal */
+                max-height: 100%; /* Set a maximum height for the notifmodal */
                 overflow-y: auto; /* Add vertical scrollbar when content overflows */
             }
 
@@ -858,8 +858,8 @@ try {
         <hr>
 
         <!-- Modal -->
-        <div id="notificationModal" class="modal">
-            <div class="modal-content">
+        <div id="notificationModal" class="notifmodal">
+            <div class="notifmodal-content">
                 <span class="close">&times;</span>
                 <div id="notificationModalBody"></div>
                 <button id="viewNotificationBtn" class="view-all-btn">View Customer's Information</button>
@@ -868,21 +868,21 @@ try {
 
         <!-- JavaScript for Modal Functionality -->
         <script>
-            // Get the modal
-            var modal = document.getElementById("notificationModal");
+            // Get the notifmodal
+            var notifmodal = document.getElementById("notificationModal");
 
-            // Get the <span> element that closes the modal
+            // Get the <span> element that closes the notifmodal
             var span = document.getElementsByClassName("close")[0];
 
-            // When the user clicks on <span> (x), close the modal
+            // When the user clicks on <span> (x), close the notifmodal
             span.onclick = function() {
-                modal.style.display = "none";
+                notifmodal.style.display = "none";
             }
 
-            // When the user clicks anywhere outside of the modal, close it
+            // When the user clicks anywhere outside of the notifmodal, close it
             window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
+                if (event.target == notifmodal) {
+                    notifmodal.style.display = "none";
                 }
             }
 
@@ -893,7 +893,7 @@ try {
                     var modalBody = document.getElementById("notificationModalBody");
                     var viewNotificationBtn = document.getElementById("viewNotificationBtn");
 
-                    // Send an AJAX request to fetch modal data
+                    // Send an AJAX request to fetch notifmodal data
                     var xhr = new XMLHttpRequest();
                     xhr.open("POST", "fetch_modal_data.php", true);
                     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -904,7 +904,7 @@ try {
                             // Clear previous content
                             modalBody.innerHTML = '';
 
-                            // Populate modal with response data based on the type of notification
+                            // Populate notifmodal with response data based on the type of notification
                             if (notificationData['type'] === 'Sent feedback') {
                                 modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
                                 modalBody.innerHTML += '<h4><strong></strong> ' + response['Full Name'] + '</h4>';
@@ -935,8 +935,8 @@ try {
                                 window.location.href = 'view_customer.php?customer_ID=' + response['Customer ID'];
                             };
 
-                            // Display the modal
-                            modal.style.display = "block";
+                            // Display the notifmodal
+                            notifmodal.style.display = "block";
                         }
                     };
                     xhr.send("customer_id=" + notificationData['customer_id'] + "&type=" + notificationData['type']);
