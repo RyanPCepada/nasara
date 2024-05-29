@@ -331,7 +331,6 @@ try {
                     </button>
                 </div>
 
-                
                 <div class="modal fade" id="modal_logout" tabindex="-1" role="dialog" aria-labelledby="modal_logoutLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
@@ -373,7 +372,7 @@ try {
                         $('.modal-backdrop').remove();
                     });
                 </script>
-
+                
             </div>
         </div>
 
@@ -497,7 +496,7 @@ try {
                                     background-color: #c8e7c9 !important;
                                 }
 
-                                .modal {
+                                .fbmodal {
                                     display: none;
                                     position: fixed;
                                     z-index: 1;
@@ -510,7 +509,7 @@ try {
                                     padding-top: 60px;
                                 }
 
-                                .modal-content {
+                                .fbmodal-content {
                                     background-color: #fefefe;
                                     margin: 5% auto;
                                     margin-top: 0px;
@@ -619,8 +618,8 @@ try {
                             </div>
 
                             <!-- Modal -->
-                            <div id="customerModal" class="modal">
-                                <div class="modal-content">
+                            <div id="customerModal" class="fbmodal">
+                                <div class="fbmodal-content">
                                     <span class="close">&times;</span>
                                     <div id="modalBody"></div>
                                     <button id="viewAllBtn" class="view-all-btn">View Customer's Information</button>
@@ -629,21 +628,21 @@ try {
 
                             <!-- JavaScript for Modal Functionality -->
                             <script>
-                                // Get the modal
-                                var modal = document.getElementById("customerModal");
+                                // Get the fbmodal
+                                var fbmodal = document.getElementById("customerModal");
 
-                                // Get the <span> element that closes the modal
+                                // Get the <span> element that closes the fbmodal
                                 var span = document.getElementsByClassName("close")[0];
 
-                                // When the user clicks on <span> (x), close the modal
+                                // When the user clicks on <span> (x), close the fbmodal
                                 span.onclick = function() {
-                                    modal.style.display = "none";
+                                    fbmodal.style.display = "none";
                                 }
 
-                                // When the user clicks anywhere outside of the modal, close it
+                                // When the user clicks anywhere outside of the fbmodal, close it
                                 window.onclick = function(event) {
-                                    if (event.target == modal) {
-                                        modal.style.display = "none";
+                                    if (event.target == fbmodal) {
+                                        fbmodal.style.display = "none";
                                     }
                                 }
 
@@ -674,8 +673,8 @@ try {
                                             window.location.href = 'view_customer.php?customer_ID=' + customerID;
                                         };
 
-                                        // Display the modal
-                                        modal.style.display = "block";
+                                        // Display the fbmodal
+                                        fbmodal.style.display = "block";
                                     });
                                 });
                             </script>
