@@ -1,6 +1,8 @@
 <?php
 include 'connection.php';
 
+//THIS FILE IS EXCLUSIVE ONLY FOR ADMIN NOTIFICATIONS FUNCTION
+
 $customerID = $_POST['customer_id'];
 $notificationType = $_POST['type'];
 
