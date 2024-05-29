@@ -943,7 +943,7 @@ try {
                                                         if ($row['Customer ID'] == $topCustomer['customer_ID']) {
                                                             // Display the trophy icon and other details for the top customer
                                                             echo "<tr class='customer-row' data-customer='" . json_encode($row) . "'>";
-                                                            echo "<td><span style='position: relative;'><h1 style='font-size: 25px; position: absolute; left: -13px; top: -25px;'>🏆</h1><img src='" . $row['Profile picture'] . "' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: white;'></span></td>";
+                                                            echo "<td><span style='position: relative;'><h1 style='font-size: 25px; position: absolute; left: -13px; top: -25px;'>🏆</h1><img src='" . $row['Profile picture'] . "' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: lightblue;'></span></td>";
                                                             foreach ($row as $key => $value) {
                                                                 if ($key !== 'Profile picture') {
                                                                     echo "<td>$value</td>";
@@ -955,7 +955,7 @@ try {
                                                             echo "<tr class='customer-row' data-customer='" . json_encode($row) . "'>";
                                                             foreach ($row as $key => $value) {
                                                                 if ($key === 'Profile picture') {
-                                                                    echo "<td><img src='$value' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: white;'></td>";
+                                                                    echo "<td><img src='$value' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: lightblue;'></td>";
                                                                 } else {
                                                                     echo "<td>$value</td>";
                                                                 }
@@ -995,14 +995,14 @@ try {
                                 // When the user clicks on <span> (x), close the custmodal
                                 span.onclick = function() {
                                     custmodal.style.display = "none";
-                                }
+                                };
 
                                 // When the user clicks anywhere outside of the custmodal, close it
                                 window.onclick = function(event) {
                                     if (event.target == custmodal) {
                                         custmodal.style.display = "none";
                                     }
-                                }
+                                };
 
                                 // Add click event listener to each table row
                                 document.querySelectorAll('.customer-row').forEach(function(row) {
@@ -1015,7 +1015,10 @@ try {
                                         modalBody.innerHTML = '';
 
                                         // Populate custmodal with specific customer data
-                                        modalBody.innerHTML += '<p><img src="' + customerData['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
+                                        if (customerData['Customer ID'] == <?php echo $topCustomer['customer_ID']; ?>) {
+                                            modalBody.innerHTML += '<span style="position: relative;"><h1 style="position: absolute; left: -10px; top: -10px;">🏆</h1></span>';
+                                        }
+                                        modalBody.innerHTML += '<p><img src="' + customerData['Profile picture'] + '" style="width: 150px; height: 150px; background: lightblue; border-radius: 75px;"></p>';
                                         modalBody.innerHTML += '<p><strong>Full Name:</strong> ' + customerData['Firstname'] + ' ' + customerData['Middlename'] + ' ' + customerData['Lastname'] + '</p>';
                                         modalBody.innerHTML += '<p><strong>Address:</strong> ' + customerData['Street'] + ', ' + customerData['Barangay'] + ', ' + customerData['Municipality'] + ', ' + customerData['Province'] + ', ' + customerData['Zipcode'] + '</p>';
                                         modalBody.innerHTML += '<p><strong>Birth Date:</strong> ' + customerData['Birthdate'] + '</p>';
@@ -1037,70 +1040,65 @@ try {
                                 });
                             </script>
 
-
-
                             <style>
-                            /* CSS for Hover Effect */
-                            .customer-row:hover {
-                                background-color: #cacbe8 !important; /* A darker shade of light blue */
-                            }
+
+                                .customer-row:hover {
+                                    background-color: #cacbe8 !important; /* A darker shade of light blue */
+                                }
 
 
-                            .custmodal {
-                                display: none;
-                                position: fixed;
-                                z-index: 1;
-                                left: 0;
-                                top: 0;
-                                width: 100%;
-                                height: 100%;
-                                overflow: hidden; /* Remove scrollbar */
-                                overflow-y: auto; /* Add scrollbar */
-                                background-color: rgba(0,0,0,0.4);
-                                padding-top: 60px;
-                            }
+                                .custmodal {
+                                    display: none;
+                                    position: fixed;
+                                    z-index: 1;
+                                    left: 0;
+                                    top: 0;
+                                    width: 100%;
+                                    height: 100%;
+                                    overflow: hidden; /* Remove scrollbar */
+                                    overflow-y: auto; /* Add scrollbar */
+                                    background-color: rgba(0,0,0,0.4);
+                                    padding-top: 60px;
+                                }
 
-                            .custmodal-content {
-                                background-color: #fefefe;
-                                margin: 5% auto;
-                                margin-top: 0px;
-                                padding: 20px;
-                                border: 1px solid #888;
-                                width: 30%;
-                            }
+                                .custmodal-content {
+                                    background-color: #fefefe;
+                                    margin: 5% auto;
+                                    margin-top: 0px;
+                                    padding: 20px;
+                                    border: 1px solid #888;
+                                    width: 30%;
+                                }
 
-                            .close {
-                                color: #aaa;
-                                float: right;
-                                font-size: 28px;
-                                font-weight: bold;
-                            }
+                                .close {
+                                    color: #aaa;
+                                    float: right;
+                                    font-size: 28px;
+                                    font-weight: bold;
+                                }
 
-                            .close:hover,
-                            .close:focus {
-                                color: black;
-                                text-decoration: none;
-                                cursor: pointer;
-                            }
+                                .close:hover,
+                                .close:focus {
+                                    color: black;
+                                    text-decoration: none;
+                                    cursor: pointer;
+                                }
 
-                            .view-all-btn {
-                                margin-top: 20px;
-                                padding: 10px 20px;
-                                background-color: #007bff; /* Primary Color */
-                                color: white;
-                                border: none;
-                                border-radius: 5px;
-                                cursor: pointer;
-                                text-align: center;
-                            }
+                                .view-all-btn {
+                                    margin-top: 20px;
+                                    padding: 10px 20px;
+                                    background-color: #007bff; /* Primary Color */
+                                    color: white;
+                                    border: none;
+                                    border-radius: 5px;
+                                    cursor: pointer;
+                                    text-align: center;
+                                }
 
-                            .view-all-btn:hover {
-                                background-color: #0056b3; /* Darkened Primary Color */
-                            }
+                                .view-all-btn:hover {
+                                    background-color: #0056b3; /* Darkened Primary Color */
+                                }
                             </style>
-
-
-
 
                             <script>
                                 document.getElementById("count_card").addEventListener("click", function() {

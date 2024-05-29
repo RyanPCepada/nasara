@@ -99,7 +99,7 @@ if (isset($_SESSION['adminID'])) {
                         <!-- Display the trophy emoji if the customer is the top customer -->
                         <h1 style="position: absolute; left: 5px; top: 8px;">🏆</h1>
                     <?php endif; ?>
-                    <img src="images/<?php echo htmlspecialchars($customer['image']); ?>" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 75px; margin-bottom: 5px;">
+                    <img src="images/<?php echo htmlspecialchars($customer['image']); ?>" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 75px; margin-bottom: 5px; background: lightblue;">
                     <h4 class="card-title"><?php echo htmlspecialchars($customer['firstName'] . ' ' . $customer['middleName'] . ' ' . $customer['lastName']); ?></h4>
                     <p><strong>Customer ID:</strong> <?php echo htmlspecialchars($customer['customer_ID']); ?></p> <!-- Add this line -->
                     <p><strong>Address:</strong> <?php echo htmlspecialchars($customer['street'] . ', ' . $customer['barangay'] . ', ' . $customer['municipality'] . ', ' . $customer['province'] . ', ' . $customer['zipcode']); ?></p>
