@@ -819,36 +819,34 @@ try {
                                 </div>
                                 
                                 <?php
-                                // Assuming you have the connection to the database established in $conn
+                                    // Fetch customer data with their feedback and audio feedback counts
+                                    $sqlCustomers = "
+                                    SELECT 
+                                        ci.customer_ID, 
+                                        CONCAT('images/', ci.image) AS profilePicture, 
+                                        CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS fullName,
+                                        COUNT(DISTINCT fb.feedback_ID) AS feedbackCount,
+                                        COUNT(DISTINCT af.audio_ID) AS audioFeedbackCount
+                                    FROM tbl_customer_info AS ci
+                                    LEFT JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID
+                                    LEFT JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
+                                    GROUP BY ci.customer_ID
+                                    ORDER BY (COUNT(DISTINCT fb.feedback_ID) + COUNT(DISTINCT af.audio_ID)) DESC
+                                    LIMIT 1";
 
-                                // Fetch customer data with their feedback and audio feedback counts
-                                $sqlCustomers = "
-                                SELECT 
-                                    ci.customer_ID, 
-                                    CONCAT('images/', ci.image) AS profilePicture, 
-                                    CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS fullName,
-                                    COUNT(DISTINCT fb.feedback_ID) AS feedbackCount,
-                                    COUNT(DISTINCT af.audio_ID) AS audioFeedbackCount
-                                FROM tbl_customer_info AS ci
-                                LEFT JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID
-                                LEFT JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
-                                GROUP BY ci.customer_ID
-                                ORDER BY (COUNT(DISTINCT fb.feedback_ID) + COUNT(DISTINCT af.audio_ID)) DESC
-                                LIMIT 1";
+                                    $stmtCustomers = $conn->prepare($sqlCustomers);
+                                    $stmtCustomers->execute();
+                                    $topCustomer = $stmtCustomers->fetch(PDO::FETCH_ASSOC);
 
-                                $stmtCustomers = $conn->prepare($sqlCustomers);
-                                $stmtCustomers->execute();
-                                $topCustomer = $stmtCustomers->fetch(PDO::FETCH_ASSOC);
-
-                                if ($topCustomer) {
-                                    $customerID = $topCustomer['customer_ID'];
-                                    $profilePicture = $topCustomer['profilePicture'];
-                                    $fullName = $topCustomer['fullName'];
-                                    $feedbackCount = $topCustomer['feedbackCount'];
-                                    $audioFeedbackCount = $topCustomer['audioFeedbackCount'];
-                                } else {
-                                    $topCustomer = null;
-                                }
+                                    if ($topCustomer) {
+                                        $customerID = $topCustomer['customer_ID'];
+                                        $profilePicture = $topCustomer['profilePicture'];
+                                        $fullName = $topCustomer['fullName'];
+                                        $feedbackCount = $topCustomer['feedbackCount'];
+                                        $audioFeedbackCount = $topCustomer['audioFeedbackCount'];
+                                    } else {
+                                        $topCustomer = null;
+                                    }
                                 ?>
 
 
@@ -856,15 +854,17 @@ try {
                                 <div class="row col-5" style="margin-top: -20px;">
                                     <div class="row text-center">
                                         <?php if ($topCustomer): ?>
-                                            <a href="view_customer.php?customer_ID=<?php echo $customerID; ?>" class="customer-link" style="text-decoration: none; color: inherit; display: block;">
+                                            <!-- <a href="view_customer.php?customer_ID=<?php echo $customerID; ?>" class="customer-link" style="text-decoration: none; color: inherit; display: block;"> -->
+                                            <a href="view_customer.php?customer_ID=<?php echo $customerID; ?>&top_customer=true" class="customer-link" style="text-decoration: none; color: inherit; display: block;">
+
                                                 <h1>🏆</h1>
                                                 <h4 class="text-danger" style="margin-top: -10px;">Top customer</h4>
 
                                                 <div>
-                                                    <img src="<?php echo $profilePicture; ?>" alt="Profile Picture" style="margin-top: -10px; width: 100px; height: 100px; border-radius: 50%;">
+                                                    <img src="<?php echo $profilePicture; ?>" alt="Profile Picture" style="margin-top: -5px; width: 100px; height: 100px; border-radius: 50%;">
                                                 </div>
 
-                                                <h3 style="margin-left: 0px; margin-top: -5px;"><?php echo $fullName; ?></h3>
+                                                <h3 style="margin-left: 0px; margin-top: -4px;"><?php echo $fullName; ?></h3>
                                                 <h7 style="margin-left: 0px; margin-bottom: 0px; margin-top: -5px; color: gray;">Sent <?php echo $feedbackCount; ?> feedbacks and <?php echo $audioFeedbackCount; ?> audio feedbacks</h7>
                                             </a>
                                         <?php else: ?>
@@ -887,77 +887,93 @@ try {
                             <!-- CUSTOMERS TABLE -->
                             <div class="text-center d-flex align-items-center justify-content-center" style="margin-left: 0px; padding: 20px; border-radius: 15px;">
 
-                            <div class="row">
-                                <?php
-                                    // Step 2: Fetch all data from tbl_customer_info with column aliases
-                                    $sql = "SELECT CONCAT('images/', image) AS 'Profile picture',  -- Concatenate the image path with the 'image' column
-                                            customer_ID AS 'Customer ID',
-                                            firstName AS 'Firstname',
-                                            middleName AS 'Middlename',
-                                            lastName AS 'Lastname',
-                                            street AS 'Street',
-                                            barangay AS 'Barangay',
-                                            municipality AS 'Municipality',
-                                            province AS 'Province',
-                                            zipcode AS 'Zipcode',
-                                            phoneNumber AS 'Phone Number',
-                                            birthDate AS 'Birthdate',
-                                            gender AS 'Gender',
-                                            email AS 'Email',
-                                            password AS 'Password',
-                                            dateAdded AS 'Creation Date'
-                                    FROM tbl_customer_info
-                                    ORDER BY customer_ID DESC";
+                                <div class="row">
+                                    <?php
+                                        // Step 2: Fetch all data from tbl_customer_info with column aliases
+                                        $sql = "SELECT CONCAT('images/', image) AS 'Profile picture',  -- Concatenate the image path with the 'image' column
+                                                customer_ID AS 'Customer ID',
+                                                firstName AS 'Firstname',
+                                                middleName AS 'Middlename',
+                                                lastName AS 'Lastname',
+                                                street AS 'Street',
+                                                barangay AS 'Barangay',
+                                                municipality AS 'Municipality',
+                                                province AS 'Province',
+                                                zipcode AS 'Zipcode',
+                                                phoneNumber AS 'Phone Number',
+                                                birthDate AS 'Birthdate',
+                                                gender AS 'Gender',
+                                                email AS 'Email',
+                                                password AS 'Password',
+                                                dateAdded AS 'Creation Date'
+                                        FROM tbl_customer_info
+                                        ORDER BY customer_ID DESC";
 
-                                    $stmt = $conn->prepare($sql);
-                                    $stmt->execute();
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute();
 
-                                    // Step 3: Create arrays to store the data
-                                    $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                ?>
+                                        // Step 3: Create arrays to store the data
+                                        $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                    ?>
 
-                                <div class="scrollable-content" id="table1">
-                                    <table class="table table-bordered class alternate-row-table" id="list_table">
-                                        <thead>
-                                            <tr>
+                                    <div class="scrollable-content" id="table1">
+                                        <table class="table table-bordered class alternate-row-table" id="list_table">
+                                            <thead>
+                                                <tr>
+                                                    <?php
+                                                    // Display column aliases as headers
+                                                    if (!empty($customerData)) {
+                                                        $aliasRow = $customerData[0]; // Assuming the first row contains aliases
+                                                        foreach ($aliasRow as $alias => $value) {
+                                                            echo "<th style='background-color: #cacbe8; color: black;'>$alias</th>";
+                                                        }
+                                                    }
+                                                    ?>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
                                                 <?php
-                                                // Display column aliases as headers
-                                                if (!empty($customerData)) {
-                                                    $aliasRow = $customerData[0]; // Assuming the first row contains aliases
-                                                    foreach ($aliasRow as $alias => $value) {
-                                                        echo "<th style='background-color: #cacbe8; color: black;'>$alias</th>";
+                                                if (empty($customerData)) {
+                                                    // Display the "No feedback yet for today" message in the table body
+                                                    echo '<tr><td colspan="6" style="text-align: center; background-color: transparent; color: black;">No feedbacks yet for today</td></tr>';
+                                                } else {
+                                                    // Loop through the data and populate the table
+                                                    foreach ($customerData as $row) {
+                                                        // Check if the current row corresponds to the top customer
+                                                        if ($row['Customer ID'] == $topCustomer['customer_ID']) {
+                                                            // Display the trophy icon and other details for the top customer
+                                                            echo "<tr class='customer-row' data-customer='" . json_encode($row) . "'>";
+                                                            echo "<td><span style='position: relative;'><h1 style='font-size: 25px; position: absolute; left: -13px; top: -25px;'>🏆</h1><img src='" . $row['Profile picture'] . "' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: white;'></span></td>";
+                                                            foreach ($row as $key => $value) {
+                                                                if ($key !== 'Profile picture') {
+                                                                    echo "<td>$value</td>";
+                                                                }
+                                                            }
+                                                            echo "</tr>";
+                                                        } else {
+                                                            // Display other customers without the trophy icon
+                                                            echo "<tr class='customer-row' data-customer='" . json_encode($row) . "'>";
+                                                            foreach ($row as $key => $value) {
+                                                                if ($key === 'Profile picture') {
+                                                                    echo "<td><img src='$value' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: white;'></td>";
+                                                                } else {
+                                                                    echo "<td>$value</td>";
+                                                                }
+                                                            }
+                                                            echo "</tr>";
+                                                        }
                                                     }
                                                 }
                                                 ?>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            if (empty($customerData)) {
-                                                // Display the "No feedback yet for today" message in the table body
-                                                echo '<tr><td colspan="6" style="text-align: center; background-color: transparent; color: black;">No feedbacks yet for today</td></tr>';
-                                            } else {
-                                                // Loop through the data and populate the table
-                                                foreach ($customerData as $row) {
-                                                    echo "<tr class='customer-row' data-customer='" . json_encode($row) . "'>";
-                                                    foreach ($row as $key => $value) {
-                                                        if ($key === 'Profile picture') {
-                                                            echo "<td><img src='$value' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: white;'></td>";
-                                                        } else {
-                                                            echo "<td>$value</td>";
-                                                        }
-                                                    }
-                                                    echo "</tr>";
-                                                }
-                                            }
-                                            ?>
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
 
                             </div>
                             <!-- END CUSTOMERS TABLE -->
+
 
                             <!-- Modal -->
                             <div id="customerModal" class="custmodal">

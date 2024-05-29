@@ -95,7 +95,11 @@ if (isset($_SESSION['adminID'])) {
         <?php if ($customer): ?>
             <div class="card mb-3">
                 <div class="card-body" style="position: relative;">
-                    <img src="images/<?php echo htmlspecialchars($customer['image']); ?>" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 75px;">
+                    <?php if(isset($_GET['top_customer']) && $_GET['top_customer'] === 'true'): ?>
+                        <!-- Display the trophy emoji if the customer is the top customer -->
+                        <h1 style="position: absolute; left: 5px; top: 8px;">🏆</h1>
+                    <?php endif; ?>
+                    <img src="images/<?php echo htmlspecialchars($customer['image']); ?>" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 75px; margin-bottom: 5px;">
                     <h4 class="card-title"><?php echo htmlspecialchars($customer['firstName'] . ' ' . $customer['middleName'] . ' ' . $customer['lastName']); ?></h4>
                     <p><strong>Customer ID:</strong> <?php echo htmlspecialchars($customer['customer_ID']); ?></p> <!-- Add this line -->
                     <p><strong>Address:</strong> <?php echo htmlspecialchars($customer['street'] . ', ' . $customer['barangay'] . ', ' . $customer['municipality'] . ', ' . $customer['province'] . ', ' . $customer['zipcode']); ?></p>
@@ -103,12 +107,6 @@ if (isset($_SESSION['adminID'])) {
                     <p><strong>Gender:</strong> <?php echo htmlspecialchars($customer['gender']); ?></p>
                     <p><strong>Email:</strong> <?php echo htmlspecialchars($customer['email']); ?></p>
                     <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($customer['phoneNumber']); ?></p>
-
-                    <!-- <div style="position: absolute; bottom: 20px; right: 20px;">
-                        <button class="btn btn-transparent" onclick="deleteCustomer(<?php echo $customerID; ?>)">
-                            <i class="fas fa-trash-alt" style="font-size: 25px; color: red;"></i> <!-- Font Awesome trash icon --
-                        </button>
-                    </div> -->
                 </div>
             </div>
 
