@@ -90,235 +90,240 @@ if (isset($_SESSION['adminID'])) {
     </button>
 
 
-    <div class="container mt-5">
-        <h2 style="margin-bottom: 20px; color: gray;">Customer Details</h2>
-        <?php if ($customer): ?>
-            <div class="card mb-3">
-                <div class="card-body" style="position: relative;">
-                    <?php if(isset($_GET['top_customer']) && $_GET['top_customer'] === 'true'): ?>
-                        <!-- Display the trophy emoji if the customer is the top customer -->
-                        <h1 style="position: absolute; left: 5px; top: 8px;">🏆</h1>
-                    <?php endif; ?>
-                    <img src="images/<?php echo htmlspecialchars($customer['image']); ?>" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 75px; margin-bottom: 5px; background: lightblue;">
-                    <h4 class="card-title"><?php echo htmlspecialchars($customer['firstName'] . ' ' . $customer['middleName'] . ' ' . $customer['lastName']); ?></h4>
-                    <p><strong>Customer ID:</strong> <?php echo htmlspecialchars($customer['customer_ID']); ?></p> <!-- Add this line -->
-                    <p><strong>Address:</strong> <?php echo htmlspecialchars($customer['street'] . ', ' . $customer['barangay'] . ', ' . $customer['municipality'] . ', ' . $customer['province'] . ', ' . $customer['zipcode']); ?></p>
-                    <p><strong>Birth Date:</strong> <?php echo htmlspecialchars($customer['birthDate']); ?></p>
-                    <p><strong>Gender:</strong> <?php echo htmlspecialchars($customer['gender']); ?></p>
-                    <p><strong>Email:</strong> <?php echo htmlspecialchars($customer['email']); ?></p>
-                    <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($customer['phoneNumber']); ?></p>
-                </div>
-            </div>
-
-
-            <h2 style="margin-top: 50px; color: gray;">Written Feedbacks</h2>
-            <div class="scrollable-content">
-                <?php
-                // Initialize feedback categories
-                $feedbackCategory = [
-                    'Today' => [],
-                    'Yesterday' => [],
-                    'Older' => []
-                ];
-
-                // Categorize feedbacks based on date
-                foreach ($feedbacks as $feedback) {
-                    $feedbackDate = new DateTime($feedback['date']);
-                    $now = new DateTime();
-                    $interval = $now->diff($feedbackDate);
-                    
-                    if ($interval->days == 0) {
-                        // Today's feedback
-                        $feedbackCategory['Today'][] = $feedback;
-                    } elseif ($interval->days == 1) {
-                        // Yesterday's feedback
-                        $feedbackCategory['Yesterday'][] = $feedback;
-                    } else {
-                        // Older feedback
-                        $feedbackCategory['Older'][] = $feedback;
-                    }
-                }
-
-                // Function to display feedbacks
-                function displayFeedbacks($feedbacks, $heading, $color) {
-                    if (!empty($feedbacks)) {
-                        echo '<h4 style="margin-top: 20px; padding: 15px; margin-left: 12px; font-size: 20px; color: gray;">' . $heading . '</h4>';
-                        foreach ($feedbacks as $feedback) {
-                            echo '<div class="row" style="background-color: ' . $color . '; margin-left: 0px; margin-right: 0px; padding: 15px; border-radius: 5px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); margin-bottom: 15px; position: relative;">';
-                            echo '<div class="col">';
-                            echo '<p class="card-text"><strong>Opinion:</strong> ' . htmlspecialchars($feedback['products']) . '</p>';
-                            echo '<p class="card-text"><strong>Suggestion:</strong> ' . htmlspecialchars($feedback['services']) . '</p>';
-                            echo '<p class="card-text"><strong>Question:</strong> ' . htmlspecialchars($feedback['convenience']) . '</p>';
-                            echo '<p class="card-text"><strong>Rating:</strong> ' . htmlspecialchars($feedback['rating']) . '</p>';
-                            echo '<p class="card-text" style="color: blue; font-size: 15px; margin-top: 10px;">' . formatRelativeDate($feedback['date'], $heading) . '</p>';
-                            
-                            // Delete button with confirmation dialog - REMOVED
-                            // echo '<button class="btn btn-transparent" onclick="confirmDelete(' . $feedback['feedback_ID'] . ', ' . $customerID . ')" style="position: absolute; bottom: 20px; right: 20px; font-size: 25px; color: red;"><i class="fas fa-trash-alt"></i></button>';
-                            
-                            echo '</div>';
-                            echo '</div>';
-                        }
-                    } else {
-                        echo '<div style="background-color: ' . $color . ';">';
-                        echo '<h4 style="margin-top: 20px; padding: 15px; margin-left: 12px; font-size: 20px; color: gray;">' . $heading . '</h4>';
-                        echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">No feedback records for ' . $heading . '.</p>';
-                        echo '</div>';
-                    }
-                }
-                
-
-                // Display feedbacks
-                displayFeedbacks($feedbackCategory['Today'], 'Today', '#ecffed');
-                displayFeedbacks($feedbackCategory['Yesterday'], 'Yesterday', '#f1e9e9');
-                displayFeedbacks($feedbackCategory['Older'], 'Older', '#ecedff');
-                ?>
-            </div>
-            <?php else: ?>
-                <p>Customer not found.</p>
-            <?php endif; ?>
-
-
-        <script>
-            function confirmDelete(feedbackID, customerID) {
-                if (confirm("Are you sure you want to delete this feedback?")) {
-                    // If the admin confirms, redirect to admin_delete_feedback.php with the feedback ID
-                    window.location.href = 'admin_delete_feedback.php?feedback_id=' + feedbackID + '&customer_ID=' + customerID;
-                }
-            }
-        </script>
-
-
-    </div>
-
-
-
-    <!-- AUDIO FEEDBACKS TABLE -->
-    <h2 style="margin-left: 113px; margin-top: 50px; margin-bottom: 0px; color: gray;">Audio Feedbacks</h2>
-    <div class="row" style="width: 1347px;" style="position: relative; justify-content: center; background: white; margin-bottom: 0px;">
-        
-        <div class="scrollable-content" style="margin-left: 113px;" id="table_audio_fb">
-            <?php
-
-            // Fetch and display customer activities from tbl_activity_logs and audio records from tbl_audio_feedback
-            $sqlAudios = "
-            SELECT 
-            CONCAT('images/', ci.image) AS 'Profile picture',
-            ci.customer_ID AS 'Customer ID',
-            CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS 'Full Name',
-            af.audio AS 'Audio',
-            af.dateAdded AS 'Date'
-            FROM tbl_customer_info AS ci
-            JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
-            WHERE ci.customer_ID = :CustomerID
-            ORDER BY af.audio_ID DESC;
-            ";
-
-            $stmtAudios = $conn->prepare($sqlAudios);
-            $stmtAudios->bindParam(':CustomerID', $customerID, PDO::PARAM_INT);
-            $stmtAudios->execute();
-            $audios = $stmtAudios->fetchAll();
-
-            $todayAudios = [];
-            $yesterdayAudios = [];
-            $olderAudios = [];
-
-            $now = new DateTime();
-            $yesterday = (clone $now)->modify('-1 day');
-
-            foreach ($audios as $audio) {
-                $audioDate = new DateTime($audio['Date']);
-
-                if ($audioDate->format('Y-m-d') == $now->format('Y-m-d')) {
-                    $todayAudios[] = $audio;
-                } elseif ($audioDate->format('Y-m-d') == $yesterday->format('Y-m-d')) {
-                    $yesterdayAudios[] = $audio;
-                } else {
-                    $olderAudios[] = $audio;
-                }
-            }
-
-            function displayAudios($audios, $heading, $marginTop) {
-                echo '<h4 style="margin-top: ' . $marginTop . '; padding: 15px; margin-left: 12px; font-size: 20px; color: gray;">' . $heading . '</h4>';
-
-                if (empty($audios)) {
-                    echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">No audio records ' . strtolower($heading) . '.</p>';
-                } else {
-                    foreach ($audios as $audio) {
-                        echo '<div class="row" style="margin-left: 15px; margin-top: 10px; padding-bottom: 10px;">';
-
-                        echo '<div class="col-auto">';
-                        echo '<img src="' . htmlspecialchars($audio['Profile picture']) . '" alt="Profile picture" style="width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 50%; background-color: white;">';
-                        echo '</div>';
-
-                        echo '<div class="col">';
-                        echo '<p style="margin-top: 10px; font-weight: bold;">' . htmlspecialchars($audio['Full Name']) . '</p>';
-                        echo '<p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($audio['Date'], $heading) . '</p>';
-                        echo '</div>';
-
-                        echo '<div class="col-auto">';
-                        echo '<audio controls style="width: 500px; margin-right: 50px; margin-top: 12px;">';
-                        echo '<source src="http://localhost/nasara/audios/' . htmlspecialchars($audio['Audio']) . '" type="audio/' . pathinfo($audio['Audio'], PATHINFO_EXTENSION) . '">';
-                        echo 'Your browser does not support the audio element.';
-                        echo '</audio>';
-                        echo '</div>';
-
-                        echo '</div>';
-                    }
-                }
-            }
-
-            // Function to format relative date and time
-            function formatRelativeDate($date, $category) {
-                $formattedDate = new DateTime($date);
-                $now = new DateTime();
-                $interval = $now->diff($formattedDate);
-
-                if ($category === 'Today') {
-                    return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
-                } elseif ($category === 'Yesterday') {
-                    return 'Yesterday @ ' . $formattedDate->format('h:i A');
-                } else {
-                    if ($interval->days == 1) {
-                        return '1 day ago @ ' . $formattedDate->format('h:i A');
-                    } elseif ($interval->days == 7) {
-                        return '1 week ago @ ' . $formattedDate->format('h:i A');
-                    } elseif ($interval->days > 7) {
-                        return $formattedDate->format('F j, Y @ h:i A');
-                    } else {
-                        return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
-                    }
-                }
-            }
-            ?>
-
-            <div class="scrollable-content">
-                <div class="" style="position: relative; width: 98%;"> <!--REASON WHY AUDIO FEEDBACK TABLE SCROOLBAR BELOW-->
-                    <?php
-                    // Display "Today" audio records with background color #ecffed
-                    echo '<div style="background-color: #ecffed;">';
-                    displayAudios($todayAudios, 'Today', '20px');
-                    echo '</div>';
-
-                    // Display "Yesterday" audio records with background color #f1e9e9
-                    echo '<div style="background-color: #f1e9e9;">';
-                    displayAudios($yesterdayAudios, 'Yesterday', '20px');
-                    echo '</div>';
-
-                    // Display "Older" audio records with background color #ecedff
-                    echo '<div style="background-color: #ecedff;">';
-                    displayAudios($olderAudios, 'Older', '20px');
-                    echo '</div>';
-                    ?>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END AUDIO FEEDBACKS TABLE -->
 
 
 
     
-    <div class="row" style="margin: 50px;"></div>
+    <div class="container mt-5">
+        <!-- Customer Details Section -->
+        <h2 style="margin-bottom: 20px; color: gray;">Customer Details</h2>
+        <div class="row align-items-center justify-content-center">
+            <div class="col-md-12">
+                <!-- Customer Details Card -->
+                <!-- Include the trophy emoji if the customer is the top customer -->
+                <div class="card mb-3">
+                    <div class="card-body" style="position: relative;">
+                        <?php if(isset($_GET['top_customer']) && $_GET['top_customer'] === 'true'): ?>
+                            <h1 style="position: absolute; left: 5px; top: 8px;">🏆</h1>
+                        <?php endif; ?>
+                        <img src="images/<?php echo htmlspecialchars($customer['image']); ?>" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 75px; margin-bottom: 5px; background: lightblue;">
+                        <h4 class="card-title"><?php echo htmlspecialchars($customer['firstName'] . ' ' . $customer['middleName'] . ' ' . $customer['lastName']); ?></h4>
+                        <p><strong>Customer ID:</strong> <?php echo htmlspecialchars($customer['customer_ID']); ?></p> <!-- Add this line -->
+                        <p><strong>Address:</strong> <?php echo htmlspecialchars($customer['street'] . ', ' . $customer['barangay'] . ', ' . $customer['municipality'] . ', ' . $customer['province'] . ', ' . $customer['zipcode']); ?></p>
+                        <p><strong>Birth Date:</strong> <?php echo htmlspecialchars($customer['birthDate']); ?></p>
+                        <p><strong>Gender:</strong> <?php echo htmlspecialchars($customer['gender']); ?></p>
+                        <p><strong>Email:</strong> <?php echo htmlspecialchars($customer['email']); ?></p>
+                        <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($customer['phoneNumber']); ?></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Written Feedbacks and Audio Feedbacks Section -->
+        <div class="row">
+            <!-- Written Feedbacks (Left Half) -->
+            <div class="col-md-6">
+                <h2 style="margin-top: 50px; color: gray;">Written Feedbacks</h2>
+                <div class="scrollable-content">
+                    <?php
+                    // Initialize feedback categories
+                    $feedbackCategory = [
+                        'Today' => [],
+                        'Yesterday' => [],
+                        'Older' => []
+                    ];
+
+                    // Categorize feedbacks based on date
+                    foreach ($feedbacks as $feedback) {
+                        $feedbackDate = new DateTime($feedback['date']);
+                        $now = new DateTime();
+                        $interval = $now->diff($feedbackDate);
+                        
+                        if ($interval->days == 0) {
+                            // Today's feedback
+                            $feedbackCategory['Today'][] = $feedback;
+                        } elseif ($interval->days == 1) {
+                            // Yesterday's feedback
+                            $feedbackCategory['Yesterday'][] = $feedback;
+                        } else {
+                            // Older feedback
+                            $feedbackCategory['Older'][] = $feedback;
+                        }
+                    }
+
+                    // Function to display feedbacks
+                    function displayFeedbacks($feedbacks, $color) {
+                        if (!empty($feedbacks)) {
+                            foreach ($feedbacks as $feedback) {
+                                echo '<div class="row" style="background-color: ' . $color . '; margin-top: 15px; margin-left: 0px; margin-right: 0px; padding: 0px; margin-bottom: 15px; position: relative;">'; //box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); 
+                                echo '<div class="col">';
+                                echo '<p class="card-text""><strong>Opinion:</strong> ' . htmlspecialchars($feedback['products']) . '</p>';
+                                echo '<p class="card-text"><strong>Suggestion:</strong> ' . htmlspecialchars($feedback['services']) . '</p>';
+                                echo '<p class="card-text"><strong>Question:</strong> ' . htmlspecialchars($feedback['convenience']) . '</p>';
+                                echo '<p class="card-text"><strong>Rating:</strong> ' . htmlspecialchars($feedback['rating']) . '</p>';
+                                echo '<p class="card-text" style="color: blue; font-size: 15px; margin-top: 10px;">' . formatRelativeDate($feedback['date']) . '</p>';
+                                
+                                // Delete button with confirmation dialog - REMOVED
+                                // echo '<button class="btn btn-transparent" onclick="confirmDelete(' . $feedback['feedback_ID'] . ', ' . $customerID . ')" style="position: absolute; bottom: 20px; right: 20px; font-size: 25px; color: red;"><i class="fas fa-trash-alt"></i></button>';
+                                
+                                echo '</div>';
+                                echo '</div>';
+                            }
+                        } else {
+                            echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">No written feedbacks.</p>';
+                        }
+                    }
+
+                    // Display feedbacks
+                    echo '<h4 style="margin-top: 20px; padding: 15px; margin-left: 12px; font-size: 20px; color: gray;">Today</h4>';
+                    echo '<div style="background-color: #ecffed; padding: 15px; border-radius: 8px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);">';
+                    displayFeedbacks($feedbackCategory['Today'], '#ecffed');
+                    echo '</div>';
+
+                    echo '<h4 style="margin-top: 20px; padding: 15px; margin-left: 12px; font-size: 20px; color: gray;">Yesterday</h4>';
+                    echo '<div style="background-color: #f1e9e9; padding: 15px; border-radius: 8px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);"">';
+                    displayFeedbacks($feedbackCategory['Yesterday'], '#f1e9e9');
+                    echo '</div>';
+
+                    echo '<h4 style="margin-top: 20px; padding: 15px; margin-left: 12px; font-size: 20px; color: gray;">Older</h4>';
+                    echo '<div style="background-color: #ecedff; padding: 15px; border-radius: 8px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);"">';
+                    displayFeedbacks($feedbackCategory['Older'], '#ecedff');
+                    echo '</div>';
+                    ?>
+                    
+                </div>  
+            </div>
+
+
+
+
+
+            
+            <!-- Audio Feedbacks (Right Half) -->
+            <div class="col-md-6">
+                <h2 style="margin-left: 0px; margin-top: 50px; margin-bottom: 0px; color: gray;">Audio Feedbacks</h2>
+                <div class="row" style="position: relative; justify-content: center; background: white; margin-bottom: 0px;">
+                    
+                    <div class="scrollable-content" style="margin-left: 0px;" id="table_audio_fb">
+                        <?php
+                        // Fetch and display customer activities from tbl_activity_logs and audio records from tbl_audio_feedback
+                        $sqlAudios = "
+                        SELECT 
+                        CONCAT('images/', ci.image) AS 'Profile picture',
+                        ci.customer_ID AS 'Customer ID',
+                        CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS 'Full Name',
+                        af.audio AS 'Audio',
+                        af.dateAdded AS 'Date'
+                        FROM tbl_customer_info AS ci
+                        JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
+                        WHERE ci.customer_ID = :CustomerID
+                        ORDER BY af.audio_ID DESC;
+                        ";
+
+                        $stmtAudios = $conn->prepare($sqlAudios);
+                        $stmtAudios->bindParam(':CustomerID', $customerID, PDO::PARAM_INT);
+                        $stmtAudios->execute();
+                        $audios = $stmtAudios->fetchAll();
+
+                        $todayAudios = [];
+                        $yesterdayAudios = [];
+                        $olderAudios = [];
+
+                        $now = new DateTime();
+                        $yesterday = (clone $now)->modify('-1 day');
+
+                        foreach ($audios as $audio) {
+                            $audioDate = new DateTime($audio['Date']);
+
+                            if ($audioDate->format('Y-m-d') == $now->format('Y-m-d')) {
+                                $todayAudios[] = $audio;
+                            } elseif ($audioDate->format('Y-m-d') == $yesterday->format('Y-m-d')) {
+                                $yesterdayAudios[] = $audio;
+                            } else {
+                                $olderAudios[] = $audio;
+                            }
+                        }
+
+                        function displayAudios($audios) {
+                            if (empty($audios)) {
+                                echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">No audio feedbacks.</p>';
+                            } else {
+                                foreach ($audios as $audio) {
+                                    echo '<div class="row" style="margin-left: 15px; margin-top: 10px; padding-bottom: 10px;">';
+
+                                    echo '<div class="col-auto">';
+                                    echo '<audio controls style="width: 550px; margin-left: -10px; margin-bottom: 12px; margin-top: 15px;">';
+                                    echo '<source src="http://localhost/nasara/audios/' . htmlspecialchars($audio['Audio']) . '" type="audio/' . pathinfo($audio['Audio'], PATHINFO_EXTENSION) . '">';
+                                    echo 'Your browser does not support the audio element.';
+                                    echo '</audio>';
+                                    echo '<p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($audio['Date']) . '</p>';
+                                    echo '</div>';
+
+                                    echo '</div>';
+                                }
+                            }
+                        }
+
+                        // Function to format relative date and time
+                        function formatRelativeDate($date) {
+                            $formattedDate = new DateTime($date);
+                            $now = new DateTime();
+                            $interval = $now->diff($formattedDate);
+
+                            if ($interval->days == 0) {
+                                return 'Today @ ' . $formattedDate->format('h:i A'); // 12-hour format with AM/PM
+                            } elseif ($interval->days == 1) {
+                                return 'Yesterday @ ' . $formattedDate->format('h:i A');
+                            } else {
+                                if ($interval->days == 1) {
+                                    return '1 day ago @ ' . $formattedDate->format('h:i A');
+                                } elseif ($interval->days == 7) {
+                                    return '1 week ago @ ' . $formattedDate->format('h:i A');
+                                } elseif ($interval->days > 7) {
+                                    return $formattedDate->format('F j, Y @ h:i A');
+                                } else {
+                                    return $interval->days . ' days ago @ ' . $formattedDate->format('h:i A');
+                                }
+                            }
+                        }
+                        ?>
+
+                        <div class="scrollable-content">
+                            <div class="" style="position: relative; width: 98%;"> <!--REASON WHY AUDIO FEEDBACK TABLE SCROOLBAR BELOW-->
+                                <?php
+                                // Display "Today" audio records with background color #ecffed
+                                echo '<h4 style="margin-top: 20px; padding: 15px; margin-left: 12px; font-size: 20px; color: gray;">Today</h4>';
+                                echo '<div style="background-color: #ecffed; padding: 15px; border-radius: 8px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);"">';
+                                displayAudios($todayAudios);
+                                echo '</div>';
+
+                                // Display "Yesterday" audio records with background color #f1e9e9
+                                echo '<h4 style="margin-top: 20px; padding: 15px; margin-left: 12px; font-size: 20px; color: gray;">Yesterday</h4>';
+                                echo '<div style="background-color: #f1e9e9; padding: 15px; border-radius: 8px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);"">';
+                                displayAudios($yesterdayAudios);
+                                echo '</div>';
+
+                                // Display "Older" audio records with background color #ecedff
+                                echo '<h4 style="margin-top: 20px; padding: 15px; margin-left: 12px; font-size: 20px; color: gray;">Older</h4>';
+                                echo '<div style="background-color: #ecedff; padding: 15px; border-radius: 8px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);"">';
+                                displayAudios($olderAudios);
+                                echo '</div>';
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END AUDIO FEEDBACKS TABLE -->
+                
+            </div>
+
+        </div>
+
+    </div>
+    
+    <div class="row" style="margin: 30px;"></div>
+
+    
 </body>
 </html>
 
