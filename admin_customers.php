@@ -1025,13 +1025,17 @@ try {
                                         modalBody.innerHTML += '<p><strong>Gender:</strong> ' + customerData['Gender'] + '</p>';
                                         modalBody.innerHTML += '<p><strong>Email:</strong> ' + customerData['Email'] + '</p>';
                                         modalBody.innerHTML += '<p><strong>Phone Number:</strong> ' + customerData['Phone Number'] + '</p>';
-
-                                        // Set the link for the view all button
+                                        
+                                        // Add click event listener to "View Customer's Information" button
                                         viewAllBtn.onclick = function() {
                                             // Extract the customer ID from customerData
                                             var customerID = customerData['Customer ID'];
-                                            // Redirect to view_customer.php with customer ID parameter
-                                            window.location.href = 'view_customer.php?customer_ID=' + customerID;
+                                            // Check if the customer is the top customer
+                                            var isTopCustomer = customerID == <?php echo $topCustomer['customer_ID']; ?>;
+                                            // Construct the URL with customer ID and whether they are the top customer
+                                            var url = 'view_customer.php?customer_ID=' + customerID + '&top_customer=' + isTopCustomer;
+                                            // Redirect to view_customer.php with parameters
+                                            window.location.href = url;
                                         };
 
                                         // Display the custmodal
