@@ -734,6 +734,21 @@ try {
                                     // Database connection
                                     // Assuming you have already established a connection to the database using $conn
 
+                                    // Define $topCustomer based on the highest count of feedbacks and audio feedbacks
+                                    $sqlTopCustomer = "SELECT ci.customer_ID, CONCAT('images/', ci.image) AS 'Profile picture',
+                                                            ci.firstName AS 'Firstname', ci.middleName AS 'Middlename', ci.lastName AS 'Lastname',
+                                                            (COUNT(fb.feedback_ID) + COUNT(af.audio_ID)) AS feedback_count
+                                                        FROM tbl_customer_info ci
+                                                        LEFT JOIN tbl_feedback fb ON ci.customer_ID = fb.customer_ID
+                                                        LEFT JOIN tbl_audio_feedback af ON ci.customer_ID = af.customer_ID
+                                                        GROUP BY ci.customer_ID
+                                                        ORDER BY feedback_count DESC
+                                                        LIMIT 1";
+
+                                    $stmtTopCustomer = $conn->prepare($sqlTopCustomer);
+                                    $stmtTopCustomer->execute();
+                                    $topCustomer = $stmtTopCustomer->fetch(PDO::FETCH_ASSOC);
+
                                     // Fetch and display customer activities from tbl_activity_logs
                                     $sqlNotifications = "
                                         SELECT 
@@ -779,7 +794,7 @@ try {
                                     }
 
                                     // Function to display notifications
-                                    function displayNotifications($notifications, $heading, $class) {
+                                    function displayNotifications($notifications, $heading, $class, $topCustomer) {
                                         echo '<h4 style="margin-top: 20px; margin-left: 15px; font-size: 20px; color: gray;">' . $heading . '</h4>';
                                     
                                         if (empty($notifications)) {
@@ -790,9 +805,14 @@ try {
                                                 echo '<div class="row notification-row ' . $class . '" data-notification=\'' . $notificationData . '\' style="border: solid 1px lightblue; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); 
                                                     border-radius: 5px; font-size: 20px; width: 900px; margin-left: 15px; margin-top: 10px;">';
                                     
-                                                echo '<div class="col-auto">
-                                                        <img src="' . htmlspecialchars($notification['image']) . '" style="width: 60px; height: 60px; border-radius: 30px; background-color: white; margin-top: 12px;">
-                                                    </div>';
+                                                echo '<div class="col-auto">';
+                                                // Check if this notification's customer is the top customer
+                                                if ($notification['customer_id'] == $topCustomer['customer_ID']) {
+                                                    echo '<span style="position: relative;"><h1 style="font-size: 18px; position: absolute; left: -7px; top: -10px;">🏆</h1>';
+                                                }
+                                                echo '<img src="' . htmlspecialchars($notification['image']) . '" style="width: 60px; height: 60px; border-radius: 30px; background-color: white; margin-top: 12px;"></span>';
+                                                echo '</div>';
+
                                                 echo '<div class="col">
                                                         <p style="margin-top: 10px;"><strong>' . htmlspecialchars($notification['name']) . '</strong> ' . getActivityMessage($notification['type'], $notification['gender']) . '</p>
                                                         <p style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($notification['date'], $heading) . '</p>
@@ -802,7 +822,6 @@ try {
                                         }
                                     }
                                     
-
                                     // Function to return activity message based on the type and gender
                                     function getActivityMessage($type, $gender) {
                                         $pronoun = ($gender == 'Male') ? 'his' : (($gender == 'Female') ? 'her' : 'his/her');
@@ -847,13 +866,13 @@ try {
                                     }
 
                                     // Display "Today" notifications
-                                    displayNotifications($todayNotifications, 'Today', 'today');
+                                    displayNotifications($todayNotifications, 'Today', 'today', $topCustomer);
 
                                     // Display "Yesterday" notifications
-                                    displayNotifications($yesterdayNotifications, 'Yesterday', 'yesterday');
+                                    displayNotifications($yesterdayNotifications, 'Yesterday', 'yesterday', $topCustomer);
 
                                     // Display "Older" notifications
-                                    displayNotifications($olderNotifications, 'Older', 'older');
+                                    displayNotifications($olderNotifications, 'Older', 'older', $topCustomer);
                                     ?>
                                 </div>
                             </div>
