@@ -590,15 +590,18 @@ try {
                                     <?php
                                         // Define $topCustomer based on the highest count of feedbacks and audio feedbacks
                                         $sqlTopCustomer = "
-                                            SELECT ci.customer_ID, CONCAT('images/', ci.image) AS 'Profile picture',
-                                                ci.firstName AS 'Firstname', ci.middleName AS 'Middlename', ci.lastName AS 'Lastname',
-                                                (COUNT(fb.feedback_ID) + COUNT(af.audio_ID)) AS feedback_count
-                                            FROM tbl_customer_info ci
-                                            LEFT JOIN tbl_feedback fb ON ci.customer_ID = fb.customer_ID
-                                            LEFT JOIN tbl_audio_feedback af ON ci.customer_ID = af.customer_ID
-                                            GROUP BY ci.customer_ID
-                                            ORDER BY feedback_count DESC
-                                            LIMIT 1";
+                                            SELECT 
+                                            ci.customer_ID, 
+                                            CONCAT('images/', ci.image) AS profilePicture, 
+                                            CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS fullName,
+                                            COUNT(DISTINCT fb.feedback_ID) AS feedbackCount,
+                                            COUNT(DISTINCT af.audio_ID) AS audioFeedbackCount
+                                        FROM tbl_customer_info AS ci
+                                        LEFT JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID
+                                        LEFT JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
+                                        GROUP BY ci.customer_ID
+                                        ORDER BY (COUNT(DISTINCT fb.feedback_ID) + COUNT(DISTINCT af.audio_ID)) DESC
+                                        LIMIT 1";
 
                                         $stmtTopCustomer = $conn->prepare($sqlTopCustomer);
                                         $stmtTopCustomer->execute();
@@ -771,15 +774,18 @@ try {
                                     }
 
                                     // Define $topCustomer based on the highest count of feedbacks and audio feedbacks
-                                    $sqlTopCustomer = "SELECT ci.customer_ID, CONCAT('images/', ci.image) AS 'Profile picture',
-                                                            ci.firstName AS 'Firstname', ci.middleName AS 'Middlename', ci.lastName AS 'Lastname',
-                                                            (COUNT(fb.feedback_ID) + COUNT(af.audio_ID)) AS feedback_count
-                                                        FROM tbl_customer_info ci
-                                                        LEFT JOIN tbl_feedback fb ON ci.customer_ID = fb.customer_ID
-                                                        LEFT JOIN tbl_audio_feedback af ON ci.customer_ID = af.customer_ID
-                                                        GROUP BY ci.customer_ID
-                                                        ORDER BY feedback_count DESC
-                                                        LIMIT 1";
+                                    $sqlTopCustomer = "SELECT 
+                                        ci.customer_ID, 
+                                        CONCAT('images/', ci.image) AS profilePicture, 
+                                        CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS fullName,
+                                        COUNT(DISTINCT fb.feedback_ID) AS feedbackCount,
+                                        COUNT(DISTINCT af.audio_ID) AS audioFeedbackCount
+                                    FROM tbl_customer_info AS ci
+                                    LEFT JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID
+                                    LEFT JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
+                                    GROUP BY ci.customer_ID
+                                    ORDER BY (COUNT(DISTINCT fb.feedback_ID) + COUNT(DISTINCT af.audio_ID)) DESC
+                                    LIMIT 1";
 
                                     $stmtTopCustomer = $conn->prepare($sqlTopCustomer);
                                     $stmtTopCustomer->execute();

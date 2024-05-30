@@ -731,20 +731,19 @@ try {
                             <div class="scrollable-content" id="inputfields">
                                 <div style="position: relative;">
                                     <?php
-                                    // Database connection
-                                    // Assuming you have already established a connection to the database using $conn
-
                                     // Define $topCustomer based on the highest count of feedbacks and audio feedbacks
-                                    $sqlTopCustomer = "SELECT ci.customer_ID, CONCAT('images/', ci.image) AS 'Profile picture',
-                                                            ci.firstName AS 'Firstname', ci.middleName AS 'Middlename', ci.lastName AS 'Lastname',
-                                                            (COUNT(fb.feedback_ID) + COUNT(af.audio_ID)) AS feedback_count
-                                                        FROM tbl_customer_info ci
-                                                        LEFT JOIN tbl_feedback fb ON ci.customer_ID = fb.customer_ID
-                                                        LEFT JOIN tbl_audio_feedback af ON ci.customer_ID = af.customer_ID
-                                                        GROUP BY ci.customer_ID
-                                                        ORDER BY feedback_count DESC
-                                                        LIMIT 1";
-
+                                    $sqlTopCustomer = "SELECT 
+                                        ci.customer_ID, 
+                                        CONCAT('images/', ci.image) AS profilePicture, 
+                                        CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS fullName,
+                                        COUNT(DISTINCT fb.feedback_ID) AS feedbackCount,
+                                        COUNT(DISTINCT af.audio_ID) AS audioFeedbackCount
+                                    FROM tbl_customer_info AS ci
+                                    LEFT JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID
+                                    LEFT JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
+                                    GROUP BY ci.customer_ID
+                                    ORDER BY (COUNT(DISTINCT fb.feedback_ID) + COUNT(DISTINCT af.audio_ID)) DESC
+                                    LIMIT 1";
                                     $stmtTopCustomer = $conn->prepare($sqlTopCustomer);
                                     $stmtTopCustomer->execute();
                                     $topCustomer = $stmtTopCustomer->fetch(PDO::FETCH_ASSOC);
@@ -919,12 +918,10 @@ try {
                                                 var response = JSON.parse(xhr.responseText);
 
                                                 modalBody.innerHTML = '';
-                                                // modalBody.innerHTML += '<p><strong>Activity ID:</strong> ' + notificationData.activity_ID + '</p>';
-                                                // modalBody.innerHTML += '<p><strong>Feedback ID:</strong> ' + notificationData.feedback_ID + '</p>'; // Display Feedback ID
-                                                // modalBody.innerHTML += '<p><strong>Audio ID:</strong> ' + notificationData.audio_ID + '</p>'; // Display Audio ID
-
+                                                if (response['isTopCustomer']) {
+                                                    modalBody.innerHTML += '<span style="position: relative;"><h1 style="position: absolute; left: -10px; top: -10px;">🏆</h1>';
+                                                }
                                                 if (notificationData['type'] === 'Sent feedback') {
-                                                    // Display feedback details
                                                     modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
                                                     modalBody.innerHTML += '<h4><strong></strong> ' + response['Full Name'] + '</h4>';
                                                     modalBody.innerHTML += '<p><strong>Products:</strong> ' + response['Products'] + '</p>';
@@ -933,13 +930,11 @@ try {
                                                     modalBody.innerHTML += '<p><strong>Rating:</strong> ' + response['Rating'] + '</p>';
                                                     modalBody.innerHTML += '<p><strong>Date:</strong> ' + response['Date'] + '</p>';
                                                 } else if (notificationData['type'] === 'Sent audio feedback') {
-                                                    // Display audio feedback details
                                                     modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
                                                     modalBody.innerHTML += '<h4><strong></strong> ' + response['Full Name'] + '</h4>';
                                                     modalBody.innerHTML += '<p><strong></strong><audio controls><source src="http://localhost/nasara/audios/' + response['Audio'] + '" type="audio/mpeg">Your browser does not support the audio element.</audio></p>';
                                                     modalBody.innerHTML += '<p><strong>Date:</strong> ' + response['Date'] + '</p>';
                                                 } else if (notificationData['type'] === 'Registered an account') {
-                                                    // Display account registration details
                                                     modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
                                                     modalBody.innerHTML += '<h4><strong>Name:</strong> ' + response['Firstname'] + ' ' + response['Middlename'] + ' ' + response['Lastname'] + '</h4>';
                                                     modalBody.innerHTML += '<p><strong>Address:</strong> ' + response['Street'] + ', ' + response['Barangay'] + ', ' + response['Municipality'] + ', ' + response['Province'] + ' - ' + response['Zipcode'] + '</p>';
@@ -962,6 +957,7 @@ try {
 
                                     });
                                 });
+
 
                             </script>
 
