@@ -154,20 +154,21 @@ if (isset($_SESSION['adminID'])) {
                     // Function to display feedbacks
                     function displayFeedbacks($feedbacks, $color) {
                         if (!empty($feedbacks)) {
-                            foreach ($feedbacks as $feedback) {
+                            $totalFeedbacks = count($feedbacks);
+                            foreach ($feedbacks as $index => $feedback) {
                                 echo '<div class="row" style="background-color: ' . $color . '; margin-top: 15px; margin-left: 0px; margin-right: 0px; padding: 0px; margin-bottom: 15px; position: relative;">'; //box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166); 
                                 echo '<div class="col">';
-                                echo '<p class="card-text""><strong>Opinion:</strong> ' . htmlspecialchars($feedback['products']) . '</p>';
+                                echo '<p class="card-text"><strong>Opinion:</strong> ' . htmlspecialchars($feedback['products']) . '</p>';
                                 echo '<p class="card-text"><strong>Suggestion:</strong> ' . htmlspecialchars($feedback['services']) . '</p>';
                                 echo '<p class="card-text"><strong>Question:</strong> ' . htmlspecialchars($feedback['convenience']) . '</p>';
                                 echo '<p class="card-text"><strong>Rating:</strong> ' . htmlspecialchars($feedback['rating']) . '</p>';
                                 echo '<p class="card-text" style="color: blue; font-size: 15px; margin-top: 10px;">' . formatRelativeDate($feedback['date']) . '</p>';
-                                
-                                // Delete button with confirmation dialog - REMOVED
-                                // echo '<button class="btn btn-transparent" onclick="confirmDelete(' . $feedback['feedback_ID'] . ', ' . $customerID . ')" style="position: absolute; bottom: 20px; right: 20px; font-size: 25px; color: red;"><i class="fas fa-trash-alt"></i></button>';
-                                
                                 echo '</div>';
                                 echo '</div>';
+                                // Add <hr> after each feedback except the last one
+                                if ($index < $totalFeedbacks - 1) {
+                                    echo '<hr>';
+                                }
                             }
                         } else {
                             echo '<p style="margin-left: 15px; font-size: 18px; color: gray;">No written feedbacks.</p>';
@@ -181,19 +182,17 @@ if (isset($_SESSION['adminID'])) {
                     echo '</div>';
 
                     echo '<h4 style="margin-top: 20px; padding: 15px; margin-left: 12px; font-size: 20px; color: gray;">Yesterday</h4>';
-                    echo '<div style="background-color: #f1e9e9; padding: 15px; border-radius: 8px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);"">';
+                    echo '<div style="background-color: #f1e9e9; padding: 15px; border-radius: 8px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);">';
                     displayFeedbacks($feedbackCategory['Yesterday'], '#f1e9e9');
                     echo '</div>';
 
                     echo '<h4 style="margin-top: 20px; padding: 15px; margin-left: 12px; font-size: 20px; color: gray;">Older</h4>';
-                    echo '<div style="background-color: #ecedff; padding: 15px; border-radius: 8px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);"">';
+                    echo '<div style="background-color: #ecedff; padding: 15px; border-radius: 8px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.166);">';
                     displayFeedbacks($feedbackCategory['Older'], '#ecedff');
                     echo '</div>';
                     ?>
-                    
                 </div>  
             </div>
-
 
 
 

@@ -861,7 +861,7 @@ try {
                                                 <h4 class="text-danger" style="margin-top: -10px;">Top customer</h4>
 
                                                 <div>
-                                                    <img src="<?php echo $profilePicture; ?>" alt="Profile Picture" style="margin-top: -5px; width: 100px; height: 100px; border-radius: 50%;">
+                                                    <img src="<?php echo $profilePicture; ?>" alt="Profile Picture" style="margin-top: -5px; width: 100px; height: 100px; border-radius: 50%; background-color: lightblue;">
                                                 </div>
 
                                                 <h3 style="margin-left: 0px; margin-top: -4px;"><?php echo $fullName; ?></h3>
