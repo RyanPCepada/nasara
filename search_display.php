@@ -170,9 +170,10 @@ if (isset($_SESSION['adminID'])) {
     </nav>
 
     <button type="button" class="btn btn-secondary" style="width: 40px; height: 40px; margin-top: 20px; margin-left: 105px; border-radius: 50%;"
-        href="#" onclick="window.history.back();">
+        href="#" onclick="window.location.href = 'admin_main.php';">
         <i class="fas fa-arrow-left" style="font-size: 20px;"></i>
     </button>
+
     
 
 
@@ -188,8 +189,31 @@ try {
     if (isset($_POST["submit"])) {
         $str = $_POST["search"];
         
-        // Search in tbl_customer_info
-        $sth = $con->prepare("SELECT * FROM `tbl_customer_info` WHERE firstName = :name OR lastName = :name");
+        // Search in tbl_customer_info, tbl_feedback, and tbl_audio_feedback
+        $sth = $con->prepare("SELECT * FROM `tbl_customer_info` WHERE 
+        customer_ID LIKE :name
+        OR firstName LIKE :name 
+        OR lastName LIKE :name 
+        OR street LIKE :name 
+        OR barangay LIKE :name 
+        OR municipality LIKE :name 
+        OR province LIKE :name 
+        OR zipcode LIKE :name 
+        OR birthDate LIKE :name 
+        OR gender LIKE :name 
+        OR phoneNumber LIKE :name 
+        OR email LIKE :name 
+        OR customer_ID IN (SELECT customer_ID FROM `tbl_feedback` WHERE 
+            feedback_ID LIKE :name
+            OR products LIKE :name 
+            OR services LIKE :name 
+            OR convenience LIKE :name
+            OR rating LIKE :name
+            OR date LIKE :name)
+        OR customer_ID IN (SELECT customer_ID FROM `tbl_audio_feedback` WHERE 
+            audio_ID LIKE :name
+            OR audio LIKE :name 
+            OR dateAdded LIKE :name)");
         $sth->bindParam(':name', $str, PDO::PARAM_STR);
         $sth->setFetchMode(PDO::FETCH_OBJ);
         $sth->execute();
@@ -272,6 +296,7 @@ try {
                 </table>
             </div>
 
+            <!-- After displaying written feedbacks -->
             <?php
             // Search in tbl_audio_feedback
             $sth_audio_feedback = $con->prepare("SELECT * FROM `tbl_audio_feedback` WHERE customer_ID = :customer_ID");
@@ -291,13 +316,22 @@ try {
                     <?php while ($row_audio_feedback = $sth_audio_feedback->fetch()) { ?>
                     <tr>
                         <td><?php echo htmlspecialchars($row_audio_feedback->audio_ID); ?></td>
-                        <td><?php echo htmlspecialchars($row_audio_feedback->audio); ?></td>
+                        <td>
+                            <?php
+                            $audio_url = "http://localhost/nasara/audios/" . htmlspecialchars($row_audio_feedback->audio);
+                            ?>
+                            <audio controls>
+                                <source src="<?php echo $audio_url; ?>" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </td>
                         <td><?php echo htmlspecialchars($row_audio_feedback->dateAdded); ?></td>
                         <td><?php echo htmlspecialchars($row_audio_feedback->customer_ID); ?></td>
                     </tr>
                     <?php } ?>
                 </table>
             </div>
+
             <?php
         } else {
             echo "Customer does not exist";
