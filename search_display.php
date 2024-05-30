@@ -188,87 +188,97 @@ try {
 
     if (isset($_POST["submit"])) {
         $str = $_POST["search"];
-        
-        // Search in tbl_customer_info, tbl_feedback, and tbl_audio_feedback
+    
         $sth = $con->prepare("SELECT * FROM `tbl_customer_info` WHERE 
         customer_ID LIKE :name
-        OR firstName LIKE :name 
-        OR lastName LIKE :name 
-        OR street LIKE :name 
-        OR barangay LIKE :name 
-        OR municipality LIKE :name 
-        OR province LIKE :name 
-        OR zipcode LIKE :name 
-        OR birthDate LIKE :name 
-        OR gender LIKE :name 
-        OR phoneNumber LIKE :name 
-        OR email LIKE :name 
+        OR firstName LIKE CONCAT('%', :name, '%')
+        OR lastName LIKE CONCAT('%', :name, '%')
+        OR street LIKE CONCAT('%', :name, '%')
+        OR barangay LIKE CONCAT('%', :name, '%')
+        OR municipality LIKE CONCAT('%', :name, '%')
+        OR province LIKE CONCAT('%', :name, '%')
+        OR zipcode LIKE CONCAT('%', :name, '%')
+        OR birthDate LIKE CONCAT('%', :name, '%')
+        OR gender LIKE CONCAT('%', :name, '%')
+        OR phoneNumber LIKE CONCAT('%', :name, '%')
+        OR email LIKE CONCAT('%', :name, '%')
         OR customer_ID IN (SELECT customer_ID FROM `tbl_feedback` WHERE 
-            feedback_ID LIKE :name
-            OR products LIKE :name 
-            OR services LIKE :name 
-            OR convenience LIKE :name
-            OR rating LIKE :name
-            OR date LIKE :name)
+            feedback_ID LIKE CONCAT('%', :name, '%')
+            OR products LIKE CONCAT('%', :name, '%')
+            OR services LIKE CONCAT('%', :name, '%')
+            OR convenience LIKE CONCAT('%', :name, '%')
+            OR rating LIKE CONCAT('%', :name, '%')
+            OR date LIKE CONCAT('%', :name, '%'))
         OR customer_ID IN (SELECT customer_ID FROM `tbl_audio_feedback` WHERE 
-            audio_ID LIKE :name
-            OR audio LIKE :name 
-            OR dateAdded LIKE :name)");
+            audio_ID LIKE CONCAT('%', :name, '%')
+            OR audio LIKE CONCAT('%', :name, '%')
+            OR dateAdded LIKE CONCAT('%', :name, '%'))");
         $sth->bindParam(':name', $str, PDO::PARAM_STR);
         $sth->setFetchMode(PDO::FETCH_OBJ);
         $sth->execute();
-        
-        if ($row = $sth->fetch()) {
-            $customer_ID = $row->customer_ID;
+    
+        // Check if any rows are returned
+        if ($sth->rowCount() > 0) {
             ?>
             <div class="table-container">
-                <h2>Customer Information</h2>
-                <table>
-                    <tr>
-                        <th>Customer ID</th>
-                        <th>First Name</th>
-                        <th>Middle Name</th>
-                        <th>Last Name</th>
-                        <th>Street</th>
-                        <th>Barangay</th>
-                        <th>Municipality</th>
-                        <th>Province</th>
-                        <th>Zip Code</th>
-                        <th>Birth Date</th>
-                        <th>Gender</th>
-                        <th>Phone Number</th>
-                        <th>Email</th>
-                        <th>Date Added</th>
-                        <th>Date Modified</th>
-                        <th>Image</th>
-                    </tr>
-                    <tr>
-                        <td><?php echo htmlspecialchars($row->customer_ID); ?></td>
-                        <td><?php echo htmlspecialchars($row->firstName); ?></td>
-                        <td><?php echo htmlspecialchars($row->middleName); ?></td>
-                        <td><?php echo htmlspecialchars($row->lastName); ?></td>
-                        <td><?php echo htmlspecialchars($row->street); ?></td>
-                        <td><?php echo htmlspecialchars($row->barangay); ?></td>
-                        <td><?php echo htmlspecialchars($row->municipality); ?></td>
-                        <td><?php echo htmlspecialchars($row->province); ?></td>
-                        <td><?php echo htmlspecialchars($row->zipcode); ?></td>
-                        <td><?php echo htmlspecialchars($row->birthDate); ?></td>
-                        <td><?php echo htmlspecialchars($row->gender); ?></td>
-                        <td><?php echo htmlspecialchars($row->phoneNumber); ?></td>
-                        <td><?php echo htmlspecialchars($row->email); ?></td>
-                        <td><?php echo htmlspecialchars($row->dateAdded); ?></td>
-                        <td><?php echo htmlspecialchars($row->dateModified); ?></td>
-                        <td><?php echo htmlspecialchars($row->image); ?></td>
-                    </tr>
-                </table>
-            </div>
+    <h2>Customer Information</h2>
+    <table>
+        <tr>
+            <th>Customer ID</th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Street</th>
+            <th>Barangay</th>
+            <th>Municipality</th>
+            <th>Province</th>
+            <th>Zip Code</th>
+            <th>Birth Date</th>
+            <th>Gender</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Date Added</th>
+            <th>Date Modified</th>
+            <th>Image</th>
+        </tr>
+        <?php while ($row = $sth->fetch()) { ?>
+            <tr onclick="window.location='view_customer.php?customer_id=<?php echo htmlspecialchars($row->customer_ID); ?>';">
+                <td><?php echo htmlspecialchars($row->customer_ID); ?></td>
+                <td><?php echo htmlspecialchars($row->firstName); ?></td>
+                <td><?php echo htmlspecialchars($row->middleName); ?></td>
+                <td><?php echo htmlspecialchars($row->lastName); ?></td>
+                <td><?php echo htmlspecialchars($row->street); ?></td>
+                <td><?php echo htmlspecialchars($row->barangay); ?></td>
+                <td><?php echo htmlspecialchars($row->municipality); ?></td>
+                <td><?php echo htmlspecialchars($row->province); ?></td>
+                <td><?php echo htmlspecialchars($row->zipcode); ?></td>
+                <td><?php echo htmlspecialchars($row->birthDate); ?></td>
+                <td><?php echo htmlspecialchars($row->gender); ?></td>
+                <td><?php echo htmlspecialchars($row->phoneNumber); ?></td>
+                <td><?php echo htmlspecialchars($row->email); ?></td>
+                <td><?php echo htmlspecialchars($row->dateAdded); ?></td>
+                <td><?php echo htmlspecialchars($row->dateModified); ?></td>
+                <td><?php echo htmlspecialchars($row->image); ?></td>
+            </tr>
+        <?php } ?>
+    </table>
+</div>
+
 
             <?php
-            // Search in tbl_feedback
-            $sth_feedback = $con->prepare("SELECT * FROM `tbl_feedback` WHERE customer_ID = :customer_ID");
-            $sth_feedback->bindParam(':customer_ID', $customer_ID, PDO::PARAM_INT);
-            $sth_feedback->setFetchMode(PDO::FETCH_OBJ);
-            $sth_feedback->execute();
+                // Search in tbl_feedback
+                $sth_feedback = $con->prepare("SELECT * FROM `tbl_feedback` WHERE 
+                customer_ID = :customer_ID
+                OR feedback_ID LIKE CONCAT('%', :name, '%')
+                OR products LIKE CONCAT('%', :name, '%')
+                OR services LIKE CONCAT('%', :name, '%')
+                OR convenience LIKE CONCAT('%', :name, '%')
+                OR rating LIKE CONCAT('%', :name, '%')
+                OR date LIKE CONCAT('%', :name, '%')");
+                $sth_feedback->bindParam(':customer_ID', $customer_ID, PDO::PARAM_INT);
+                $sth_feedback->bindParam(':name', $str, PDO::PARAM_STR);
+                $sth_feedback->setFetchMode(PDO::FETCH_OBJ);
+                $sth_feedback->execute();
             ?>
             <div class="table-container">
                 <h2>Written Feedbacks</h2>
@@ -298,11 +308,16 @@ try {
 
             <!-- After displaying written feedbacks -->
             <?php
-            // Search in tbl_audio_feedback
-            $sth_audio_feedback = $con->prepare("SELECT * FROM `tbl_audio_feedback` WHERE customer_ID = :customer_ID");
-            $sth_audio_feedback->bindParam(':customer_ID', $customer_ID, PDO::PARAM_INT);
-            $sth_audio_feedback->setFetchMode(PDO::FETCH_OBJ);
-            $sth_audio_feedback->execute();
+                // Search in tbl_audio_feedback
+                $sth_audio_feedback = $con->prepare("SELECT * FROM `tbl_audio_feedback` WHERE 
+                customer_ID = :customer_ID
+                OR audio_ID LIKE CONCAT('%', :name, '%')
+                OR audio LIKE CONCAT('%', :name, '%')
+                OR dateAdded LIKE CONCAT('%', :name, '%')");
+                $sth_audio_feedback->bindParam(':customer_ID', $customer_ID, PDO::PARAM_INT);
+                $sth_audio_feedback->bindParam(':name', $str, PDO::PARAM_STR);
+                $sth_audio_feedback->setFetchMode(PDO::FETCH_OBJ);
+                $sth_audio_feedback->execute();
             ?>
             <div class="table-container">
                 <h2>Audio Feedbacks</h2>

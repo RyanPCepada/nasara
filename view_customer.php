@@ -17,6 +17,9 @@ if (isset($_SESSION['adminID'])) {
         // Get the customer's ID from the query parameter
         $customerID = isset($_GET['customer_ID']) ? $_GET['customer_ID'] : null;
 
+// Now you can use $customer_ID and $is_top_customer in your PHP code
+
+
         if ($customerID) {
             // Fetch the customer's information
             $query = $conn->prepare("SELECT * FROM tbl_customer_info WHERE customer_ID = :customerID");
@@ -131,6 +134,12 @@ if (isset($_GET["search"])) {
 
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
         <img src="icons/NASARA_LOGO_WHITE_PNG.png" class="img-fluid" id="NASARA_LOGO" alt="">
+        
+        <form method="post" action="search_display.php" style="width: 300px; margin-left: 950px;">
+            <input class="form-control me-2" type="text" name="search" placeholder="Search" aria-label="Search" style="width: 250px;">
+            <button class="btn btn-light" type="submit" name="submit" style="position: absolute; margin-left: 252px; margin-top: -38px;"><i class="fas fa-search"></i></button>
+        </form>
+
         <img src="images_admin/<?php echo $adminimage; ?>" id="icon_profile" class="img-fluid zoomable-image rounded-square" onclick="to_adminacc()">
     </nav>
 
