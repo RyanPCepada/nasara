@@ -742,7 +742,7 @@ try {
         <ul class="list-unstyled">
           <li>Owner: Hermenia Nasara</li>
           <li>Location: Tankulan, Manolo Fortich, Bukidnon</li>
-          <li>Established: 2010</li>
+          <!-- <li>Established: 2010</li> -->
           <!-- <li>Address: Tankulan, Manolo Fortich, Bukidnon</li> -->
         </ul>
       </div>
@@ -766,7 +766,7 @@ try {
     <hr>
     <div class="row">
       <div class="col-md-12 text-center">
-        <p>&copy; 2024 Nasara Store. All rights reserved.</p>
+        <p>&copy; Nasara Store. All rights reserved.</p>
       </div>
     </div>
   </div>
