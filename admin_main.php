@@ -215,19 +215,16 @@ try {
     <script src="assets/js/global.js"></script>
     <link rel="stylesheet" href="pages/admin/style_ad.css">
 
-   <!-- Navigation bar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-primary">
-    <img src="icons/NASARA_LOGO_WHITE_PNG.png" class="img-fluid" id="NASARA_LOGO" alt="">
-    
-    
-<form method="post" action="search_display.php">
-<label>Search</label>
-<input type="text" name="search">
-<input type="submit" name="submit">
-</form>
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+        <img src="icons/NASARA_LOGO_WHITE_PNG.png" class="img-fluid" id="NASARA_LOGO" alt="">
+        
+        <form method="post" action="search_display.php" style="width: 300px; margin-left: 950px;">
+            <input class="form-control me-2" type="text" name="search" placeholder="Search" aria-label="Search" style="width: 250px;">
+            <button class="btn btn-light" type="submit" name="submit" style="position: absolute; margin-left: 252px; margin-top: -38px;"><i class="fas fa-search"></i></button>
+        </form>
 
-    <img src="images_admin/<?php echo $adminimage; ?>" id="icon_profile" class="img-fluid zoomable-image rounded-square" onclick="to_adminacc()">
-</nav>
+        <img src="images_admin/<?php echo $adminimage; ?>" id="icon_profile" class="img-fluid zoomable-image rounded-square" onclick="to_adminacc()">
+    </nav>
 
 
 

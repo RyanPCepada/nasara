@@ -37,12 +37,18 @@ if (isset($_SESSION['adminID'])) {
             $audioFiles = $audioQuery->fetchAll(PDO::FETCH_ASSOC);
 
             // Fetch the top customer data
-            $sqlTopCustomer = "SELECT ci.customer_ID FROM tbl_customer_info ci
-                                LEFT JOIN tbl_feedback fb ON ci.customer_ID = fb.customer_ID
-                                LEFT JOIN tbl_audio_feedback af ON ci.customer_ID = af.customer_ID
-                                GROUP BY ci.customer_ID
-                                ORDER BY (COUNT(fb.feedback_ID) + COUNT(af.audio_ID)) DESC
-                                LIMIT 1";
+            $sqlTopCustomer = "SELECT 
+                ci.customer_ID, 
+                CONCAT('images/', ci.image) AS profilePicture, 
+                CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS fullName,
+                COUNT(DISTINCT fb.feedback_ID) AS feedbackCount,
+                COUNT(DISTINCT af.audio_ID) AS audioFeedbackCount
+            FROM tbl_customer_info AS ci
+            LEFT JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID
+            LEFT JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
+            GROUP BY ci.customer_ID
+            ORDER BY (COUNT(DISTINCT fb.feedback_ID) + COUNT(DISTINCT af.audio_ID)) DESC
+            LIMIT 1";
             $stmtTopCustomer = $conn->prepare($sqlTopCustomer);
             $stmtTopCustomer->execute();
             $topCustomer = $stmtTopCustomer->fetch(PDO::FETCH_ASSOC);
@@ -82,6 +88,26 @@ if (isset($_SESSION['adminID'])) {
     exit();  // Exit the script
 }
 ?>
+
+<?php
+// view_customer.php
+
+// Retrieve the search query from the URL parameter
+if (isset($_GET["search"])) {
+    $searchQuery = $_GET["search"];
+
+    // Now you can use $searchQuery to filter your database query
+    // Example:
+    // $sth = $con->prepare("SELECT * FROM `tbl_customer_info` WHERE firstName = :name OR lastName = :name");
+    // $sth->bindParam(':name', $searchQuery, PDO::PARAM_STR);
+    // Execute the query and display the results
+} else {
+    // Handle case where search query is not provided
+    // Redirect to admin_main or display an error message
+}
+?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
