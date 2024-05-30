@@ -487,11 +487,18 @@ try {
 
                         <div class="card-body" id="cards_body3" style="justify-content: center; background: white;">
 
-
+                        <h3 style="margin: 20px; color: gray; margin-bottom: 40px;">Written Feedbacks</h3>
                             <!-- CSS for Hover Effect -->
                             <style>
                                 .table-hover tbody tr:hover {
                                     background-color: #c8e7c9 !important;
+                                }
+
+                                .table thead th {
+                                    top: 0;
+                                    z-index: 1;
+                                    background-color: #c8e7c9;
+                                    color: black;
                                 }
 
                                 .fbmodal {
@@ -903,16 +910,16 @@ try {
             
             // Delay scrolling to the written feedbacks table
             setTimeout(function() {
-                document.getElementById("div_written_fb").scrollIntoView({ behavior: "smooth", block: "start" });
+                document.getElementById("cards_body3").scrollIntoView({ behavior: "smooth", block: "start" });
             }, 800); // Adjust the delay time as needed
         });
 
         document.getElementById("gif_written_white_bg").addEventListener("click", function() {
-        document.getElementById("div_written_fb").scrollIntoView({ behavior: "smooth" });
+        document.getElementById("cards_body3").scrollIntoView({ behavior: "smooth" });
         });
         
         document.getElementById("count_written_fb").addEventListener("click", function() {
-        document.getElementById("div_written_fb").scrollIntoView({ behavior: "smooth" });
+        document.getElementById("cards_body3").scrollIntoView({ behavior: "smooth" });
         });
 
         document.getElementById("gif_mic_white_bg").addEventListener("click", function() {

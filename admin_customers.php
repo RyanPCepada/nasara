@@ -1048,6 +1048,12 @@ try {
                                     background-color: #cacbe8 !important; /* A darker shade of light blue */
                                 }
 
+                                .table thead th {
+                                    top: 0;
+                                    z-index: 1;
+                                    background-color: #c8e7c9;
+                                    color: black;
+                                }
 
                                 .custmodal {
                                     display: none;

@@ -208,6 +208,16 @@ try {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!--FOR PIE CHART-->
 
     <title>Nasara - Admin</title>
+
+    <style>
+        .table thead th {
+            top: 0;
+            z-index: 1;
+            background-color: #c8e7c9;
+            color: black;
+        }
+    </style>
+    
 </head>
 <body>
     <script src="assets/js/jquery-3.7.1.js"></script>
