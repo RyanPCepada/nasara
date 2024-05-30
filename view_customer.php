@@ -39,6 +39,33 @@ if (isset($_SESSION['adminID'])) {
             echo "No customer ID provided.";
             exit();
         }
+
+
+
+        
+        // Get admin information based on adminID from the session
+        $adminID = $_SESSION['adminID'];
+        $adminQuery = $conn->prepare("SELECT userName, password, image FROM tbl_admin WHERE admin_ID = :adminID");
+        $adminQuery->bindParam(':adminID', $adminID, PDO::PARAM_INT);
+        $adminQuery->execute();
+
+        // Fetch the admin's information
+        $admin = $adminQuery->fetch(PDO::FETCH_ASSOC);
+
+        // Check if data was found in the database
+        if ($admin !== false) {
+            // Assign the username to $userName
+            $userName = $admin['userName'];
+            $adminimage = $admin['image'];
+            $password = $admin['password'];
+        } else {
+            $userName = '';
+            $adminimage = '';
+            $password = '';
+        }
+
+
+
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
         exit();
