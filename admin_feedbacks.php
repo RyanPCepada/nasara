@@ -551,12 +551,9 @@ try {
                             </style>
 
 
-                            <div class="text-center d-flex align-items-center justify-content-center" style="margin-left: 0px; padding: 20px; border-radius: 15px;">
-                                <div class="row" id="div_written_fb">
-                                    <h3 style="margin-top: 10px; margin-bottom: 40px; margin-left: -405px; color: gray;">Written Feedbacks</h3>
-                                    <?php
-                                        // Step 2: Fetch data from tbl_customer_info
-                                        $sql = "SELECT
+                            <?php
+                                // Fetch data from tbl_customer_info and feedback tables
+                                $sql = "SELECT
                                             CONCAT('images/', ci.image) AS 'Profile picture',
                                             ci.customer_ID AS 'Customer ID',
                                             CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS 'Full Name',
@@ -569,52 +566,77 @@ try {
                                         JOIN tbl_feedback AS fb ON ci.customer_ID = fb.customer_ID
                                         ORDER BY fb.feedback_ID DESC";
 
-                                        $stmt = $conn->prepare($sql);
-                                        $stmt->execute();
+                                $stmt = $conn->prepare($sql);
+                                $stmt->execute();
+                                $feedbackData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                                        // Step 3: Create arrays to store the data
-                                        $customerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                    ?>
+                            ?>
 
-                                    <div class="scrollable-content" id="table_written_fb">
-                                        <table class="table table-bordered table-hover class alternate-row-table" id="list_table">
-                                            <thead>
-                                                <tr>
-                                                    <?php
-                                                    // Display column aliases as headers
-                                                    if (!empty($customerData)) {
-                                                        $aliasRow = $customerData[0]; // Assuming the first row contains aliases
-                                                        foreach ($aliasRow as $alias => $value) {
-                                                            echo "<th style='background-color: #c8e7c9; color: black;'>$alias</th>";
-                                                        }
-                                                    }
-                                                    ?>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php
-                                                if (empty($customerData)) {
-                                                    // Display the "No feedback yet for today" message in the table body
-                                                    echo '<tr><td colspan="8" style="text-align: center; background-color: transparent; color: black;">No feedbacks yet for today</td></tr>';
-                                                } else {
-                                                    // Loop through the data and populate the table
-                                                    foreach ($customerData as $row) {
-                                                        echo "<tr data-customer='" . json_encode($row) . "'>";
-                                                        foreach ($row as $key => $value) {
-                                                            if ($key === 'Profile picture') {
-                                                                echo "<td><img src='$value' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: white;'></td>";
-                                                            } else {
-                                                                echo "<td>$value</td>";
-                                                            }
-                                                        }
-                                                        echo "</tr>";
-                                                    }
+                            <div class="scrollable-content" id="table_written_fb">
+                                <table class="table table-bordered table-hover class alternate-row-table" id="list_table">
+                                    <thead>
+                                        <tr>
+                                            <?php
+                                            if (!empty($feedbackData)) {
+                                                $aliasRow = $feedbackData[0]; // Assuming the first row contains aliases
+                                                foreach ($aliasRow as $alias => $value) {
+                                                    echo "<th style='background-color: #c8e7c9; color: black;'>$alias</th>";
                                                 }
-                                                ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                            }
+                                            ?>
+                                        </tr>
+                                    </thead>
+
+                                    <?php
+                                        // Define $topCustomer based on the highest count of feedbacks and audio feedbacks
+                                        $sqlTopCustomer = "
+                                            SELECT ci.customer_ID, CONCAT('images/', ci.image) AS 'Profile picture',
+                                                ci.firstName AS 'Firstname', ci.middleName AS 'Middlename', ci.lastName AS 'Lastname',
+                                                (COUNT(fb.feedback_ID) + COUNT(af.audio_ID)) AS feedback_count
+                                            FROM tbl_customer_info ci
+                                            LEFT JOIN tbl_feedback fb ON ci.customer_ID = fb.customer_ID
+                                            LEFT JOIN tbl_audio_feedback af ON ci.customer_ID = af.customer_ID
+                                            GROUP BY ci.customer_ID
+                                            ORDER BY feedback_count DESC
+                                            LIMIT 1";
+
+                                        $stmtTopCustomer = $conn->prepare($sqlTopCustomer);
+                                        $stmtTopCustomer->execute();
+                                        $topCustomer = $stmtTopCustomer->fetch(PDO::FETCH_ASSOC);
+                                    ?>
+                                    <tbody>
+                                        <?php
+                                        if (empty($feedbackData)) {
+                                            echo '<tr><td colspan="8" style="text-align: center; background-color: transparent; color: black;">No feedbacks yet for today</td></tr>';
+                                        } else {
+                                            foreach ($feedbackData as $row) {
+                                                if ($row['Customer ID'] == $topCustomer['customer_ID']) {
+                                                    // Display top customer with trophy icon
+                                                    echo "<tr class='customer-row' data-customer='" . json_encode($row) . "'>";
+                                                    echo "<td><span style='position: relative;'><h1 style='font-size: 25px; position: absolute; left: -11px; top: -30px;'>🏆</h1><img src='" . $row['Profile picture'] . "' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: white;'></span></td>";
+                                                    foreach ($row as $key => $value) {
+                                                        if ($key !== 'Profile picture') {
+                                                            echo "<td>$value</td>";
+                                                        }
+                                                    }
+                                                    echo "</tr>";
+                                                } else {
+                                                    // Display other customers without the trophy icon
+                                                    echo "<tr class='customer-row' data-customer='" . json_encode($row) . "'>";
+                                                    foreach ($row as $key => $value) {
+                                                        if ($key === 'Profile picture') {
+                                                            echo "<td><img src='$value' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: white;'></td>";
+                                                        } else {
+                                                            echo "<td>$value</td>";
+                                                        }
+                                                    }
+                                                    echo "</tr>";
+                                                }
+                                            }
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
                             </div>
 
                             <!-- Modal -->
@@ -628,56 +650,51 @@ try {
 
                             <!-- JavaScript for Modal Functionality -->
                             <script>
-                                // Get the fbmodal
                                 var fbmodal = document.getElementById("customerModal");
-
-                                // Get the <span> element that closes the fbmodal
                                 var span = document.getElementsByClassName("close")[0];
 
-                                // When the user clicks on <span> (x), close the fbmodal
                                 span.onclick = function() {
                                     fbmodal.style.display = "none";
                                 }
 
-                                // When the user clicks anywhere outside of the fbmodal, close it
                                 window.onclick = function(event) {
                                     if (event.target == fbmodal) {
                                         fbmodal.style.display = "none";
                                     }
                                 }
 
-                                // Add click event listener to each table row
-                                document.querySelectorAll('#list_table tbody tr').forEach(function(row) {
+                                document.querySelectorAll('.customer-row').forEach(function(row) {
                                     row.addEventListener('click', function() {
                                         var customerData = JSON.parse(this.getAttribute('data-customer'));
                                         var modalBody = document.getElementById("modalBody");
                                         var viewAllBtn = document.getElementById("viewAllBtn");
 
-                                        // Clear previous content
                                         modalBody.innerHTML = '';
 
-                                        // Populate modal with customer data
-                                        for (var key in customerData) {
-                                            if (key === 'Profile picture') {
-                                                modalBody.innerHTML += '<p><img src="' + customerData[key] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
-                                            } else {
-                                                modalBody.innerHTML += '<p><strong>' + key + ':</strong> ' + customerData[key] + '</p>';
-                                            }
+                                        if (customerData['Customer ID'] == <?php echo $topCustomer['customer_ID']; ?>) {
+                                            modalBody.innerHTML += '<span style="position: relative;"><h1 style="position: absolute; left: -10px; top: -10px;">🏆</h1></span>';
                                         }
+                                        modalBody.innerHTML += '<p><img src="' + customerData['Profile picture'] + '" style="width: 150px; height: 150px; background: lightblue; border-radius: 75px;"></p>';
+                                        modalBody.innerHTML += '<p><strong>Full Name:</strong> ' + customerData['Full Name'] + '</p>';
+                                        modalBody.innerHTML += '<p><strong>Products:</strong> ' + customerData['Products'] + '</p>';
+                                        modalBody.innerHTML += '<p><strong>Services:</strong> ' + customerData['Services'] + '</p>';
+                                        modalBody.innerHTML += '<p><strong>Convenience:</strong> ' + customerData['Convenience'] + '</p>';
+                                        modalBody.innerHTML += '<p><strong>Rating:</strong> ' + customerData['Rating'] + '</p>';
+                                        modalBody.innerHTML += '<p><strong>Date:</strong> ' + customerData['Date'] + '</p>';
 
-                                        // Set the link for the view all button
                                         viewAllBtn.onclick = function() {
-                                            // Extract the customer ID from customerData
                                             var customerID = customerData['Customer ID'];
-                                            // Redirect to view_customer.php with customer ID parameter
-                                            window.location.href = 'view_customer.php?customer_ID=' + customerID;
+                                            var isTopCustomer = customerID == <?php echo $topCustomer['customer_ID']; ?>;
+                                            var url = 'view_customer.php?customer_ID=' + customerID + '&top_customer=' + isTopCustomer;
+                                            window.location.href = url;
                                         };
 
-                                        // Display the fbmodal
                                         fbmodal.style.display = "block";
                                     });
                                 });
                             </script>
+
+
 
 
                         </div>
@@ -760,7 +777,23 @@ try {
                                         }
                                     }
 
-                                    function displayAudios($audios, $heading, $marginTop) {
+                                    // Define $topCustomer based on the highest count of feedbacks and audio feedbacks
+                                    $sqlTopCustomer = "
+                                        SELECT ci.customer_ID, CONCAT('images/', ci.image) AS 'Profile picture',
+                                            ci.firstName AS 'Firstname', ci.middleName AS 'Middlename', ci.lastName AS 'Lastname',
+                                            (COUNT(fb.feedback_ID) + COUNT(af.audio_ID)) AS feedback_count
+                                        FROM tbl_customer_info ci
+                                        LEFT JOIN tbl_feedback fb ON ci.customer_ID = fb.customer_ID
+                                        LEFT JOIN tbl_audio_feedback af ON ci.customer_ID = af.customer_ID
+                                        GROUP BY ci.customer_ID
+                                        ORDER BY feedback_count DESC
+                                        LIMIT 1";
+
+                                    $stmtTopCustomer = $conn->prepare($sqlTopCustomer);
+                                    $stmtTopCustomer->execute();
+                                    $topCustomer = $stmtTopCustomer->fetch(PDO::FETCH_ASSOC);
+
+                                    function displayAudios($audios, $heading, $marginTop, $topCustomer) {
                                         echo '<h4 style="margin-top: ' . $marginTop . '; padding: 15px; margin-left: 12px; font-size: 20px; color: gray;">' . $heading . '</h4>';
 
                                         if (empty($audios)) {
@@ -768,27 +801,35 @@ try {
                                         } else {
                                             foreach ($audios as $audio) {
                                                 echo '<div class="row" style="margin-left: 15px; margin-top: 10px; padding-bottom: 10px;">';
-                                        
+
                                                 echo '<div class="col-auto">';
                                                 // Wrap the image with an anchor tag
-                                                echo '<a href="view_customer.php?customer_ID=' . $audio['Customer ID'] . '"><img class="profile-image" src="' . htmlspecialchars($audio['Profile picture']) . '" alt="Profile picture" style="width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 50%; background-color: white;"></a>';
+                                                // echo '<a href="view_customer.php?customer_ID=' . $audio['Customer ID'] . '">';
+                                                echo '<a href="view_customer.php?customer_ID=' . $audio['Customer ID'] . '&top_customer=true">';
+
+                                                if ($audio['Customer ID'] == $topCustomer['customer_ID']) {
+                                                    echo '<span style="position: relative;"><h1 style="font-size: 25px; position: absolute; left: -10px; top: -30px;">🏆</h1>';
+                                                }
+                                                echo '<img class="profile-image" src="' . htmlspecialchars($audio['Profile picture']) . '" alt="Profile picture" style="width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 50%; background-color: white;"></a>';
+                                                if ($audio['Customer ID'] == $topCustomer['customer_ID']) {
+                                                    echo '</span>';
+                                                }
                                                 echo '</div>';
-                                        
+
                                                 echo '<div class="col">';
                                                 echo '<p style="margin-top: 10px; font-weight: bold;"><a href="view_customer.php?customer_ID=' . $audio['Customer ID'] . '" class="customer-name">' . htmlspecialchars($audio['Full Name']) . '</a></p>';
                                                 echo '<p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($audio['Date'], $heading) . '</p>';
                                                 echo '</div>';
-                                        
+
                                                 echo '<div class="col-auto">';
                                                 echo '<audio controls style="width: 500px; margin-right: 50px; margin-top: 12px;">';
                                                 echo '<source src="http://localhost/nasara/audios/' . htmlspecialchars($audio['Audio']) . '" type="audio/' . pathinfo($audio['Audio'], PATHINFO_EXTENSION) . '">';
                                                 echo 'Your browser does not support the audio element.';
                                                 echo '</audio>';
                                                 echo '</div>';
-                                        
+
                                                 echo '</div>';
                                             }
-                                        
                                         }
                                     }
 
@@ -821,23 +862,22 @@ try {
                                             <?php
                                             // Display "Today" audio records with background color #ecffed
                                             echo '<div style="background-color: #ecffed;">';
-                                            displayAudios($todayAudios, 'Today', '20px');
+                                            displayAudios($todayAudios, 'Today', '20px', $topCustomer);
                                             echo '</div>';
 
                                             // Display "Yesterday" audio records with background color #f1e9e9
                                             echo '<div style="background-color: #f1e9e9;">';
-                                            displayAudios($yesterdayAudios, 'Yesterday', '20px');
+                                            displayAudios($yesterdayAudios, 'Yesterday', '20px', $topCustomer);
                                             echo '</div>';
 
                                             // Display "Older" audio records with background color #ecedff
                                             echo '<div style="background-color: #ecedff;">';
-                                            displayAudios($olderAudios, 'Older', '20px');
+                                            displayAudios($olderAudios, 'Older', '20px', $topCustomer);
                                             echo '</div>';
                                             ?>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                             <!-- END AUDIO FEEDBACKS TABLE -->
 
