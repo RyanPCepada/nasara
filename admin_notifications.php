@@ -809,7 +809,7 @@ try {
                                                 if ($notification['customer_id'] == $topCustomer['customer_ID']) {
                                                     echo '<span style="position: relative;"><h1 style="font-size: 18px; position: absolute; left: -7px; top: -10px;">🏆</h1>';
                                                 }
-                                                echo '<img src="' . htmlspecialchars($notification['image']) . '" style="width: 60px; height: 60px; border-radius: 30px; background-color: white; margin-top: 12px;"></span>';
+                                                echo '<img src="' . htmlspecialchars($notification['image']) . '" style="width: 60px; height: 60px; border-radius: 30px; background-color: lightblue; margin-top: 12px;"></span>';
                                                 echo '</div>';
 
                                                 echo '<div class="col">
@@ -922,7 +922,7 @@ try {
                                                     modalBody.innerHTML += '<span style="position: relative;"><h1 style="position: absolute; left: -10px; top: -10px;">🏆</h1>';
                                                 }
                                                 if (notificationData['type'] === 'Sent feedback') {
-                                                    modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
+                                                    modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px; background-color: lightblue;"></p>';
                                                     modalBody.innerHTML += '<h4><strong></strong> ' + response['Full Name'] + '</h4>';
                                                     modalBody.innerHTML += '<p><strong>Products:</strong> ' + response['Products'] + '</p>';
                                                     modalBody.innerHTML += '<p><strong>Services:</strong> ' + response['Services'] + '</p>';
@@ -930,12 +930,12 @@ try {
                                                     modalBody.innerHTML += '<p><strong>Rating:</strong> ' + response['Rating'] + '</p>';
                                                     modalBody.innerHTML += '<p><strong>Date:</strong> ' + response['Date'] + '</p>';
                                                 } else if (notificationData['type'] === 'Sent audio feedback') {
-                                                    modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
+                                                    modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px; background-color: lightblue;"></p>';
                                                     modalBody.innerHTML += '<h4><strong></strong> ' + response['Full Name'] + '</h4>';
                                                     modalBody.innerHTML += '<p><strong></strong><audio controls><source src="http://localhost/nasara/audios/' + response['Audio'] + '" type="audio/mpeg">Your browser does not support the audio element.</audio></p>';
                                                     modalBody.innerHTML += '<p><strong>Date:</strong> ' + response['Date'] + '</p>';
                                                 } else if (notificationData['type'] === 'Registered an account') {
-                                                    modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px;"></p>';
+                                                    modalBody.innerHTML += '<p><img src="' + response['Profile picture'] + '" style="width: 150px; height: 150px; border-radius: 75px; background-color: lightblue;"></p>';
                                                     modalBody.innerHTML += '<h4><strong>Name:</strong> ' + response['Firstname'] + ' ' + response['Middlename'] + ' ' + response['Lastname'] + '</h4>';
                                                     modalBody.innerHTML += '<p><strong>Address:</strong> ' + response['Street'] + ', ' + response['Barangay'] + ', ' + response['Municipality'] + ', ' + response['Province'] + ' - ' + response['Zipcode'] + '</p>';
                                                     modalBody.innerHTML += '<p><strong>Phone Number:</strong> ' + response['Phone Number'] + '</p>';

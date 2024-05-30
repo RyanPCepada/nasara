@@ -100,7 +100,3 @@ if ($notificationType == 'Sent feedback') {
 
 echo json_encode($response);
 ?>
-
-
-
-

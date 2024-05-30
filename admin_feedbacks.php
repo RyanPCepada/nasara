@@ -616,7 +616,7 @@ try {
                                                 if ($row['Customer ID'] == $topCustomer['customer_ID']) {
                                                     // Display top customer with trophy icon
                                                     echo "<tr class='customer-row' data-customer='" . json_encode($row) . "'>";
-                                                    echo "<td><span style='position: relative;'><h1 style='font-size: 25px; position: absolute; left: -11px; top: -30px;'>🏆</h1><img src='" . $row['Profile picture'] . "' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: white;'></span></td>";
+                                                    echo "<td><span style='position: relative;'><h1 style='font-size: 25px; position: absolute; left: -11px; top: -30px;'>🏆</h1><img src='" . $row['Profile picture'] . "' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: lightblue;'></span></td>";
                                                     foreach ($row as $key => $value) {
                                                         if ($key !== 'Profile picture') {
                                                             echo "<td>$value</td>";
@@ -805,7 +805,7 @@ try {
                                                 // Check if this audio's customer is the top customer
                                                 if ($audio['Customer ID'] == $topCustomer['customer_ID']) {
                                                     echo '<span style="position: relative;"><a href="view_customer.php?customer_ID=' . $audio['Customer ID'] . '&top_customer=true"><h1 style="font-size: 25px; position: absolute; left: -10px; top: -30px;">🏆</h1>';
-                                                    echo '<img class="profile-image" src="' . htmlspecialchars($audio['Profile picture']) . '" alt="Profile picture" style="width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 50%; background-color: white;"></a></span>';
+                                                    echo '<img class="profile-image" src="' . htmlspecialchars($audio['Profile picture']) . '" alt="Profile picture" style="width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 50%; background-color: lightblue;"></a></span>';
                                                 } else {
                                                     echo '<a href="view_customer.php?customer_ID=' . $audio['Customer ID'] . '">';
                                                     echo '<img class="profile-image" src="' . htmlspecialchars($audio['Profile picture']) . '" alt="Profile picture" style="width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 50%; background-color: white;"></a>';

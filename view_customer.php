@@ -35,14 +35,23 @@ if (isset($_SESSION['adminID'])) {
             $audioQuery->bindParam(':customerID', $customerID, PDO::PARAM_INT);
             $audioQuery->execute();
             $audioFiles = $audioQuery->fetchAll(PDO::FETCH_ASSOC);
+
+            // Fetch the top customer data
+            $sqlTopCustomer = "SELECT ci.customer_ID FROM tbl_customer_info ci
+                                LEFT JOIN tbl_feedback fb ON ci.customer_ID = fb.customer_ID
+                                LEFT JOIN tbl_audio_feedback af ON ci.customer_ID = af.customer_ID
+                                GROUP BY ci.customer_ID
+                                ORDER BY (COUNT(fb.feedback_ID) + COUNT(af.audio_ID)) DESC
+                                LIMIT 1";
+            $stmtTopCustomer = $conn->prepare($sqlTopCustomer);
+            $stmtTopCustomer->execute();
+            $topCustomer = $stmtTopCustomer->fetch(PDO::FETCH_ASSOC);
+            $isTopCustomer = ($customerID == $topCustomer['customer_ID']);
         } else {
             echo "No customer ID provided.";
             exit();
         }
 
-
-
-        
         // Get admin information based on adminID from the session
         $adminID = $_SESSION['adminID'];
         $adminQuery = $conn->prepare("SELECT userName, password, image FROM tbl_admin WHERE admin_ID = :adminID");
@@ -63,9 +72,6 @@ if (isset($_SESSION['adminID'])) {
             $adminimage = '';
             $password = '';
         }
-
-
-
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
         exit();
@@ -98,29 +104,15 @@ if (isset($_SESSION['adminID'])) {
     <link rel="stylesheet" href="pages/admin/style_ad.css">
 
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-
         <img src="icons/NASARA_LOGO_WHITE_PNG.png" class="img-fluid" id="NASARA_LOGO" alt="">
-
-        <!-- <form action="actions_admin/logoutAction_admin.php" method="post">
-            <button class="btn" type="submit" id="logout" onclick="window.location.href='login_main.php'"
-            >Log Out</button>
-        </form> -->
-
         <img src="images_admin/<?php echo $adminimage; ?>" id="icon_profile" class="img-fluid zoomable-image rounded-square" onclick="to_adminacc()">
-        
     </nav>
-
 
     <button type="button" class="btn btn-secondary" style="width: 40px; height: 40px; margin-top: 20px; margin-left: 105px; border-radius: 50%;"
         href="#" onclick="window.history.back();">
         <i class="fas fa-arrow-left" style="font-size: 20px;"></i>
     </button>
 
-
-
-
-
-    
     <div class="container mt-5">
         <!-- Customer Details Section -->
         <h2 style="margin-bottom: 20px; color: gray;">Customer Details</h2>
@@ -130,10 +122,11 @@ if (isset($_SESSION['adminID'])) {
                 <!-- Include the trophy emoji if the customer is the top customer -->
                 <div class="card mb-3">
                     <div class="card-body" style="position: relative;">
-                        <?php if(isset($_GET['top_customer']) && $_GET['top_customer'] === 'true'): ?>
+                        <?php if($isTopCustomer): ?>
                             <h1 style="position: absolute; left: 5px; top: 8px;">🏆</h1>
                         <?php endif; ?>
-                        <img src="images/<?php echo htmlspecialchars($customer['image']); ?>" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 75px; margin-bottom: 5px; background: lightblue;">
+                        <img src="images/<?php echo htmlspecialchars($customer['image']); ?>" alt="Profile Picture"
+                        style="width: 150px; height: 150px; border-radius: 75px; margin-bottom: 5px; background-color: lightblue;">
                         <h4 class="card-title"><?php echo htmlspecialchars($customer['firstName'] . ' ' . $customer['middleName'] . ' ' . $customer['lastName']); ?></h4>
                         <p><strong>Customer ID:</strong> <?php echo htmlspecialchars($customer['customer_ID']); ?></p> <!-- Add this line -->
                         <p><strong>Address:</strong> <?php echo htmlspecialchars($customer['street'] . ', ' . $customer['barangay'] . ', ' . $customer['municipality'] . ', ' . $customer['province'] . ', ' . $customer['zipcode']); ?></p>
