@@ -545,6 +545,8 @@ thead th {
   background: white;
   border-radius: 15px;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.166);
+
+  padding: 30px;
 }
 
 #cards_body4{
@@ -570,7 +572,7 @@ thead th {
 }
 
 #table_written_fb{
-  height: 840px;
+  height: 930px;
   width: 1000px;
   margin-left: 0px;
   overflow-y: auto;

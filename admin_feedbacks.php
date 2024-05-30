@@ -706,7 +706,6 @@ try {
 
 
                     <div class="row">
-
                         <div class="card-body" id="cards_body4" style="justify-content: center; background: white;">
 
                             <style>
@@ -732,27 +731,21 @@ try {
                                 }
                             </style>
 
-
                             <!-- AUDIO FEEDBACKS TABLE -->
                             <div class="card-body" id="div_audio_fb" style="position: relative; justify-content: center; background: white; margin-top: 0px;">
-
                                 <h3 style="margin: 20px; color: gray;">Audio Feedbacks</h3>
-
-                                <!-- <hr> -->
-
                                 <div class="scrollable-content" id="table_audio_fb">
                                     <?php
                                     // Fetch and display customer activities from tbl_activity_logs and audio records from tbl_audio_feedback
-                                    $sqlAudios = "
-                                        SELECT 
-                                            CONCAT('images/', ci.image) AS 'Profile picture',
-                                            ci.customer_ID AS 'Customer ID',
-                                            CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS 'Full Name',
-                                            af.audio AS 'Audio',
-                                            af.dateAdded AS 'Date'
-                                        FROM tbl_customer_info AS ci
-                                        JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
-                                        ORDER BY af.audio_ID DESC";
+                                    $sqlAudios = "SELECT 
+                                                        CONCAT('images/', ci.image) AS 'Profile picture',
+                                                        ci.customer_ID AS 'Customer ID',
+                                                        CONCAT(ci.firstName, ' ', ci.middleName, ' ', ci.lastName) AS 'Full Name',
+                                                        af.audio AS 'Audio',
+                                                        af.dateAdded AS 'Date'
+                                                    FROM tbl_customer_info AS ci
+                                                    JOIN tbl_audio_feedback AS af ON ci.customer_ID = af.customer_ID
+                                                    ORDER BY af.audio_ID DESC";
 
                                     $stmtAudios = $conn->prepare($sqlAudios);
                                     $stmtAudios->execute();
@@ -778,21 +771,21 @@ try {
                                     }
 
                                     // Define $topCustomer based on the highest count of feedbacks and audio feedbacks
-                                    $sqlTopCustomer = "
-                                        SELECT ci.customer_ID, CONCAT('images/', ci.image) AS 'Profile picture',
-                                            ci.firstName AS 'Firstname', ci.middleName AS 'Middlename', ci.lastName AS 'Lastname',
-                                            (COUNT(fb.feedback_ID) + COUNT(af.audio_ID)) AS feedback_count
-                                        FROM tbl_customer_info ci
-                                        LEFT JOIN tbl_feedback fb ON ci.customer_ID = fb.customer_ID
-                                        LEFT JOIN tbl_audio_feedback af ON ci.customer_ID = af.customer_ID
-                                        GROUP BY ci.customer_ID
-                                        ORDER BY feedback_count DESC
-                                        LIMIT 1";
+                                    $sqlTopCustomer = "SELECT ci.customer_ID, CONCAT('images/', ci.image) AS 'Profile picture',
+                                                            ci.firstName AS 'Firstname', ci.middleName AS 'Middlename', ci.lastName AS 'Lastname',
+                                                            (COUNT(fb.feedback_ID) + COUNT(af.audio_ID)) AS feedback_count
+                                                        FROM tbl_customer_info ci
+                                                        LEFT JOIN tbl_feedback fb ON ci.customer_ID = fb.customer_ID
+                                                        LEFT JOIN tbl_audio_feedback af ON ci.customer_ID = af.customer_ID
+                                                        GROUP BY ci.customer_ID
+                                                        ORDER BY feedback_count DESC
+                                                        LIMIT 1";
 
                                     $stmtTopCustomer = $conn->prepare($sqlTopCustomer);
                                     $stmtTopCustomer->execute();
                                     $topCustomer = $stmtTopCustomer->fetch(PDO::FETCH_ASSOC);
 
+                                    // Function to display audio feedbacks
                                     function displayAudios($audios, $heading, $marginTop, $topCustomer) {
                                         echo '<h4 style="margin-top: ' . $marginTop . '; padding: 15px; margin-left: 12px; font-size: 20px; color: gray;">' . $heading . '</h4>';
 
@@ -803,21 +796,23 @@ try {
                                                 echo '<div class="row" style="margin-left: 15px; margin-top: 10px; padding-bottom: 10px;">';
 
                                                 echo '<div class="col-auto">';
-                                                // Wrap the image with an anchor tag
-                                                // echo '<a href="view_customer.php?customer_ID=' . $audio['Customer ID'] . '">';
-                                                echo '<a href="view_customer.php?customer_ID=' . $audio['Customer ID'] . '&top_customer=true">';
-
+                                                // Check if this audio's customer is the top customer
                                                 if ($audio['Customer ID'] == $topCustomer['customer_ID']) {
-                                                    echo '<span style="position: relative;"><h1 style="font-size: 25px; position: absolute; left: -10px; top: -30px;">🏆</h1>';
-                                                }
-                                                echo '<img class="profile-image" src="' . htmlspecialchars($audio['Profile picture']) . '" alt="Profile picture" style="width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 50%; background-color: white;"></a>';
-                                                if ($audio['Customer ID'] == $topCustomer['customer_ID']) {
-                                                    echo '</span>';
+                                                    echo '<span style="position: relative;"><a href="view_customer.php?customer_ID=' . $audio['Customer ID'] . '&top_customer=true"><h1 style="font-size: 25px; position: absolute; left: -10px; top: -30px;">🏆</h1>';
+                                                    echo '<img class="profile-image" src="' . htmlspecialchars($audio['Profile picture']) . '" alt="Profile picture" style="width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 50%; background-color: white;"></a></span>';
+                                                } else {
+                                                    echo '<a href="view_customer.php?customer_ID=' . $audio['Customer ID'] . '">';
+                                                    echo '<img class="profile-image" src="' . htmlspecialchars($audio['Profile picture']) . '" alt="Profile picture" style="width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 50%; background-color: white;"></a>';
                                                 }
                                                 echo '</div>';
 
                                                 echo '<div class="col">';
-                                                echo '<p style="margin-top: 10px; font-weight: bold;"><a href="view_customer.php?customer_ID=' . $audio['Customer ID'] . '" class="customer-name">' . htmlspecialchars($audio['Full Name']) . '</a></p>';
+                                                // Check if this audio's customer is the top customer and include the parameter in the full name link
+                                                if ($audio['Customer ID'] == $topCustomer['customer_ID']) {
+                                                    echo '<p style="margin-top: 10px; font-weight: bold;"><a href="view_customer.php?customer_ID=' . $audio['Customer ID'] . '&top_customer=true" class="customer-name">' . htmlspecialchars($audio['Full Name']) . '</a></p>';
+                                                } else {
+                                                    echo '<p style="margin-top: 10px; font-weight: bold;"><a href="view_customer.php?customer_ID=' . $audio['Customer ID'] . '" class="customer-name">' . htmlspecialchars($audio['Full Name']) . '</a></p>';
+                                                }
                                                 echo '<p class="" style="color: blue; font-size: 15px; margin-top: -10px;">' . formatRelativeDate($audio['Date'], $heading) . '</p>';
                                                 echo '</div>';
 
@@ -858,7 +853,7 @@ try {
                                     ?>
 
                                     <div class="scrollable-content">
-                                        <div class="" style="position: relative; width: 98%;"> <!--REASON WHY AUDIO FEEDBACK TABLE SCROOLBAR BELOW-->
+                                        <div class="" style="position: relative; width: 98%;">
                                             <?php
                                             // Display "Today" audio records with background color #ecffed
                                             echo '<div style="background-color: #ecffed;">';
@@ -879,36 +874,12 @@ try {
                                     </div>
                                 </div>
                             </div>
-                            <!-- END AUDIO FEEDBACKS TABLE -->
-
-
-
-
                         </div>
+                    </div>
 
-                    </div>  <!-- END ROW 1 - ADMIN DASHBOARD - REPORTS -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    
-
+                    <?php
+                    // Close the PHP tags if necessary
+                    ?>
 
 
 

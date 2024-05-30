@@ -943,7 +943,7 @@ try {
                                                         if ($row['Customer ID'] == $topCustomer['customer_ID']) {
                                                             // Display the trophy icon and other details for the top customer
                                                             echo "<tr class='customer-row' data-customer='" . json_encode($row) . "'>";
-                                                            echo "<td><span style='position: relative;'><h1 style='font-size: 25px; position: absolute; left: -13px; top: -25px;'>🏆</h1><img src='" . $row['Profile picture'] . "' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: lightblue;'></span></td>";
+                                                            echo "<td><span style='position: relative;'><h1 style='font-size: 25px; position: absolute; left: -10px; top: -30px;'>🏆</h1><img src='" . $row['Profile picture'] . "' style='width: 80px; height: 80px; border: solid 0px lightblue; border-radius: 40px; background-color: lightblue;'></span></td>";
                                                             foreach ($row as $key => $value) {
                                                                 if ($key !== 'Profile picture') {
                                                                     echo "<td>$value</td>";
