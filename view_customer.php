@@ -174,11 +174,37 @@ if (isset($_GET["search"])) {
             </div>
         </div>
 
+
+        <?php
+        // Fetch the customer's feedbacks
+        $feedbackQuery = $conn->prepare("SELECT * FROM tbl_feedback WHERE customer_ID = :customerID ORDER BY feedback_ID DESC");
+        $feedbackQuery->bindParam(':customerID', $customerID, PDO::PARAM_INT);
+        $feedbackQuery->execute();
+        $feedbacks = $feedbackQuery->fetchAll(PDO::FETCH_ASSOC);
+
+        // Fetch the customer's audio files
+        $audioQuery = $conn->prepare("SELECT * FROM tbl_audio_feedback WHERE customer_ID = :customerID ORDER BY audio_ID DESC");
+        $audioQuery->bindParam(':customerID', $customerID, PDO::PARAM_INT);
+        $audioQuery->execute();
+        $audioFiles = $audioQuery->fetchAll(PDO::FETCH_ASSOC);
+
+        // Count the number of written feedbacks
+        $writtenFeedbackCount = count($feedbacks);
+
+        // Count the number of audio feedbacks
+        $audioFeedbackCount = count($audioFiles);
+
+        ?>
+
+
+                                    
         <!-- Written Feedbacks and Audio Feedbacks Section -->
         <div class="row">
             <!-- Written Feedbacks (Left Half) -->
             <div class="col-md-6">
-                <h2 style="margin-top: 50px; color: gray;">Written Feedbacks</h2>
+                <h2 style="margin-top: 50px; color: gray;">Written Feedbacks<?php echo '<span style="display: inline-block; font-size: 40px; color: white; margin-left: 10px; background-color: gray; width: 50px; height: 50px;
+                border-radius: 50%; text-align: center; line-height: 50px;">' . $writtenFeedbackCount . '</span>'; ?></h2>
+                
                 <div class="scrollable-content">
                     <?php
                     // Initialize feedback categories
@@ -255,7 +281,9 @@ if (isset($_GET["search"])) {
             
             <!-- Audio Feedbacks (Right Half) -->
             <div class="col-md-6">
-                <h2 style="margin-left: 0px; margin-top: 50px; margin-bottom: 0px; color: gray;">Audio Feedbacks</h2>
+                <h2 style="margin-top: 50px; color: gray;">Audio Feedbacks<?php echo '<span style="display: inline-block; font-size: 40px; color: white; margin-left: 10px; background-color: gray; width: 50px; height: 50px;
+                border-radius: 50%; text-align: center; line-height: 50px;">' . $audioFeedbackCount . '</span>'; ?></h2>
+
                 <div class="row" style="position: relative; justify-content: center; background: white; margin-bottom: 0px;">
                     
                     <div class="scrollable-content" style="margin-left: 0px;" id="table_audio_fb">

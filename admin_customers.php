@@ -863,7 +863,7 @@ try {
                                                 </div>
 
                                                 <h3 style="margin-left: 0px; margin-top: -4px;"><?php echo $fullName; ?></h3>
-                                                <h7 style="margin-left: 0px; margin-bottom: 0px; margin-top: -5px; color: gray;">Sent <?php echo $feedbackCount; ?> feedbacks and <?php echo $audioFeedbackCount; ?> audio feedbacks</h7>
+                                                <h7 style="margin-left: 0px; margin-bottom: 0px; margin-top: -5px; color: gray;">Sent <?php echo $feedbackCount; ?> written feedbacks and <?php echo $audioFeedbackCount; ?> audio feedbacks</h7>
                                             </a>
                                         <?php else: ?>
                                             <h5>No top customer found</h5>
