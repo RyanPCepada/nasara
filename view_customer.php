@@ -352,4 +352,7 @@ if (isset($_SESSION['adminID'])) {
     function to_adminfeedbacks() {
         window.location.href = 'admin_feedbacks.php';
     }
+    function to_adminacc() {
+        window.location.href = 'admin_account.php';
+    }
 </script>
