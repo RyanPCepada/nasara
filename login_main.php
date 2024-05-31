@@ -43,9 +43,9 @@
                         <i class='bx bx-hide show-password' id="showPassword" onclick="togglePasswordVisibility()"></i>
                     </div>
                     <div class="remember-forgot">
-                        <input type="checkbox" id="checkbox">
+                        <!-- <input type="checkbox" id="checkbox">
                         <span id="rm">Remember me</span>
-                        <a onclick="to_forgotpassword_main()" id="fp">Forgot password?</a>
+                        <a onclick="to_forgotpassword_main()" id="fp">Forgot password?</a> -->
                     </div>
                     <button type="submit" id="login_button">Sign in</button>
 
@@ -113,45 +113,29 @@
 
     <!-- CUSTOMER REGISTRATION MODAL -->
     <div class="modal fade" id="modal_registration" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <!-- <img src="pages/landing/GIF_REGISTER.gif" style="width: 1.6in; height: .9in; margin-right: -10px;" id="register_gif"> -->
-                        <h5 class="modal-title" id="staticBackdropLabel" style="color: lightgray;">Sign up</h5>
-                    </div>
-                    <div class="modal-body">
-
-                        <form id="registration_form" method="POST" action="actions/insert_new_account.php">
-                            <div class="input" id="inputfields">
-                                <input type="text" placeholder="Firstname" class="firstname" name="firstname" id="row1" required/>
-                                <input type="text" placeholder="Lastname" class="lastname" name="lastname" id="row1" required/>
-                                <input type="text" placeholder="Email" class="email" name="email" id="row2" required/> 
-                                <input type="text" placeholder="Password" class="password" name="password" id="row3" required/> 
-                                <input type="text" placeholder="Confirm Password" class="confirmpassword" name="confirmpassword" id="row4" required/> 
-                                <!-- <p id="message" style="background: white;"></p> -->
-                            </div>
-
-                            <!-- <div class="boxandlink">
-                                <input type="checkbox" id="privacy-checkbox" name="privacy-checkbox" required>
-                                <label for="privacy-checkbox" id="privacy-link" style="color: #f5f5f5;">I already read and understand the <a href="privacy_details_main.php"
-                                style="color: white;"><b>privacy details</b></a>.</label>
-                            </div> -->
-                            
-                            <button type="submit" class="btn" name="submit" id="modalsubmit" onclick="checkPassword(event)">Create</button>
-                            <button type="button" class="btn btn-secondary" id="closeModalBtn" data-bs-dismiss="modal">Close</button>
-                            <!-- <button id="closeModalBtn" data-bs-dismiss="modal">Back</button> -->
-                            
-                        </form>
-                        
-                            
-                
-                    </div>
-                
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- <img src="pages/landing/GIF_REGISTER.gif" style="width: 1.6in; height: .9in; margin-right: -10px;" id="register_gif"> -->
+                    <h5 class="modal-title" id="staticBackdropLabel" style="color: lightgray;">Sign up</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="registration_form" method="POST" action="actions/insert_new_account.php">
+                        <div class="input" id="inputfields">
+                            <input type="text" placeholder="Firstname" class="firstname" name="firstname" id="row1" required/>
+                            <input type="text" placeholder="Lastname" class="lastname" name="lastname" id="row1" required/>
+                            <input type="email" placeholder="Email" class="email" name="email" id="row2" required/>
+                            <input type="password" placeholder="Password" class="password" name="password" id="row3" autocomplete="new-password" required/>
+                            <input type="password" placeholder="Confirm Password" class="confirmpassword" name="confirmpassword" id="row4" autocomplete="new-password" required/>
+                        </div>
+                        <button type="submit" class="btn" name="submit" id="modalsubmit" onclick="checkPassword(event)">Create</button>
+                        <button type="button" class="btn btn-secondary" id="closeModalBtn" data-bs-dismiss="modal">Close</button>
+                    </form>
                 </div>
             </div>
         </div>
-
-        <!-- END CUSTOMER REGISTRATION MODAL -->
+    </div>
+    <!-- END CUSTOMER REGISTRATION MODAL -->
             
 
 

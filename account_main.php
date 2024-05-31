@@ -684,7 +684,7 @@ try {
                     <div class="scrollable-content" style="height: 400px; overflow-y: auto;">
                         <b>Nasara Store Customer Feedback Management System</b>
                             <br><br>
-                            Effective Date: September 09, 2010
+                            <!-- Effective Date: September 09, 2010
                             <br><br>
                             Thank you for using our Customer Feedback Management System. Please read the following terms and policies carefully before using our platform. By accessing and using this system, you agree to these terms and policies.
                             <br><br>
@@ -738,7 +738,7 @@ try {
                             <b>Contact Information</b>
                             <br>
                             If you have any questions or concerns about these terms and policies, please contact us at NasaraStore2010@gmail.com.
-                            <br>
+                            <br> -->
                         <h style="margin-top: 5px; margin-left: 10px; font-size: 10px;">
                             <!-- Your terms and policy text here -->
                         </h>
