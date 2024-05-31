@@ -43,9 +43,9 @@
                         <i class='bx bx-hide show-password' id="showPassword" onclick="togglePasswordVisibility()"></i>
                     </div>
                     <div class="remember-forgot">
-                        <!-- <input type="checkbox" id="checkbox">
+                        <input type="checkbox" id="checkbox">
                         <span id="rm">Remember me</span>
-                        <a onclick="to_forgotpassword_main()" id="fp">Forgot password?</a> -->
+                        <a onclick="to_forgotpassword_main()" id="fp">Forgot password?</a>
                     </div>
                     <button type="submit" id="login_button">Sign in</button>
 
